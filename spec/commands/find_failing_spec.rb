@@ -1,13 +1,13 @@
 # Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
 
 require 'spec_helper'
-require 'tddium/cli'
-require 'tddium/cli/commands/find_failing'
+require 'solano/cli'
+require 'solano/cli/commands/find_failing'
 require 'tmpdir'
 
-describe Tddium::TddiumCli do
+describe Solano::SolanoCli do
   describe "#find_failing" do
-    include_context "tddium_api_stubs"
+    include_context "solano_api_stubs"
 
     def write(file, content)
       File.open(file, "w") { |f| f.write(content) }

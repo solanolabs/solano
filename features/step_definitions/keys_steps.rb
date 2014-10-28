@@ -1,7 +1,7 @@
 # Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
 
-Given /^`tddium keys` will write into tmp storage$/ do
-  ENV['TDDIUM_GEM_KEY_DIR'] = current_dir
+Given /^`solano keys` will write into tmp storage$/ do
+  ENV['SOLANO_GEM_KEY_DIR'] = current_dir
 end
 
 Given /^the user has the following keys:$/ do |table|
@@ -30,19 +30,19 @@ end
 
 Then /^the key file named "([^"]*)" should exist$/ do |arg1|
   steps %Q{
-    Then a file named "identity.tddium.#{arg1}" should exist
+    Then a file named "identity.solano.#{arg1}" should exist
   } 
 end
 
 Then /^the key file named "([^"]*)" should not exist$/ do |arg1|
   steps %Q{
-    Then the file "identity.tddium.#{arg1}" should not exist
+    Then the file "identity.solano.#{arg1}" should not exist
   } 
 end
 
 Given /^the public key file named "([^"]*)" exists$/ do |arg1|
   steps %Q{
-    Given a file named "identity.tddium.#{arg1}.pub" with:
+    Given a file named "identity.solano.#{arg1}.pub" with:
     """
     ssh-rsa SOME DATA
     """
@@ -51,7 +51,7 @@ end
 
 Given /^the private key file named "([^"]*)" exists$/ do |arg1|
   steps %Q{
-    Given a file named "identity.tddium.#{arg1}" with:
+    Given a file named "identity.solano.#{arg1}" with:
     """
     -----BEGIN RSA PRIVATE KEY-----
     ABCDEF

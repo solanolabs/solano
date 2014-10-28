@@ -20,8 +20,8 @@ SAMPLE_NEW_PASSWORD = "foobar2"
 SAMPLE_REPORT_URL = "http://ci.solanolabs.com/1/sessions/1/test_executions/report"
 SAMPLE_RUBYGEMS_VERSION = "1.3.7"
 SAMPLE_RUBY_VERSION = "ruby 1.8.7 (2010-08-16 patchlevel 302) [i686-darwin10.5.0]"
-SAMPLE_RECURLY_URL = "https://tddium.recurly.com/account/1"
-SAMPLE_RECURLY_URL_2 = "https://tddium.recurly.com/account/2"
+SAMPLE_RECURLY_URL = "https://solano.recurly.com/account/1"
+SAMPLE_RECURLY_URL_2 = "https://solano.recurly.com/account/2"
 SAMPLE_SESSION_ID = 1
 SAMPLE_SUITE_ID = 1
 SAMPLE_REPO_ID = 1
@@ -47,8 +47,8 @@ SAMPLE_SUITE_RESPONSE = {"repo_name" => SAMPLE_APP_NAME,
                          "ci_ssh_pubkey" => SAMPLE_SSH_PUBKEY,
                          "test_pattern" => SAMPLE_SUITE_PATTERN}
 SAMPLE_SUITES_RESPONSE = {"suites" => [SAMPLE_SUITE_RESPONSE]}
-SAMPLE_TDDIUM_CONFIG_FILE = ".tddium.test"
-SAMPLE_TDDIUM_DEPLOY_KEY_FILE = ".tddium-deploy-key.test"
+SAMPLE_SOLANO_CONFIG_FILE = ".solano.test"
+SAMPLE_SOLANO_DEPLOY_KEY_FILE = ".solano-deploy-key.test"
 SAMPLE_TEST_EXECUTION_STATS = "total 1, notstarted 0, started 1, passed 0, failed 0, pending 0, error 0", "start_time"
 SAMPLE_USER_SUITES_RESPONSE = {"status"=>0, "suites" => [SAMPLE_SUITE_RESPONSE]}
 SAMPLE_USER_RESPONSE = {"status"=>0, "user"=>

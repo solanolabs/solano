@@ -1,12 +1,12 @@
 # Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
 
 module FileHelpers
-  def tddium_global_config_file_path
-    File.join(ENV["HOME"], ".tddium.localhost")
+  def solano_global_config_file_path
+    File.join(ENV["HOME"], ".solano.localhost")
   end
 
-  def tddium_homedir_path
-    File.join(Dir.tmpdir, "tddium-aruba", "tmphome")
+  def solano_homedir_path
+    File.join(Dir.tmpdir, "solano-aruba", "tmphome")
   end
 end
 

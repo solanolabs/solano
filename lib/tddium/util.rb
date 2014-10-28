@@ -19,7 +19,7 @@ class String
   end
 end
 
-module Tddium
+module Solano
   def self.message_pack(value)
     io = StringIO.new
     if RUBY_VERSION =~ /^1[.]([0-8]|9[.][0-2])/ then

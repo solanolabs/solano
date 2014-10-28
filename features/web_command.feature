@@ -4,12 +4,12 @@
 Feature: Web command
 
   Background:
-    Given the command is "tddium web"
+    Given the command is "solano web"
 
-  Scenario: Run tddium web
-    When I run `tddium web`
+  Scenario: Run solano web
+    When I run `solano web`
     Then the exit status should be 0
 
-  Scenario: Run tddium web with a session ID
-    When I run `tddium web 1234`
+  Scenario: Run solano web with a session ID
+    When I run `solano web 1234`
     Then the exit status should be 0

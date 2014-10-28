@@ -1,17 +1,17 @@
 @mimic
 Feature: spec command
-  As a tddium user
+  As a solano user
   In order to run tests
   I want to start a test session
 
   Background:
-    Given the command is "tddium spec"
+    Given the command is "solano spec"
 
   Scenario: Fail if user isn't logged in
     Given a git repo is initialized
-    When I run `tddium spec`
+    When I run `solano spec`
     Then the exit status should not be 0
-    And the output should contain "tddium login"
+    And the output should contain "solano login"
 
   @announce-cmd
   Scenario: Fail if user has uncommitted changes
@@ -23,7 +23,7 @@ Feature: spec command
     And the user has a suite for "repo" on "master"
     And the user can create a session
     But the user has uncommitted changes to "foo.rb"
-    When I run `tddium spec`
+    When I run `solano spec`
     Then the exit status should not be 0
     And the output should contain "uncommitted"
 
@@ -39,7 +39,7 @@ Feature: spec command
     And the user successfully registers tests for the suite 
     And the tests start successfully
     And the test all pass
-    When I run `tddium spec`
+    When I run `solano spec`
     Then the exit status should be 0
 
   Scenario: Auto-create a new suite with no .gitignore
@@ -56,7 +56,7 @@ Feature: spec command
     And the user successfully registers tests for the suite 
     And the tests start successfully
     And the test all pass
-    When I run `tddium spec`
+    When I run `solano spec`
     Then the exit status should be 0
     And the output should contain "Creating suite"
 
@@ -74,7 +74,7 @@ Feature: spec command
     And the user successfully registers tests for the suite 
     And the tests start successfully
     And the test all pass
-    When I run `tddium spec`
+    When I run `solano spec`
     Then the exit status should be 0
     And the output should contain "Creating suite"
 
@@ -93,7 +93,7 @@ Feature: spec command
     And the user successfully registers tests for the suite 
     And the tests start successfully
     And the test all pass
-    When I run `tddium spec`
+    When I run `solano spec`
     Then the exit status should be 0
     And the output should contain "Creating suite"
 
@@ -113,7 +113,7 @@ Feature: spec command
     And the tests start successfully
     And the test all pass
     And the user can indicate repoman demand
-    When I run `tddium spec`
+    When I run `solano spec`
     Then the exit status should be 1
     And the output should contain "Creating suite"
     And the output should contain "prepped"
@@ -129,7 +129,7 @@ Feature: spec command
     And the user successfully registers tests for the suite with test_pattern: "spec/foo"
     And the tests start successfully
     And the test all pass
-    When I run `tddium spec --max-parallelism=1 --test-pattern=spec/foo`
+    When I run `solano spec --max-parallelism=1 --test-pattern=spec/foo`
     Then the exit status should be 0
     And the output should contain "Starting Session"
     And the output should contain "To view results"
@@ -147,7 +147,7 @@ Feature: spec command
     And the user successfully registers tests for the suite with test_pattern: "spec/foo"
     And the tests start successfully
     And the tests all fail
-    When I run `tddium spec --max-parallelism=1 --test-pattern=spec/foo`
+    When I run `solano spec --max-parallelism=1 --test-pattern=spec/foo`
     Then the exit status should be 1
     And the output should contain "Starting Session"
     And the output should contain "To view results"
@@ -169,7 +169,7 @@ Feature: spec command
     And the test all pass
     And an empty file named "spec1.rb" 
     And an empty file named "spec2.rb" 
-    When I run `tddium spec spec1.rb spec2.rb`
+    When I run `solano spec spec1.rb spec2.rb`
     Then the exit status should be 0
     And the output should contain "To view results"
     And the output should not contain "emembered"
@@ -188,7 +188,7 @@ Feature: spec command
     And the test all pass
     And the user can indicate repoman demand
     And the session completes
-    When I run `tddium spec --machine`
+    When I run `solano spec --machine`
     Then the exit status should be 0
     And the output should not contain "Ctrl-C"
     And the output should not contain "--->"
@@ -207,7 +207,7 @@ Feature: spec command
     And the test all pass with messages
     And the user can indicate repoman demand
     And the session completes
-    When I run `tddium spec --machine`
+    When I run `solano spec --machine`
     Then the exit status should be 0
     And the output should not contain "Ctrl-C"
     And the output should not contain "--->"
@@ -223,7 +223,7 @@ Feature: spec command
     And the user successfully registers tests for the suite
     And the tests start successfully
     And the test all pass with messages
-    When I run `tddium spec`
+    When I run `solano spec`
     Then the exit status should be 0
     And the output should contain "To view results"
     And the output should contain "Ctrl-C"
@@ -250,7 +250,7 @@ Feature: spec command
     And the user successfully registers tests for the suite
     And the tests start successfully
     And the test all pass with messages
-    When I run `tddium spec`
+    When I run `solano spec`
     Then the exit status should be 0
     And the output should contain "Updated test pattern"
     Examples:
@@ -280,7 +280,7 @@ Feature: spec command
     And the user successfully registers tests for the suite
     And the tests start successfully
     And the test all pass with messages
-    When I run `tddium spec`
+    When I run `solano spec`
     Then the exit status should be 0
     And the output should contain "Updated test pattern"
     Examples:
@@ -309,7 +309,7 @@ Feature: spec command
     And the user successfully registers tests for the suite
     And the tests start successfully
     And the test all pass with messages
-    When I run `tddium spec`
+    When I run `solano spec`
     Then the exit status should be 1
     And the output should not contain "Updated test pattern"
     Examples:
@@ -337,7 +337,7 @@ Feature: spec command
     And the user successfully registers tests for the suite
     And the tests start successfully
     And the test all pass with messages
-    When I run `tddium spec`
+    When I run `solano spec`
     Then the exit status should be 0
     And the output should contain "Updated ruby version"
     Examples:

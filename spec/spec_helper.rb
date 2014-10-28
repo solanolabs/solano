@@ -3,7 +3,7 @@
 #require 'simplecov'
 #SimpleCov.start
 
-require 'tddium'
+require 'solano'
 
 require 'rspec'
 require 'fakefs/spec_helpers'
@@ -33,14 +33,14 @@ def env_restore(env)
   end
 end
 
-shared_context "tddium_api_stubs" do
-  let(:api_config) { double(Tddium::ApiConfig, :get_branch => nil) }
-  let(:tddium_api) { double(Tddium::TddiumAPI) }
+shared_context "solano_api_stubs" do
+  let(:api_config) { double(Solano::ApiConfig, :get_branch => nil) }
+  let(:solano_api) { double(Solano::SolanoAPI) }
   let(:tddium_client) { double(TddiumClient::InternalClient) }
 
-  def stub_tddium_api
-    tddium_api.stub(:user_logged_in?).and_return(true)
-    Tddium::TddiumAPI.stub(:new).and_return(tddium_api)
+  def stub_solano_api
+    solano_api.stub(:user_logged_in?).and_return(true)
+    Solano::SolanoAPI.stub(:new).and_return(solano_api)
   end
 
   def stub_tddium_client
@@ -51,7 +51,7 @@ shared_context "tddium_api_stubs" do
 
   before do
     stub_tddium_client
-    stub_tddium_api
+    stub_solano_api
   end
 end
 

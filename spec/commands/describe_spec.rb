@@ -1,12 +1,12 @@
 # Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
 
 require 'spec_helper'
-require 'tddium/cli'
-require 'tddium/cli/commands/spec'
+require 'solano/cli'
+require 'solano/cli/commands/spec'
 
-describe Tddium::TddiumCli do
+describe Solano::SolanoCli do
   describe "#describe" do
-    include_context "tddium_api_stubs"
+    include_context "solano_api_stubs"
 
     let(:session_id) { 123 }
     let(:query_session_result) {
@@ -19,22 +19,22 @@ describe Tddium::TddiumCli do
     }
 
     it "should table print the failures" do
-      tddium_api.should_receive(:query_session).with(session_id).and_return(query_session_result)
+      solano_api.should_receive(:query_session).with(session_id).and_return(query_session_result)
       subject.should_receive(:print_table)
       subject.describe(session_id)
     end
 
     it "should print only names if indicated" do
-      tddium_api.should_receive(:query_session).with(session_id).and_return(query_session_result)
+      solano_api.should_receive(:query_session).with(session_id).and_return(query_session_result)
       subject.stub(:options) { { :names => true } }
       subject.should_receive(:say).with("foo.rb")
       subject.describe(session_id)
     end
 
     it "should exit with failure when no recent sessions exist on current branch" do
-      tddium_api.stub(:current_suite_id) { suite_id }
+      solano_api.stub(:current_suite_id) { suite_id }
       subject.stub(:suite_for_current_branch?) { true }
-      tddium_api.stub(:get_sessions).exactly(1).times.and_return([])
+      solano_api.stub(:get_sessions).exactly(1).times.and_return([])
       expect {
         subject.describe
       }.to raise_error(SystemExit,
@@ -42,8 +42,8 @@ describe Tddium::TddiumCli do
     end
 
     it "should exit with failure when no suite exists on current branch" do
-      tddium_api.stub(:current_suite_id) { nil }
-      tddium_api.should_not_receive(:get_sessions)
+      solano_api.stub(:current_suite_id) { nil }
+      solano_api.should_not_receive(:get_sessions)
       expect {
         subject.describe
       }.to raise_error(SystemExit,
@@ -52,10 +52,10 @@ describe Tddium::TddiumCli do
 
     context "prints recent session if no session id specified" do
       before do
-        tddium_api.stub(:current_suite_id) { suite_id }
+        solano_api.stub(:current_suite_id) { suite_id }
         subject.stub(:suite_for_current_branch?) { true }
-        tddium_api.stub(:get_sessions).exactly(1).times.and_return(get_sessions_result)
-        tddium_api.should_receive(:query_session).with(session_id).and_return(query_session_result)
+        solano_api.stub(:get_sessions).exactly(1).times.and_return(get_sessions_result)
+        solano_api.should_receive(:query_session).with(session_id).and_return(query_session_result)
         subject.should_receive(:print_table)
       end
 

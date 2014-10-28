@@ -2,13 +2,13 @@
 # Contributed by: Michael Grosser <https://github.com/grosser>
 # Copyright: Original Author
 
-# Autocomplete tddium for bash
+# Autocomplete solano for bash
 # Save it somewhere and then add
-# complete -C path/to/script -o default tddium
+# complete -C path/to/script -o default solano
 # to your ~/.bashrc
 
 def available_tasks
-  task_lines = `tddium --help`.split("\n")
+  task_lines = `solano --help`.split("\n")
   inside_tasks = false
   task_lines.map do |line|
     inside_tasks = true and next if line == "Commands:"
@@ -29,8 +29,8 @@ def cache(file)
   end
 end
 
-exit 0 unless /^tddium\b/ =~ ENV["COMP_LINE"]
+exit 0 unless /^solano\b/ =~ ENV["COMP_LINE"]
 
-require "tddium/version"
-tasks = cache("~/.autocomplete-cache/tddium-#{Tddium::VERSION}"){ available_tasks }
+require "solano/version"
+tasks = cache("~/.autocomplete-cache/solano-#{Solano::VERSION}"){ available_tasks }
 puts tasks.grep(/^#{$'.strip}/)

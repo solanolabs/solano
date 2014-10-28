@@ -1,16 +1,16 @@
 # Copyright (c) 2013, 2014 Solano Labs All Rights Reserved
 
 require 'spec_helper'
-require 'tddium/cli'
+require 'solano/cli'
 
-describe Tddium::TddiumCli do
-  let(:api_config) { double(Tddium::ApiConfig, :get_branch => nil) }
-  let(:tddium_api) { double(Tddium::TddiumAPI) }
+describe Solano::SolanoCli do
+  let(:api_config) { double(Solano::ApiConfig, :get_branch => nil) }
+  let(:solano_api) { double(Solano::SolanoAPI) }
   let(:tddium_client) { double(TddiumClient::InternalClient) }
 
-  def stub_tddium_api
-    tddium_api.stub(:user_logged_in?).and_return(true)
-    Tddium::TddiumAPI.stub(:new).and_return(tddium_api)
+  def stub_solano_api
+    solano_api.stub(:user_logged_in?).and_return(true)
+    Solano::SolanoAPI.stub(:new).and_return(solano_api)
   end
 
   def stub_tddium_client
@@ -29,14 +29,14 @@ describe Tddium::TddiumCli do
 
   before do
     stub_tddium_client
-    stub_tddium_api
+    stub_solano_api
     subject.stub(:say)  # Be quieter
   end
 
   describe "#prompt_suite_params" do
     before do
       # Make it public so we can test it.
-      Tddium::TddiumCli.send(:public, :prompt_suite_params)
+      Solano::SolanoCli.send(:public, :prompt_suite_params)
     end
 
     describe "account logic" do
@@ -89,7 +89,7 @@ describe Tddium::TddiumCli do
 
       it "should default to the same repo as an existing suite" do
         stub_accounts(3)
-        tddium_api.stub(:get_suites).and_return([
+        solano_api.stub(:get_suites).and_return([
           {"account" => "handle-2"},
         ])
         params = {}
@@ -100,7 +100,7 @@ describe Tddium::TddiumCli do
 
       it "should fail to default if multiple suites with the same repo" do
         stub_accounts(3)
-        tddium_api.stub(:get_suites).and_return([
+        solano_api.stub(:get_suites).and_return([
           {"account" => "handle-2"},
           {"account" => "handle-3"},
         ])

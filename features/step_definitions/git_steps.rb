@@ -10,7 +10,7 @@ Given /^an old version of git is installed$/ do
 end
 
 Given "the SCM ready timeout is 0" do
-  ENV["TDDIUM_SCM_READY_SLEEP"] = "0"
+  ENV["SOLANO_SCM_READY_SLEEP"] = "0"
 end
 
 Given /^a git repo is initialized(?: on branch "([^"]*)")?$/ do |branch|

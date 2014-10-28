@@ -52,9 +52,9 @@ end
 require 'antilles/cucumber'
 
 port = Antilles.find_available_port
-ENV['TDDIUM_CLIENT_PORT'] = port.to_s
-ENV['TDDIUM_CLIENT_HOST'] = "localhost"
-ENV['TDDIUM_CLIENT_PROTO'] = 'http'
+ENV['SOLANO_CLIENT_PORT'] = port.to_s
+ENV['SOLANO_CLIENT_HOST'] = "localhost"
+ENV['SOLANO_CLIENT_PROTO'] = 'http'
 
 Antilles.configure do |server|
   server.log = STDOUT

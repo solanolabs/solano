@@ -1,7 +1,7 @@
 # Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
 
 require 'spec_helper'
-require 'tddium/scm/git_log_parser'
+require 'solano/scm/git_log_parser'
 require 'msgpack_pure'
 
 describe GitCommitLogParser do

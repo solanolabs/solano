@@ -1,21 +1,21 @@
 # Copyright (c) 2014 Solano Labs All Rights Reserved
 
-# delete tddium-server file before require tddium/cli/tddium.rb
+# delete solano-server file before require solano/cli/solano.rb
 # it will use stored options, not default (if server-file already exist)
-require 'tddium/constant'
+require 'solano/constant'
 
 def remove_server_file
-  `rm #{TddiumConstant::Default::PARAMS_PATH}`
+  `rm #{SolanoConstant::Default::PARAMS_PATH}`
 end
 
 remove_server_file
 
 require 'spec_helper'
-require 'tddium/cli'
-require 'tddium/cli/commands/server'
+require 'solano/cli'
+require 'solano/cli/commands/server'
 
-describe Tddium::TddiumCli do
-  include TddiumConstant
+describe Solano::SolanoCli do
+  include SolanoConstant
   extend ParamsHelper
 
   describe '#server:set' do
@@ -89,10 +89,10 @@ describe Tddium::TddiumCli do
     end
 
     it 'returns empty hash, than stored options' do
-      Tddium::TddiumCli
+      Solano::SolanoCli
         .should_receive(:load_params)
         .and_return({})
-      Tddium::TddiumCli.load_params
+      Solano::SolanoCli.load_params
     end
   end
 end

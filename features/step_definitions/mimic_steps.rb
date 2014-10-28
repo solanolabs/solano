@@ -5,7 +5,11 @@ Given /^the command is "([^"]*)"$/ do |command|
 end
 
 When /^I respond to "([^"]*)" with "([^"]*)"$/ do |str, response|
-  cmd = @command || "tddium suite"
+  cmd = @command || "solano suite"
   get_process(cmd).expect(str, response)
   puts "matched #{str} and wrote #{response}"
+end
+
+Given /^a solano global config file exists$/ do
+  file_to_write = solano_global_config_file_path
 end

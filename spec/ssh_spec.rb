@@ -1,13 +1,13 @@
 # Copyright (c) 2014 Solano Labs All Rights Reserved
 
-require 'tddium/constant'
+require 'solano/constant'
 require 'spec_helper'
-require 'tddium/cli'
-require 'tddium/ssh'
+require 'solano/cli'
+require 'solano/ssh'
 
-describe Tddium::Ssh do
-  include_context "tddium_api_stubs"
-  include TddiumConstant
+describe Solano::Ssh do
+  include_context 'solano_api_stubs'
+  include SolanoConstant
 
   describe '.validate_keys' do
     let(:key) do
@@ -20,20 +20,20 @@ describe Tddium::Ssh do
     end
 
     it "aborts adding duplicate key's name" do
-      tddium_api.stub(:get_keys).and_return([key])
-      Tddium::Ssh.stub(:load_ssh_key).and_return(key)
+      solano_api.stub(:get_keys).and_return([key])
+      Solano::Ssh.stub(:load_ssh_key).and_return(key)
 
       expect{
-        subject.class.validate_keys(key['name'], 'some/path', tddium_api, false)
+        subject.class.validate_keys(key['name'], 'some/path', solano_api, false)
       }.to raise_error(SystemExit, self.class::Text::Error::ADD_KEYS_DUPLICATE % key['name'])
     end
 
     it "aborts adding duplicate key's content" do
-      tddium_api.stub(:get_keys).and_return([key])
-      Tddium::Ssh.stub(:load_ssh_key).and_return(another_key)
+      solano_api.stub(:get_keys).and_return([key])
+      Solano::Ssh.stub(:load_ssh_key).and_return(another_key)
 
       expect{
-        subject.class.validate_keys(another_key['name'], 'some/path', tddium_api, false)
+        subject.class.validate_keys(another_key['name'], 'some/path', solano_api, false)
       }.to raise_error(SystemExit, self.class::Text::Error::ADD_KEY_CONTENT_DUPLICATE % key['name'])
     end
   end

@@ -7,7 +7,7 @@ tmp
 coverage
 
 .rvmrc
-.tddium*
-.tddium-deploy-key*
+.solano*
+.solano-deploy-key*
 
 pkg/*

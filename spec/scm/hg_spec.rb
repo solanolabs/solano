@@ -1,10 +1,10 @@
 # Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
 
 require 'spec_helper'
-require 'tddium/scm/hg'
+require 'solano/scm/hg'
 
-describe Tddium::Hg do
-  let(:subject) { Tddium::Hg.new }
+describe Solano::Hg do
+  let(:subject) { Solano::Hg.new }
 
   def stub_hg(command, return_value)
     subject.stub(:`).with(/^hg #{command}/).and_return(return_value)

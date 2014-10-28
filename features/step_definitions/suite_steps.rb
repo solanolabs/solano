@@ -10,7 +10,7 @@ def make_suite_response(name, branch, options = {})
   end
   suite["repo_name"] = name
   suite["branch"] = branch
-  suite["git_repo_uri"] = "file:///#{Dir.tmpdir}/tddium-aruba/repo"
+  suite["git_repo_uri"] = "file:///#{Dir.tmpdir}/solano-aruba/repo"
   suite["repoman_current"] = true
   suite["ci_ssh_pubkey"] = "ssh-rsa ABCDEFGG"
   suite

@@ -50,11 +50,11 @@ end
 Before do
   @aruba_timeout_seconds = 10
   @aruba_io_wait_seconds = 5
-  @dirs = [Dir.tmpdir, "tddium-aruba"]
+  @dirs = [Dir.tmpdir, "solano-aruba"]
   FileUtils.rm_rf(current_dir)
   
-  FileUtils.rm_rf(tddium_homedir_path)
-  FileUtils.mkdir_p(tddium_homedir_path)
-  ENV['HOME'] = tddium_homedir_path
-  FileUtils.rm_f(File.join(ENV['HOME'], '.tddium.*'))
+  FileUtils.rm_rf(solano_homedir_path)
+  FileUtils.mkdir_p(solano_homedir_path)
+  ENV['HOME'] = solano_homedir_path
+  FileUtils.rm_f(File.join(ENV['HOME'], '.solano.*'))
 end

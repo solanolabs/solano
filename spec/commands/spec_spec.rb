@@ -2,11 +2,11 @@
 
 require 'spec_helper'
 require 'msgpack_pure'
-require 'tddium/cli'
-require 'tddium/cli/commands/spec'
+require 'solano/cli'
+require 'solano/cli/commands/spec'
 
-describe Tddium::TddiumCli do
-  include_context "tddium_api_stubs"
+describe Solano::SolanoCli do
+  include_context "solano_api_stubs"
 
   describe "#read_and_encode_config_file" do
     it "should return encoded config file" do
@@ -29,8 +29,8 @@ describe Tddium::TddiumCli do
     let(:test_executions) { { "started" => 1, "tests" => [], "session_done" => true, "session_status" => "passed"}}
 
     def stub_git
-      Tddium::Git.stub(:git_changes?).and_return(false)
-      Tddium::Git.stub(:git_push).and_return(true)
+      Solano::Git.stub(:git_changes?).and_return(false)
+      Solano::Git.stub(:git_push).and_return(true)
     end
 
     def stub_commit_log_parser
@@ -41,14 +41,14 @@ describe Tddium::TddiumCli do
     before do
       stub_git
       stub_commit_log_parser
-      tddium_api.stub(:current_suite_id).and_return(suite_id)
-      tddium_api.stub(:get_suite_by_id).and_return(suite)
-      tddium_api.stub(:update_suite)
-      tddium_api.stub(:create_session).and_return(session)
-      tddium_api.stub(:register_session)
-      tddium_api.stub(:start_session).and_return(test_executions)
-      tddium_api.stub(:poll_session).and_return(test_executions)
-      tddium_api.stub(:get_keys).and_return([{name: 'some_key', pub: 'some content'}])
+      solano_api.stub(:current_suite_id).and_return(suite_id)
+      solano_api.stub(:get_suite_by_id).and_return(suite)
+      solano_api.stub(:update_suite)
+      solano_api.stub(:create_session).and_return(session)
+      solano_api.stub(:register_session)
+      solano_api.stub(:start_session).and_return(test_executions)
+      solano_api.stub(:poll_session).and_return(test_executions)
+      solano_api.stub(:get_keys).and_return([{name: 'some_key', pub: 'some content'}])
     end
 
     it "should create a new session" do
@@ -59,10 +59,10 @@ describe Tddium::TddiumCli do
         'Gemfile.lock' => Digest::SHA1.file("Gemfile.lock").to_s,
       ))
       repo_config_file_encoded = Base64.encode64(File.read('config/solano.yml'))
-      tddium_api.stub(:get_suites).and_return([
+      solano_api.stub(:get_suites).and_return([
         {"account" => "handle-2"},
       ])
-      tddium_api.should_receive(:create_session).with(suite_id, 
+      solano_api.should_receive(:create_session).with(suite_id, 
                                         :commits_encoded => commits_encoded,
                                         :cache_control_encoded => cache_control_encoded,
                                         :cache_save_paths_encoded => cache_paths_encoded,
@@ -72,9 +72,9 @@ describe Tddium::TddiumCli do
     end
 
     it "should not create a new session if a session_id is specified" do
-      tddium_api.should_not_receive(:create_session)
-      tddium_api.should_receive(:update_session)
-      tddium_api.stub(:get_suites).and_return([
+      solano_api.should_not_receive(:create_session)
+      solano_api.should_receive(:update_session)
+      solano_api.stub(:get_suites).and_return([
         {"account" => "handle-2"},
       ])
       subject.stub(:options) { {:session_id=>1} }

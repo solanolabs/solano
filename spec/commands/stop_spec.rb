@@ -1,12 +1,12 @@
 # Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
 
 require 'spec_helper'
-require 'tddium/cli'
-require 'tddium/cli/commands/stop'
+require 'solano/cli'
+require 'solano/cli/commands/stop'
 
-describe Tddium::TddiumCli do
+describe Solano::SolanoCli do
   describe "#stop" do
-    include_context "tddium_api_stubs"
+    include_context "solano_api_stubs"
 
     let(:ls_id) { 123 }
     let(:stop_session_result) {
@@ -14,7 +14,7 @@ describe Tddium::TddiumCli do
     }
 
     it "should produce a command line from an old session's results" do
-      tddium_api.should_receive(:stop_session).with(ls_id).and_return(stop_session_result)
+      solano_api.should_receive(:stop_session).with(ls_id).and_return(stop_session_result)
       subject.should_receive(:say).with("Stoping session #{ls_id} ...")
       subject.should_receive(:say).with(stop_session_result['notice'])
 
