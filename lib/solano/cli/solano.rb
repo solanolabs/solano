@@ -11,19 +11,19 @@ module Solano
     params = self.load_params
 
     class_option :host, :type => :string, 
-                        :default => params['host'] || ENV['SOLANO_CLIENT_HOST'] || "ci.solanolabs.com",
+                        :default => self.default_host(params),
                         :desc => "Solano CI app server hostname"
 
     class_option :port, :type => :numeric,
-                        :default => params['port'] || (ENV['SOLANO_CLIENT_PORT'].nil? ? nil : ENV['SOLANO_CLIENT_PORT'].to_i),
+                        :default => self.default_port(params),
                         :desc => "Solano CI app server port"
 
     class_option :proto, :type => :string,
-                         :default => params['proto'] || ENV['SOLANO_CLIENT_PROTO'] || "https",
+                         :default => self.default_proto(params),
                          :desc => "API Protocol"
 
     class_option :insecure, :type => :boolean, 
-                            :default => params.key?('insecure') ? params['insecure'] : (ENV['SOLANO_CLIENT_INSECURE'] != nil),
+                            :default => self.default_insecure(params),
                             :desc => "Don't verify Solano CI app SSL server certificate"
 
     def initialize(*args)

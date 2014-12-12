@@ -84,7 +84,7 @@ describe Solano::SolanoCli do
 
     it "should push to the public repo uri in CLI mode" do
       subject.stub(:options) { {:machine => false} }
-      tddium_api.stub(:get_suites).and_return([
+      solano_api.stub(:get_suites).and_return([
         {"account" => "handle-2"},
       ])
       subject.scm.stub(:latest_commit).and_return(latest_commit)

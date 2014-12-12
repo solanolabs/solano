@@ -2,6 +2,36 @@
 
 module ParamsHelper
   include SolanoConstant
+
+  def default_host params
+    params['host'] || ENV['SOLANO_CLIENT_HOST'] || ENV['TDDIUM_CLIENT_HOST'] || 'ci.solanolabs.com'
+  end
+
+  def default_port params
+    if params['port']
+      params['port']
+    elsif ENV['SOLANO_CLIENT_PORT']
+      ENV['SOLANO_CLIENT_PORT'].to_i
+    elsif ENV['TDDIUM_CLIENT_PORT']
+      ENV['TDDIUM_CLIENT_PORT'].to_i
+    else
+      nil
+    end
+  end
+
+  def default_proto params
+    params['proto'] || ENV['SOLANO_CLIENT_PROTO'] || ENV['TDDIUM_CLIENT_PROTO'] || 'https'
+  end
+
+  def default_insecure params
+    if params.key?('insecure')
+      params['insecure']
+    elsif ENV['SOLANO_CLIENT_INSECURE'] || ENV['TDDIUM_CLIENT_INSECURE']
+      true
+    else
+      false
+    end
+  end
   
   def load_params(defaults=true)
     params = {}

@@ -5,13 +5,13 @@
 # Autocomplete solano for bash
 # Save it somewhere and then add
 # complete -C path/to/script -o default solano
+# complete -C path/to/script -o default tddium
 # to your ~/.bashrc
-
 def available_tasks
   task_lines = `solano --help`.split("\n")
   inside_tasks = false
   task_lines.map do |line|
-    inside_tasks = true and next if line == "Commands:"
+    inside_tasks = true and next if line == 'Tasks:'
     inside_tasks = false and next if inside_tasks and line =~ /^\S/
     line.strip.split(/\s+/)[1] if inside_tasks
   end.compact
@@ -29,8 +29,7 @@ def cache(file)
   end
 end
 
-exit 0 unless /^solano\b/ =~ ENV["COMP_LINE"]
+exit 0 unless /^solano\b|tddium\b/ =~ ENV["COMP_LINE"]
 
-require "solano/version"
-tasks = cache("~/.autocomplete-cache/solano-#{Solano::VERSION}"){ available_tasks }
+tasks = cache("~/.autocomplete-cache/solano-#{`solano -v`}"){ available_tasks }
 puts tasks.grep(/^#{$'.strip}/)
