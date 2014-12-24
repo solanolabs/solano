@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tddium (1.25.4)
+    solano (1.25.4)
       github_api
       highline
       json
@@ -139,4 +139,4 @@ DEPENDENCIES
   rdiscount (= 1.6.8)
   rspec
   simplecov
-  tddium!
+  solano!
