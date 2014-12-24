@@ -6,6 +6,11 @@ require 'spec_helper'
 
 describe ParamsHelper do
   extend ParamsHelper
+  around do |example|
+    orig_env = ENV.to_hash
+    example.run
+    ENV.update(orig_env)
+  end
 
   describe '.default_host' do
     it 'return host params if it is present' do
