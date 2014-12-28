@@ -19,7 +19,7 @@ module Solano
     method_option :machine, :type => :boolean, :default => false
     method_option :session_id, :type => :numeric, :default => nil
     method_option :tool, :type => :hash, :default => {}
-    method_option :profile, :type => :string, :default => nil
+    method_option :profile, :type => :string, :default => nil, :aliases => %w(--profile-name)
     def spec(*pattern)
       machine_data = {}
 
