@@ -1,8 +1,9 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011, 2012, 2013, 2014, 2015 Solano Labs All Rights Reserved
 
 module Solano
   class SolanoCli < Thor
-    desc "account", "View account information"
+    desc "account [--org NAME]", "View account information"
+    method_option :org, type: :string
     def account
       user_details = solano_setup({:scm => false})
 

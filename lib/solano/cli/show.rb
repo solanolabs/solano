@@ -1,4 +1,4 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011, 2012, 2013, 2014, 2015 Solano Labs All Rights Reserved
 
 module Solano
   class SolanoCli < Thor
@@ -78,7 +78,21 @@ module Solano
 
       # Use "all_accounts" here instead of "participating_accounts" -- these
       # are the accounts the user can administer.
-      user["all_accounts"].each do |acct|
+      # Select those accounts that match org param or all if no org param
+
+      org = options['org']
+      regexp = org.nil? ? nil : Regexp.new(org.to_s)
+      account_list = user['all_accounts']
+      account_list.select! do |acct|
+        if regexp.nil? || regexp =~ acct[:account] then
+          acct
+        else
+          nil
+        end
+      end
+      account_list.compact!
+
+      account_list.each do |acct|
         id = acct['account_id'].to_i
 
         say ERB.new(Text::Status::ACCOUNT_DETAILS).result(binding)

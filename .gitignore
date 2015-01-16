@@ -7,6 +7,7 @@ tmp
 coverage
 
 .rvmrc
+.tddium*
 .solano*
 .solano-deploy-key*
 
