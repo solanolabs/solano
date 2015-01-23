@@ -405,6 +405,7 @@ EOF
     end
 
     module Error
+      MALFORMED_CONFIGURATION = 'Unable to parse YAML configuration file: %s'
       OPTIONS_NOT_SAVED = 'Options have not been saved.'
       KEY_ALREADY_EXISTS = "Aborting. SSH key already exists: %s"
       KEYGEN_FAILED = "Failed to generate new SSH key for '%s'"

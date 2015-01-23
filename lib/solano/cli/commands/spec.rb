@@ -293,11 +293,22 @@ module Solano
       fn = @repo_config.config_filename
       root = @scm.root
 
-      if fn && root && File.exists?(File.join(root, fn)) then
-        Base64.encode64(File.read(File.join(root, fn)))
-      else
-        nil
+      # Implement a first line of defense against malformed YAML
+      encoded = nil
+      if fn && root then
+        cfg_path = File.join(root, fn)
+        if File.exists?(cfg_path) then
+          raw = File.read(cfg_path)
+          begin
+            YAML.load(raw)
+            encoded = Base64.encode64(raw)
+          rescue Exception
+            say Text::Error::MALFORMED_CONFIGURATION % cfg_path
+          end
+        end
       end
+
+      return encoded
     end
   end
 end
