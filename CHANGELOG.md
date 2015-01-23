@@ -3,6 +3,7 @@
 
 ## Version History
 
+- v1.25.5 - First release with 'solano' gem fully replacing 'tddium' gem
 - v1.25.4 - Backwards compatibility for StringIO.
 - v1.25.3 - Properly handle configuration file when running below repo root
 - v1.25.2 - Support git remote with private IP
