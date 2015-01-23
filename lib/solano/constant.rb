@@ -1,4 +1,4 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011, 2012, 2013, 2014, 2015 Solano Labs All Rights Reserved
 
 module SolanoConstant
 
@@ -405,6 +405,7 @@ EOF
     end
 
     module Error
+      MALFORMED_CONFIGURATION = 'Unable to parse YAML configuration file: %s'
       OPTIONS_NOT_SAVED = 'Options have not been saved.'
       KEY_ALREADY_EXISTS = "Aborting. SSH key already exists: %s"
       KEYGEN_FAILED = "Failed to generate new SSH key for '%s'"
