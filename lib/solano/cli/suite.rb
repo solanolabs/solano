@@ -34,7 +34,7 @@ module Solano
         params[:repo_name] = @scm.repo_name
         params[:scm] = @scm.scm_name
         if options[:account] && !params.member?(:account_id) then
-          account_id = @tddium_api.get_account_id(options[:account])
+          account_id = @solano_api.get_account_id(options[:account])
           params[:account_id] = account_id if account_id
         end
 
