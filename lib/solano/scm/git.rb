@@ -1,8 +1,12 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011-2015 Solano Labs All Rights Reserved
 
 module Solano
-  class Git
+  class Git < SCM
     include SolanoConstant
+
+    def initialize
+      super
+    end
 
     def scm_name
       return 'git'

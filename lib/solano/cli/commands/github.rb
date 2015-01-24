@@ -1,9 +1,11 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011-2015 Solano Labs All Rights Reserved
 
 module Solano
   class SolanoCli < Thor
     desc "github:migrate_hooks", "Authorize and switch the repo to use the solano webhook with the proper token"
     define_method "github:migrate_hooks" do
+      solano_setup({:scm => false})
+
       suites = @solano_api.get_suites
       if suites.any?
         say 'Please enter your github credentials; we do not store them anywhere'
@@ -13,7 +15,7 @@ module Solano
         
         suites.each do |suite|
           login = suite['org_name'] || username
-          unless has_hook_token?(suite, login)
+          if !has_hook_token?(suite, login) then
             if confirm_for_repo?(suite['repo_name'])
               set_hook_token(suite, login)
             end

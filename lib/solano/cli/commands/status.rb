@@ -1,4 +1,4 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011-2015 Solano Labs All Rights Reserved
 
 require 'stringio'
 
@@ -10,7 +10,7 @@ module Solano
       solano_setup
 
       begin
-        # solano_setup asserts that we're in a git repo
+        # solano_setup asserts that we're in a supported SCM repo
         origin_url = @scm.origin_url
         repo_params = {
           :active => true, 

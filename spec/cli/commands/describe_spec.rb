@@ -51,6 +51,8 @@ describe Solano::SolanoCli do
     end
 
     context "prints recent session if no session id specified" do
+      let(:scm) { double "Solano::Git" }
+
       before do
         solano_api.stub(:current_suite_id) { suite_id }
         subject.stub(:suite_for_current_branch?) { true }
@@ -59,20 +61,27 @@ describe Solano::SolanoCli do
         subject.should_receive(:print_table)
       end
 
+      before(:each) do
+        scm.stub(:repo?).and_return(true)
+        scm.stub(:root).and_return(Dir.pwd)
+
+        Solano::Git.stub(:new).and_return(scm)
+      end
+
       it "should work for equal commits" do
-        subject.scm.should_receive(:current_commit).and_return(git_commit)
+        scm.should_receive(:current_commit).and_return(git_commit)
         subject.describe
       end
 
       it "should work when the worspace is ahead" do
-        subject.scm.should_receive(:current_commit).and_return("#{git_commit}1")
-        subject.scm.should_receive(:number_of_commits).and_return(1)
+        scm.should_receive(:current_commit).and_return("#{git_commit}1")
+        scm.should_receive(:number_of_commits).and_return(1)
         subject.describe
       end
 
       it "should work when the worspace is behind" do
-        subject.scm.should_receive(:current_commit).and_return("#{git_commit}1")
-        subject.scm.should_receive(:number_of_commits).and_return(0, 1)
+        scm.should_receive(:current_commit).and_return("#{git_commit}1")
+        scm.should_receive(:number_of_commits).and_return(0, 1)
         subject.describe
       end
     end

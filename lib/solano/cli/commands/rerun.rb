@@ -1,4 +1,4 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011-2015 Solano Labs All Rights Reserved
 
 module Solano
   class SolanoCli < Thor
@@ -9,6 +9,7 @@ module Solano
     method_option :no_op, :type=>:boolean, :default => false, :aliases => ["-n"]
     method_option :force, :type=>:boolean, :default => false
     def rerun(session_id=nil)
+# REPO => false?
       solano_setup({:repo => false})
 
       session_id ||= session_id_for_current_suite

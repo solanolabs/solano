@@ -29,7 +29,8 @@ module Solano
     def initialize(*args)
       super(*args)
 
-      # XXX TODO: read host from .solano file, allow selecting which .solano "profile" to use
+      # TODO: read host from .solano file
+      # TODO: allow selecting which .solano "profile" to use
       cli_opts = options[:insecure] ? { :insecure => true } : {}
       @tddium_client = TddiumClient::InternalClient.new(options[:host], 
                                                         options[:port], 
@@ -37,15 +38,7 @@ module Solano
                                                         1, 
                                                         caller_version, 
                                                         cli_opts)
-
-      @scm = Solano::SCM.configure
-
-      @api_config = ApiConfig.new(@tddium_client, options[:host], options)
-      @repo_config = RepoConfig.new
-      @solano_api = SolanoAPI.new(@api_config, @tddium_client, @scm)
-
-      # BOTCH: fugly
-      @api_config.set_api(@solano_api)
+      @cli_options = options
     end
 
 
@@ -121,6 +114,10 @@ module Solano
     end
 
     def solano_setup(params={})
+      if params[:deprecated] then
+        say Text::Error::COMMAND_DEPRECATED
+      end
+
       params[:scm] = !params.member?(:scm) || params[:scm] == true
       params[:login] = true unless params.member?(:login)
       params[:repo] = params[:repo] == true
@@ -131,6 +128,14 @@ module Solano
 
       set_shell
 
+      @scm = Solano::SCM.configure
+
+      host = @cli_options[:host]
+      @api_config = ApiConfig.new(@scm, @tddium_client, host, @cli_options)
+      @repo_config = RepoConfig.new(@scm)
+      @solano_api = SolanoAPI.new(@scm, @tddium_client, @api_config)
+
+      @api_config.set_api(@solano_api)
       @api_config.load_config
 
       user_details = @solano_api.user_logged_in?(true, params[:login])

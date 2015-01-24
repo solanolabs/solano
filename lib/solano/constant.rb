@@ -501,6 +501,7 @@ Aborting. You don't have any ssh key.
 Add an ssh key first, using `solano keys:add` or visit web-site http://ci.solanolabs.com/user_settings/ssh_keys
 EOF
       CANNOT_OVERRIDE_PROFILE="Cannot override profile for existing session"
+      COMMAND_DEPRECATED = "This command is deprecated and will be removed in a future version"
     end
   end
 

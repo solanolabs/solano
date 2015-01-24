@@ -96,14 +96,16 @@ describe Solano::SCM do
 
     context 'for non git and non mercurial repo' do
       let(:solano_git) { double(Solano::Git).as_null_object }
+      let(:solano_stub_scm) { double(Solano::StubSCM).as_null_object }
 
-      it 'returns git scm' do
+      it 'returns generic scm' do
         Solano::Git.stub(:new).and_return solano_git
+        Solano::StubSCM.stub(:new).and_return solano_stub_scm
         solano_git.should_receive(:repo?).and_return false
         solano_git.class.stub(:version_ok)
         Solano::Hg.any_instance.should_receive(:repo?).and_return false
 
-        expect(Solano::SCM.configure).to eq(solano_git)
+        expect(Solano::SCM.configure).to eq(solano_stub_scm)
       end
     end
   end

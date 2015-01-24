@@ -1,10 +1,12 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011-2015 Solano Labs All Rights Reserved
 
 module Solano
   class SolanoCli < Thor
-    desc "find_failing FILES", "Find failing ordering by binary searching a failing test run"
+    desc "find_failing FILES", "Find failing ordering for ruby specs by binary searching a failing test run"
     desc "find_failing files+ failing_file", "Find out which file causes pollution / makes the failing file fail"
     def find_failing(*files)
+      solano_setup({:repo => true})
+
       failing = files.pop
       if !files.include?(failing)
         exit_failure "Files have to include the failing file, use the copy helper"

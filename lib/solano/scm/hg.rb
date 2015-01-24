@@ -4,8 +4,12 @@ require 'uri'
 require 'shellwords'
 
 module Solano
-  class Hg
+  class Hg < SCM
     include SolanoConstant
+
+    def initialize
+      super
+    end
 
     def scm_name
       return 'hg'

@@ -54,4 +54,3 @@ shared_context "solano_api_stubs" do
     stub_solano_api
   end
 end
-

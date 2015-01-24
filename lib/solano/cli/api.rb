@@ -6,7 +6,7 @@ module Solano
 
     attr_reader :scm	# rspec
 
-    def initialize(api_config, tddium_client, scm)
+    def initialize(scm, tddium_client, api_config)
       @scm = scm
       @api_config = api_config
       @tddium_client = tddium_client

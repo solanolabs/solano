@@ -84,6 +84,10 @@ describe Solano::SolanoCli do
     let(:branch) { false }
     let(:output) { subject.send(:capture_stdout) { subject.send(:show_session_details, "xxx", {:suite_id => 1}, "X", "Y-%s-", branch) } }
 
+    before(:each) do
+      subject.send(:solano_setup)
+    end
+
     it "shows empty" do
       expect(solano_api).to receive(:get_sessions).once.and_return([])
       output = subject.send(:capture_stdout) { subject.send(:show_session_details, "xxx", {}, "X", "Y", false) }

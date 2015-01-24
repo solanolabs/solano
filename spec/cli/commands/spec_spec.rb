@@ -9,14 +9,18 @@ describe Solano::SolanoCli do
   include_context "solano_api_stubs"
 
   describe "#read_and_encode_config_file" do
+    before(:each) do
+      subject.send(:solano_setup, {:repo => true})
+    end
+
     it "should return encoded config file" do
-      system("mkdir .tddiumtesting")
-      Dir.chdir ".tddiumtesting"
-
-      subject.send(:read_and_encode_config_file).should_not be_nil
-
-      Dir.chdir ".."
-      system("rm -rf .tddiumtesting")
+      dname = ".tddiumtesting"
+      system("rm -rf #{dname}")
+      system("mkdir #{dname}")
+      Dir.chdir(dname) do
+        subject.send(:read_and_encode_config_file).should_not be_nil
+      end
+      system("rm -rf #{dname}")
     end
   end
 
@@ -27,6 +31,7 @@ describe Solano::SolanoCli do
     let(:session) { { "id" => 1 } }
     let(:latest_commit) { "latest_commit" }
     let(:test_executions) { { "started" => 1, "tests" => [], "session_done" => true, "session_status" => "passed"}}
+    let(:scm) { double "Solano::Git" }
 
     def stub_git
       Solano::Git.stub(:git_changes?).and_return(false)
@@ -50,6 +55,19 @@ describe Solano::SolanoCli do
       solano_api.stub(:poll_session).and_return(test_executions)
       solano_api.stub(:get_keys).and_return([{name: 'some_key', pub: 'some content'}])
     end
+ 
+    before(:each) do
+      scm.stub(:repo?).and_return(true)
+      scm.stub(:changes?).and_return(false)
+      scm.stub(:root).and_return(Dir.pwd)
+      scm.stub(:commits).and_return([latest_commit])
+      scm.stub(:push_latest).and_return(true)
+      scm.stub(:current_branch).and_return('current_branch')
+      scm.stub(:origin_url).and_return('ssh://git@github.com/solano/solano.git')
+      scm.stub(:ignore_path).and_return('.gitignore')
+
+      Solano::Git.stub(:new).and_return(scm)
+    end
 
     it "should create a new session" do
       commits_encoded = Base64.encode64(MessagePackPure.pack([latest_commit]))
@@ -67,7 +85,7 @@ describe Solano::SolanoCli do
                                         :cache_control_encoded => cache_control_encoded,
                                         :cache_save_paths_encoded => cache_paths_encoded,
                                         :raw_config_file => repo_config_file_encoded)
-      subject.scm.stub(:latest_commit).and_return(latest_commit)
+      scm.stub(:latest_commit).and_return(latest_commit)
       subject.spec
     end
 
@@ -77,8 +95,8 @@ describe Solano::SolanoCli do
       solano_api.stub(:get_suites).and_return([
         {"account" => "handle-2"},
       ])
+      scm.stub(:latest_commit).and_return(latest_commit)
       subject.stub(:options) { {:session_id=>1} }
-      subject.scm.stub(:latest_commit).and_return(latest_commit)
       subject.spec
     end
 
@@ -87,15 +105,15 @@ describe Solano::SolanoCli do
       solano_api.stub(:get_suites).and_return([
         {"account" => "handle-2"},
       ])
-      subject.scm.stub(:latest_commit).and_return(latest_commit)
-      subject.scm.should_receive(:push_latest).with(anything, anything, {}).and_return(true)
+      scm.stub(:latest_commit).and_return(latest_commit)
+      scm.should_receive(:push_latest).with(anything, anything, {}).and_return(true)
       subject.spec
     end
 
     it "should push to the private repo uri in ci mode" do
+      scm.stub(:latest_commit).and_return(latest_commit)
+      scm.should_receive(:push_latest).with(anything, anything, use_private_uri: true).and_return(true)
       subject.stub(:options) { {:machine => true} }
-      subject.scm.stub(:latest_commit).and_return(latest_commit)
-      subject.scm.should_receive(:push_latest).with(anything, anything, use_private_uri: true).and_return(true)
       subject.spec
     end
 

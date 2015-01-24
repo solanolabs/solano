@@ -1,4 +1,4 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011-2015 Solano Labs All Rights Reserved
 
 module Solano
   class SolanoCli < Thor
@@ -10,6 +10,8 @@ module Solano
     def heroku
       say "To activate your heroku account, please visit"
       say "https://ci.solanolabs.com/"
+
+      solano_setup({:scm => false})
     end
   end
 end

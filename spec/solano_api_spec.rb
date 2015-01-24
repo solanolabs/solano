@@ -9,7 +9,7 @@ describe Solano::SolanoAPI do
   let(:scm) { Solano::SCM.configure }
   let(:api_config) { double(Solano::ApiConfig, :get_branch => nil) }
   let(:tddium_client) { double(TddiumClient::Client) }
-  let(:subject) { Solano::SolanoAPI.new(api_config, tddium_client, scm) }
+  let(:subject) { Solano::SolanoAPI.new(scm, tddium_client, api_config) }
 
   shared_examples_for "retrieving the branch info" do
     before do

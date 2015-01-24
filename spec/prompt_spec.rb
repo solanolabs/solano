@@ -39,6 +39,10 @@ describe Solano::SolanoCli do
       Solano::SolanoCli.send(:public, :prompt_suite_params)
     end
 
+    before(:each) do
+      subject.send(:solano_setup)
+    end
+
     describe "account logic" do
       before do
         @prompt_calls = 0

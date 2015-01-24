@@ -19,7 +19,10 @@ describe Solano::SolanoCli do
 
     around do |test|
       Dir.mktmpdir do |dir|
-        Dir.chdir(dir, &test)
+        Dir.chdir(dir) do
+          Kernel.system("git init .")
+          test.call()
+        end
       end
     end
 

@@ -1,4 +1,4 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011-2015 Solano Labs All Rights Reserved
 
 require 'yaml'
 
@@ -20,8 +20,8 @@ module Solano
     include SolanoConstant
     include ConfigHelper
 
-    def initialize
-      @scm = Solano::SCM.configure
+    def initialize(scm)
+      @scm = scm
       @config = load_config
     end
 
@@ -77,12 +77,12 @@ module Solano
     include SolanoConstant
 
     # BOTCH: should be a state object rather than entire CLI object
-    def initialize(tddium_client, host, cli_options)
-      @scm = Solano::SCM.configure
+    def initialize(scm, tddium_client, host, cli_options)
+      @scm = scm
       @tddium_client = tddium_client
-      @config = Hash.new
       @host = host
       @cli_options = cli_options
+      @config = Hash.new
     end
 
     # BOTCH: fugly

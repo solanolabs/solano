@@ -1,4 +1,4 @@
-# Copyright (c) 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2012-2015 Solano Labs All Rights Reserved
 
 require 'fileutils'
 
@@ -8,7 +8,7 @@ module Solano
     method_option :noop, :type => :boolean, :default => false
     method_option :force, :type => :boolean, :default => false
     define_method "hg:mirror" do |*args|
-      solano_setup({:repo => true})
+      solano_setup({:repo => true, :deprecated => true})
 
       if @scm.scm_name != 'hg' then
         exit_failure("Current repository does not appear to be using Mercurial")

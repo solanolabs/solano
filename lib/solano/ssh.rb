@@ -39,7 +39,7 @@ module Solano
          :fingerprint=>`ssh-keygen -lf #{pub_filename}`}
       end
 
-      def validate_keys name, path, solano_api, generate_new_key = false
+      def validate_keys(name, path, solano_api, generate_new_key = false)
         keys_details, keydata = solano_api.get_keys, nil
 
         # key name should be unique
@@ -47,11 +47,11 @@ module Solano
           abort Text::Error::ADD_KEYS_DUPLICATE % name
         end
 
-        unless generate_new_key
+        if !generate_new_key then
           # check out key's content uniqueness
           keydata = self.load_ssh_key(path, name)
           duplicate_keys = keys_details.select{|key| key['pub'] == keydata[:pub] }
-          unless duplicate_keys.empty?
+          if !duplicate_keys.empty? then
             abort Text::Error::ADD_KEY_CONTENT_DUPLICATE % duplicate_keys.first['name']
           end
         else
