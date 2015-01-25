@@ -406,7 +406,6 @@ EOF
     end
 
     module Error
-      MALFORMED_CONFIGURATION = 'Unable to parse YAML configuration file: %s'
       OPTIONS_NOT_SAVED = 'Options have not been saved.'
       KEY_ALREADY_EXISTS = "Aborting. SSH key already exists: %s"
       KEYGEN_FAILED = "Failed to generate new SSH key for '%s'"
@@ -419,7 +418,7 @@ EOF
       ADD_CONFIG_ERROR = "Error setting configuration variable"
       REMOVE_CONFIG_ERROR = "Error removing configuration variable"
       SCM_NOT_A_REPOSITORY = "Current working directory is not a suitable repository"
-      SCM_NO_ORIGIN = "Unable to determine repository remote origin URI"
+      SCM_NO_ORIGIN = "Origin URI not set; Solano CI requires origin URI to identify repository"
       INVALID_CONFIGURED_PATTERN =<<EOF;
 Configuring test pattern from %s...
 

@@ -21,7 +21,13 @@ module Solano
     end
 
     def load_config
+      config, raw_config = read_config(false)
+      return config
+    end
+
+    def read_config(raise_error)
       config = nil
+      raw_config = nil
 
       root = @scm.root
       cfgfile_pair = pick_config_pair(root, Config::CONFIG_PATHS)
@@ -37,20 +43,25 @@ module Solano
         cfgfile = cfgfile_pair.first
         @config_filename = cfgfile_pair[1]
         begin
-          rawconfig = File.read(cfgfile)
-          if rawconfig && rawconfig !~ /\A\s*\z/ then
-            config = YAML.load(rawconfig)
+          raw_config = File.read(cfgfile)
+          if raw_config && raw_config !~ /\A\s*\z/ then
+            config = YAML.load(raw_config)
             config = hash_stringify_keys(config)
             config = config['solano'] || config['tddium'] || config
           end
         rescue Exception => e
           message = Text::Warning::YAML_PARSE_FAILED % cfgfile
-          raise ::Solano::SolanoError.new(message)
+          if raise_error then
+            raise ::Solano::SolanoError.new(message)
+          else
+            say message
+          end
         end
       end
 
       config ||= Hash.new
-      return config
+      raw_config ||= ''
+      return [config, raw_config]
     end
 
     private
