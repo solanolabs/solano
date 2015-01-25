@@ -3,3 +3,9 @@ bundler_version: 1.3.5
 test_pattern:
   - features/*.feature
   - spec/**_spec.rb
+cache:
+  key_paths:
+    - Gemfile
+    - Gemfile.lock
+    - solano.gemspec
+    - lib/solano/version.rb
