@@ -2,7 +2,10 @@
 
 module Solano
   class SCM
+    attr_accessor :default_origin_url
+
     def initialize
+      @default_origin_url = nil
     end
 
     def scm_name
@@ -21,7 +24,7 @@ module Solano
     end
 
     def origin_url
-      return nil
+      return @default_origin_url
     end
 
     def ignore_path

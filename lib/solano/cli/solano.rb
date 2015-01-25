@@ -140,9 +140,13 @@ module Solano
         exit_failure
       end
 
+      @repo_config = RepoConfig.new(@scm)
+      if origin_url = @repo_config[:origin_url] then
+        @scm.default_origin_url = origin_url
+      end
+
       host = @cli_options[:host]
       @api_config = ApiConfig.new(@scm, @tddium_client, host, @cli_options)
-      @repo_config = RepoConfig.new(@scm)
       @solano_api = SolanoAPI.new(@scm, @tddium_client, @api_config)
 
       @api_config.set_api(@solano_api)

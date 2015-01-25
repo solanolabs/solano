@@ -1,4 +1,4 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011-2015 Solano Labs All Rights Reserved
 
 require 'uri'
 require 'shellwords'
@@ -38,6 +38,8 @@ module Solano
     end
 
     def origin_url
+      return @default_origin_url if @default_origin_url
+
       result = `(hg paths default || echo HG_FAILED) 2>/dev/null`
       return nil if result =~ /HG_FAILED/
       result.strip!

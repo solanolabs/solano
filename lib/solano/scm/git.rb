@@ -39,6 +39,8 @@ module Solano
     end
 
     def origin_url
+      return @default_origin_url if @default_origin_url
+
       result = `(git config --get remote.origin.url || echo GIT_FAILED) 2>/dev/null`
       return nil if result =~ /GIT_FAILED/
       result.strip
