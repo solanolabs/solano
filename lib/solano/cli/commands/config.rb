@@ -7,7 +7,11 @@ module Solano
     one organization), or 'org:an_organization_name' (if you are a member of
     multiple organizations). The default is 'suite'."
     def config(scope="suite")
-      solano_setup({:repo => true, :suite => true})
+      params = {:repo => true}
+      if scope == 'suite' then
+        params[:suite] = true
+      end
+      solano_setup(params)
 
       begin
         config_details = @solano_api.get_config_key(scope)
@@ -24,7 +28,11 @@ module Solano
     one organization), or 'org:an_organization_name' (if you are a member of
     multiple organizations)."
     define_method "config:add" do |scope, key, value|
-      solano_setup({:repo => true, :suite => true})
+      params = {:repo => true}
+      if scope == 'suite' then
+        params[:suite] = true
+      end
+      solano_setup(params)
 
       begin
         say Text::Process::ADD_CONFIG % [key, value, scope]
@@ -39,7 +47,11 @@ module Solano
 
     desc "config:remove [SCOPE] [KEY]", "Remove config variable NAME from SCOPE."
     define_method "config:remove" do |scope, key|
-      solano_setup({:repo => true, :suite => true})
+      params = {:repo => true}
+      if scope == 'suite' then
+        params[:suite] = true
+      end
+      solano_setup(params)
 
       begin
         say Text::Process::REMOVE_CONFIG % [key, scope]

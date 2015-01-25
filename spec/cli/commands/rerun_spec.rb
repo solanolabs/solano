@@ -21,7 +21,7 @@ describe Solano::SolanoCli do
     end
 
     it "should produce a command line from an last session's results" do
-      solano_api.should_receive(:current_suite_id).twice.and_return(123)
+      solano_api.should_receive(:current_suite_id).exactly(3).times.and_return(123)
       solano_api.should_receive(:get_sessions).and_return([{"id" => 1234}])
       solano_api.should_receive(:query_session).with(1234).and_return(query_session_result)
       Kernel.should_receive(:exec).with(/solano run foo.rb/)

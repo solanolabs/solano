@@ -4,9 +4,16 @@ module Solano
   class SolanoCli < Thor
     desc "web [SESSION_ID]", "Open build report in web browser"
     def web(*args)
-      solano_setup({:login => false, :scm => false})
-
       session_id = args.first
+
+      params = {:login => false}
+      if session_id.nil? then
+        params[:scm] = true
+        params[:repo] = true
+      end
+
+      solano_setup(params)
+
       if session_id then
         fragment = "1/reports/#{session_id.to_i}" if session_id =~ /^[0-9]+$/
       end

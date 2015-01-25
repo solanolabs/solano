@@ -7,7 +7,7 @@ module Solano
     desc "status", "Display information about this suite, and any open dev sessions"
     method_option :json, :type => :boolean, :default => false
     def status
-      solano_setup
+      solano_setup({:repo => true})
 
       begin
         # solano_setup asserts that we're in a supported SCM repo

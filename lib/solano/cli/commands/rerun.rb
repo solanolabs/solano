@@ -9,8 +9,11 @@ module Solano
     method_option :no_op, :type=>:boolean, :default => false, :aliases => ["-n"]
     method_option :force, :type=>:boolean, :default => false
     def rerun(session_id=nil)
-# REPO => false?
-      solano_setup({:repo => false})
+      params = {:scm => true, :repo => false}
+      if session_id.nil? then
+        params = {:repo => true, :suite => true}
+      end
+      solano_setup(params)
 
       session_id ||= session_id_for_current_suite
 

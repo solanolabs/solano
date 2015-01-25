@@ -406,7 +406,11 @@ EOF
     end
 
     module Error
+      NOT_INITIALIZED = "Solano CI must be initialized. Try 'solano login'"
       OPTIONS_NOT_SAVED = 'Options have not been saved.'
+      LIST_CONFIG_ERROR = "Error listing configuration variables"
+      ADD_CONFIG_ERROR = "Error setting configuration variable"
+      REMOVE_CONFIG_ERROR = "Error removing configuration variable"
       KEY_ALREADY_EXISTS = "Aborting. SSH key already exists: %s"
       KEYGEN_FAILED = "Failed to generate new SSH key for '%s'"
       LIST_KEYS_ERROR = "Error listing SSH keys"
@@ -414,11 +418,9 @@ EOF
       ADD_KEYS_DUPLICATE = "You already have a key named '%s'"
       ADD_KEY_CONTENT_DUPLICATE = "You already have a key named '%s' with the same content"
       ADD_KEYS_ERROR = "Failed to add key '%s'"
-      LIST_CONFIG_ERROR = "Error listing configuration variables"
-      ADD_CONFIG_ERROR = "Error setting configuration variable"
-      REMOVE_CONFIG_ERROR = "Error removing configuration variable"
-      SCM_NOT_A_REPOSITORY = "Current working directory is not a suitable repository"
-      SCM_NO_ORIGIN = "Origin URI not set; Solano CI requires origin URI to identify repository"
+      INVALID_SSH_PUBLIC_KEY = '%s does not appear to be a valid SSH public key'
+      INACCESSIBLE_SSH_PUBLIC_KEY = '%s is not accessible: %s'
+      INVALID_SOLANO_FILE = ".solano.%s config file is corrupt. Try 'solano login'"
       INVALID_CONFIGURED_PATTERN =<<EOF;
 Configuring test pattern from %s...
 
@@ -431,6 +433,8 @@ You entered:
 >>> Edit %s and rerun `solano suite --edit`
 
 EOF
+      SCM_NOT_A_REPOSITORY = "Current working directory is not a suitable repository"
+      SCM_NO_ORIGIN = "Origin URI not set; Solano CI requires origin URI to identify repository"
       SCM_REPO_NOT_READY = "Your repository is being prepped.  Try again in a minute."
       SCM_PUSH_FAILED = <<EOF;
 
@@ -444,8 +448,6 @@ For any other error, contact us at: support@solanolabs.com
 
 
 EOF
-      INVALID_SSH_PUBLIC_KEY = '%s does not appear to be a valid SSH public key'
-      INACCESSIBLE_SSH_PUBLIC_KEY = '%s is not accessible: %s'
       SCM_CHANGES_NOT_COMMITTED =<<EOF
 There are uncommitted changes in the local repository.
 
@@ -453,8 +455,6 @@ Commit changes before running 'solano spec'.
 
 Use 'solano spec --force' to test with only already-committed changes.
 EOF
-      NOT_INITIALIZED = "Solano CI must be initialized. Try 'solano login'"
-      INVALID_SOLANO_FILE = ".solano.%s config file is corrupt. Try 'solano login'"
       SCM_NOT_FOUND = "Solano CI requires git or mercurial which are not on your PATH"
       SCM_NOT_INITIALIZED =<<EOF;
 It doesn't look like you're in a git repo.  If you're not, use 'git init' to

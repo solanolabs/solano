@@ -7,6 +7,7 @@ Feature: Web command
     Given the command is "solano web"
 
   Scenario: Run solano web
+    Given a git repo is initialized
     When I run `solano web`
     Then the exit status should be 0
 
