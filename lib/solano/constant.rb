@@ -419,6 +419,7 @@ EOF
       ADD_CONFIG_ERROR = "Error setting configuration variable"
       REMOVE_CONFIG_ERROR = "Error removing configuration variable"
       SCM_NOT_A_REPOSITORY = "Current working directory is not a suitable repository"
+      SCM_NO_ORIGIN = "Unable to determine repository remote origin URI"
       INVALID_CONFIGURED_PATTERN =<<EOF;
 Configuring test pattern from %s...
 

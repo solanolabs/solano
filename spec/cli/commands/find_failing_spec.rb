@@ -21,6 +21,7 @@ describe Solano::SolanoCli do
       Dir.mktmpdir do |dir|
         Dir.chdir(dir) do
           Kernel.system("git init .")
+          Kernel.system("git remote add origin git@github.com/solanolabs/solano")
           test.call()
         end
       end

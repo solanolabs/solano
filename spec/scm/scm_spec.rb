@@ -15,35 +15,35 @@ describe Solano::SCM do
 
       context 'when git is installed' do
         it "doesn't abort" do
-          Solano::Git.any_instance.should_receive(:repo?).and_return true
-          Solano::Git.stub(:`).with('git --version').and_return 'git version 1.9.3 (Apple Git-50)'
-          Solano::Git.should_receive(:new).and_call_original
-          Solano::Hg.should_not_receive(:new)
+          expect_any_instance_of(Solano::Git).to receive(:repo?).and_return(true)
+          expect(Solano::Git).to receive(:`).with('git --version').and_return 'git version 1.9.3 (Apple Git-50)'
+          expect(Solano::Git).to receive(:new).and_call_original
+          expect(Solano::Hg).not_to receive(:new)
 
           expect{ Solano::SCM.configure }.not_to raise_error
         end
 
         it 'returns correct SCM instance' do
-          Solano::Git.should_receive(:new).and_return solano_git
-          solano_git.should_receive(:repo?).and_return true
-          solano_git.class.stub(:version_ok)
-          Solano::Git.stub(:`).with('git --version').and_return 'git version 1.9.3 (Apple Git-50)'
-          Solano::Hg.should_not_receive(:new)
+          expect(Solano::Git).to receive(:new).and_return solano_git
+          expect(solano_git).to receive(:repo?).and_return(true)
+          allow(solano_git.class).to receive(:version_ok)
+          expect(Solano::Git).to receive(:`).with('git --version').and_return 'git version 1.9.3 (Apple Git-50)'
+          expect(Solano::Hg).not_to receive(:new)
 
-          expect(Solano::SCM.configure).to eq(solano_git)
+          expect(Solano::SCM.configure).to eq([solano_git, true])
         end
       end
 
       context 'when git is not installed' do
         it 'aborts with message' do
-          Solano::Git.should_receive(:new).and_call_original
-          Solano::Git.any_instance.should_receive(:repo?).and_return true
-          Solano::Git.stub(:`).with('git --version').and_raise Exception
-          Solano::Hg.should_not_receive(:new)
+          expect(Solano::Git).to receive(:new).twice.and_call_original
+          expect_any_instance_of(Solano::Git).to receive(:repo?).and_return(true)
+          expect(Solano::Git).to receive(:`).twice.with('git --version').and_raise(Exception)
+          expect(Solano::Hg).to receive(:new).twice.and_call_original
+          expect(Solano::Hg).to receive(:`).with('hg -q --version').and_raise(Exception)
 
-          expect{
-            Solano::SCM.configure
-          }.to raise_error(SystemExit, self.class::Text::Error::SCM_NOT_FOUND)
+          scm, ok = Solano::SCM.configure
+          expect(ok).to eq(false)
         end
       end
     end
@@ -53,12 +53,12 @@ describe Solano::SCM do
         let(:solano_hg) { double(Solano::Hg).as_null_object }
 
         it "doesn't abort" do
-          Solano::Git.any_instance.should_receive(:repo?).and_return false
-          Solano::Git.any_instance.should_not_receive(:version_ok)
+          expect_any_instance_of(Solano::Git).to receive(:repo?).and_return(false)
+          expect(Solano::Git).not_to receive(:version_ok)
 
-          Solano::Hg.should_receive(:new).and_call_original
-          Solano::Hg.any_instance.should_receive(:repo?).and_return true
-          Solano::Hg.stub(:`).with('hg -q --version').and_return 'Mercurial Distributed SCM (version 3.1.1)'
+          expect(Solano::Hg).to receive(:new).and_call_original
+          expect_any_instance_of(Solano::Hg).to receive(:repo?).and_return(true)
+          expect(Solano::Hg).to receive(:`).with('hg -q --version').and_return('Mercurial Distributed SCM (version 3.1.1)')
 
           expect{
             Solano::SCM.configure
@@ -66,46 +66,50 @@ describe Solano::SCM do
         end
 
         it 'returns correct SCM instance' do
-          Solano::Git.any_instance.should_receive(:repo?).and_return false
-          Solano::Git.any_instance.should_not_receive(:version_ok)
+          expect_any_instance_of(Solano::Git).to receive(:repo?).and_return(false)
+          expect(Solano::Git).not_to receive(:version_ok)
 
-          Solano::Hg.stub(:`).with('hg -q --version').and_return 'Mercurial Distributed SCM (version 3.1.1)'
-          Solano::Hg.stub(:new).and_return solano_hg
-          solano_hg.should_receive(:repo?).and_return true
-          solano_hg.class.stub(:version_ok)
+          expect(Solano::Hg).to receive(:`).with('hg -q --version').and_return('Mercurial Distributed SCM (version 3.1.1)')
+          expect(Solano::Hg).to receive(:new).and_return solano_hg
+          expect(solano_hg).to receive(:repo?).and_return(true)
+          allow(solano_hg.class).to receive(:version_ok)
           
-          expect(Solano::SCM.configure).to eq(solano_hg)
+          expect(Solano::SCM.configure).to eq([solano_hg, true])
         end
       end
 
       context 'when mercurial is not installed' do
         it 'abort with message' do
-          Solano::Git.any_instance.should_receive(:repo?).and_return false
-          Solano::Git.any_instance.should_not_receive(:version_ok)
+          expect_any_instance_of(Solano::Git).to receive(:repo?).and_return(false)
+          expect(Solano::Git).to receive(:version_ok).and_return(false)
 
-          Solano::Hg.should_receive(:new).and_call_original
-          Solano::Hg.any_instance.should_receive(:repo?).and_return true
-          Solano::Hg.stub(:`).with('hg -q --version').and_raise(Exception)
+          expect_any_instance_of(Solano::Hg).to receive(:repo?).and_return(false)
+          expect(Solano::Hg).to receive(:`).with('hg -q --version').and_raise(Exception)
 
-          expect{
-            Solano::SCM.configure
-          }.to raise_error(SystemExit, self.class::Text::Error::SCM_NOT_FOUND)
+
+          scm, ok = Solano::SCM.configure
+          expect(ok).to eq(false)
         end
       end
     end
 
     context 'for non git and non mercurial repo' do
+      let(:solano_hg) { double(Solano::Hg).as_null_object }
       let(:solano_git) { double(Solano::Git).as_null_object }
       let(:solano_stub_scm) { double(Solano::StubSCM).as_null_object }
 
       it 'returns generic scm' do
-        Solano::Git.stub(:new).and_return solano_git
-        Solano::StubSCM.stub(:new).and_return solano_stub_scm
-        solano_git.should_receive(:repo?).and_return false
-        solano_git.class.stub(:version_ok)
-        Solano::Hg.any_instance.should_receive(:repo?).and_return false
+        expect(Solano::StubSCM).to receive(:new).and_return solano_stub_scm
 
-        expect(Solano::SCM.configure).to eq(solano_stub_scm)
+        expect(Solano::Git).to receive(:new).twice.and_return solano_git
+        expect(solano_git).to receive(:repo?).and_return(false)
+        expect(Solano::Git).to receive(:version_ok).and_return(false)
+
+        expect(Solano::Hg).to receive(:new).twice.and_return solano_hg
+        expect(solano_hg).to receive(:repo?).and_return(false)
+        expect(Solano::Hg).to receive(:version_ok).and_return(false)
+
+        expect(Solano::SCM.configure).to eq([solano_stub_scm, false])
       end
     end
   end

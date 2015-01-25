@@ -1,4 +1,4 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011-2015 Solano Labs All Rights Reserved
 
 module Solano
   class SolanoCli < Thor
@@ -118,17 +118,27 @@ module Solano
         say Text::Error::COMMAND_DEPRECATED
       end
 
-      params[:scm] = !params.member?(:scm) || params[:scm] == true
-      params[:login] = true unless params.member?(:login)
-      params[:repo] = params[:repo] == true
+      # suite => repo => scm
       params[:suite] = params[:suite] == true
+
+      params[:repo] = params[:repo] == true
+      params[:repo] ||= params[:suite]
+
+      params[:scm] = !params.member?(:scm) || params[:scm] == true
+      params[:scm] ||= params[:repo]
+
+      params[:login] = true unless params[:login] == false
 
       $stdout.sync = true
       $stderr.sync = true
 
       set_shell
 
-      @scm = Solano::SCM.configure
+      @scm, ok = Solano::SCM.configure
+      if params[:scm] && !ok then
+        say Text::Error::SCM_NOT_FOUND
+        exit_failure
+      end
 
       host = @cli_options[:host]
       @api_config = ApiConfig.new(@scm, @tddium_client, host, @cli_options)
@@ -136,20 +146,40 @@ module Solano
       @solano_api = SolanoAPI.new(@scm, @tddium_client, @api_config)
 
       @api_config.set_api(@solano_api)
-      @api_config.load_config
+
+      begin
+        @api_config.load_config
+      rescue ::Solano::SolanoError => e
+        say e.message
+        exit_failure
+      end
 
       user_details = @solano_api.user_logged_in?(true, params[:login])
       if params[:login] && user_details.nil? then
         exit_failure
       end
 
-      if params[:repo] && !@scm.repo? then
-        say Text::Error::SCM_NOT_A_REPOSITORY
-        exit_failure
+      if params[:repo] then
+        if !@scm.repo? then
+          say Text::Error::SCM_NOT_A_REPOSITORY
+          exit_failure
+        end
+
+        if @scm.origin_url.nil? then
+          say Text::Error::SCM_NO_ORIGIN
+          exit_failure
+        end
       end
 
-      if params[:suite] && !suite_for_current_branch? then
-        exit_failure
+      if params[:suite] then
+        if @scm.current_branch.nil? then
+          say Text::Error::SCM_NO_BRANCH
+          exit_failure
+        end
+
+        if !suite_for_current_branch? then
+          exit_failure
+        end
       end
 
       @user_details = user_details

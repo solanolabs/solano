@@ -4,17 +4,34 @@ module Solano
   class SCM
     def self.configure
       scm = nil
-      [::Solano::Git, ::Solano::Hg].each do |scm_class|
+      ok = false
+      scms = [::Solano::Git, ::Solano::Hg]
+
+      # Select SCM based on command availability and current repo type
+      scms.each do |scm_class|
         sniff_scm = scm_class.new
-        if sniff_scm.repo? && scm_class.version_ok
+        if sniff_scm.repo? && scm_class.version_ok then
+          ok = true
           scm = sniff_scm
           break
         end
       end
 
-      # default scm is null SCM
+      # Fall back to first SCM type that is available
+      if !ok then
+        scms.each do |scm_class|
+          sniff_scm = scm_class.new
+          if scm_class.version_ok then
+            ok = true
+            scm = sniff_scm
+            break
+          end
+        end
+      end
+
+      # Default to a null SCM implementation
       scm ||= ::Solano::StubSCM.new
-      return scm
+      return [scm, ok]
     end
   end
 end

@@ -33,3 +33,16 @@ module Solano
     return result
   end
 end
+
+module ConfigHelper
+  def hash_stringify_keys(h)
+    case h
+    when Hash
+      Hash[ h.map { |k, v| [ k.to_s, hash_stringify_keys(v) ] } ]
+    when Enumerable
+      h.map { |v| hash_stringify_keys(v) }
+    else
+      h
+    end
+  end
+end

@@ -178,7 +178,7 @@ module Solano
         rescue Exception
         end
         if version.nil? || version.empty? then
-          abort Text::Error::SCM_NOT_FOUND
+          return false
         end
         version_parts = version.split(".")
         if version_parts[0].to_i < 1 ||

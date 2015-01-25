@@ -2,19 +2,6 @@
 
 require 'yaml'
 
-module ConfigHelper
-  def hash_stringify_keys(h)
-    case h
-    when Hash
-      Hash[ h.map { |k, v| [ k.to_s, hash_stringify_keys(v) ] } ]
-    when Enumerable
-      h.map { |v| hash_stringify_keys(v) }
-    else
-      h
-    end
-  end
-end
-
 module Solano
   class RepoConfig
     include SolanoConstant
@@ -57,7 +44,8 @@ module Solano
             config = config['solano'] || config['tddium'] || config
           end
         rescue Exception => e
-          warn(Text::Warning::YAML_PARSE_FAILED % cfgfile)
+          message = Text::Warning::YAML_PARSE_FAILED % cfgfile
+          raise ::Solano::SolanoError.new(message)
         end
       end
 

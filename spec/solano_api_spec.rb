@@ -6,7 +6,7 @@ require 'solano/cli/api'
 require 'solano/cli/config'
 
 describe Solano::SolanoAPI do
-  let(:scm) { Solano::SCM.configure }
+  let(:scm) { scm_config = Solano::SCM.configure; scm_config[0] }
   let(:api_config) { double(Solano::ApiConfig, :get_branch => nil) }
   let(:tddium_client) { double(TddiumClient::Client) }
   let(:subject) { Solano::SolanoAPI.new(scm, tddium_client, api_config) }
