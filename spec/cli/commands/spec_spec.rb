@@ -18,7 +18,7 @@ describe Solano::SolanoCli do
       system("rm -rf #{dname}")
       system("mkdir #{dname}")
       Dir.chdir(dname) do
-        subject.send(:read_and_encode_config_file).should_not be_nil
+        expect(subject.send(:read_and_encode_config_file)).not_to be_nil
       end
       system("rm -rf #{dname}")
     end
@@ -75,23 +75,25 @@ describe Solano::SolanoCli do
       cache_control_encoded = Base64.encode64(MessagePackPure.pack(
         'Gemfile' => Digest::SHA1.file("Gemfile").to_s,
         'Gemfile.lock' => Digest::SHA1.file("Gemfile.lock").to_s,
+        'solano.gemspec' => Digest::SHA1.file("solano.gemspec").to_s,
+        'lib/solano/version.rb' => Digest::SHA1.file("lib/solano/version.rb").to_s,
       ))
       repo_config_file_encoded = Base64.encode64(File.read('config/solano.yml'))
       solano_api.stub(:get_suites).and_return([
         {"account" => "handle-2"},
       ])
-      solano_api.should_receive(:create_session).with(suite_id, 
-                                        :commits_encoded => commits_encoded,
-                                        :cache_control_encoded => cache_control_encoded,
-                                        :cache_save_paths_encoded => cache_paths_encoded,
-                                        :raw_config_file => repo_config_file_encoded)
+      expect(solano_api).to receive(:create_session).with(suite_id, 
+                                    :commits_encoded => commits_encoded,
+                                    :cache_control_encoded => cache_control_encoded,
+                                    :cache_save_paths_encoded => cache_paths_encoded,
+                                    :raw_config_file => repo_config_file_encoded)
       scm.stub(:latest_commit).and_return(latest_commit)
       subject.spec
     end
 
     it "should not create a new session if a session_id is specified" do
-      solano_api.should_not_receive(:create_session)
-      solano_api.should_receive(:update_session)
+      expect(solano_api).to_not receive(:create_session)
+      expect(solano_api).to receive(:update_session)
       solano_api.stub(:get_suites).and_return([
         {"account" => "handle-2"},
       ])
@@ -106,13 +108,13 @@ describe Solano::SolanoCli do
         {"account" => "handle-2"},
       ])
       scm.stub(:latest_commit).and_return(latest_commit)
-      scm.should_receive(:push_latest).with(anything, anything, {}).and_return(true)
+      expect(scm).to receive(:push_latest).with(anything, anything, {}).and_return(true)
       subject.spec
     end
 
     it "should push to the private repo uri in ci mode" do
       scm.stub(:latest_commit).and_return(latest_commit)
-      scm.should_receive(:push_latest).with(anything, anything, use_private_uri: true).and_return(true)
+      expect(scm).to receive(:push_latest).with(anything, anything, use_private_uri: true).and_return(true)
       subject.stub(:options) { {:machine => true} }
       subject.spec
     end

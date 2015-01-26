@@ -20,8 +20,8 @@ describe Solano::SolanoCli do
     around do |test|
       Dir.mktmpdir do |dir|
         Dir.chdir(dir) do
-          Kernel.system("git init .")
-          Kernel.system("git remote add origin git@github.com/solanolabs/solano")
+          Kernel.system("git init . 2>&1 > /dev/null")
+          Kernel.system("git remote add origin git@github.com:solanolabs/solano" )
           test.call()
         end
       end
@@ -31,7 +31,7 @@ describe Solano::SolanoCli do
       write "a.rb", "$a=1"
       write "b.rb", "$b=1"
       write "c.rb", "exit($b || 0)"
-      subject.stub(:say)
+      allow(subject).to receive(:say).and_return(nil)
     end
 
     it "fails with missing failure" do
@@ -61,13 +61,13 @@ describe Solano::SolanoCli do
     end
 
     it "find the polluter" do
-      subject.should_receive(:say).with("Fails when b.rb, c.rb are run together")
+      expect(subject).to receive(:say).with("Fails when b.rb, c.rb are run together")
       run_valid_order
     end
 
     it "finds the polluter in a bigger set" do
       10.times { |i| write "#{i}.rb", "$a#{i}=1" }
-      subject.should_receive(:say).with("Fails when b.rb, c.rb are run together")
+      expect(subject).to receive(:say).with("Fails when b.rb, c.rb are run together")
       subject.find_failing("a.rb", "0.rb", "1.rb", "2.rb", "b.rb", "3.rb", "4.rb", "5.rb", "6.rb", "7.rb", "c.rb", "8.rb", "9.rb", "c.rb")
     end
   end

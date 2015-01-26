@@ -39,14 +39,14 @@ shared_context "solano_api_stubs" do
   let(:tddium_client) { double(TddiumClient::InternalClient) }
 
   def stub_solano_api
-    solano_api.stub(:user_logged_in?).and_return(true)
-    Solano::SolanoAPI.stub(:new).and_return(solano_api)
+    allow(solano_api).to receive(:user_logged_in?).and_return(true)
+    allow(Solano::SolanoAPI).to receive(:new).and_return(solano_api)
   end
 
   def stub_tddium_client
-    tddium_client.stub(:caller_version=)
-    tddium_client.stub(:call_api)
-    TddiumClient::InternalClient.stub(:new).and_return(tddium_client)
+    allow(tddium_client).to receive(:caller_version=).and_return(nil)
+    allow(tddium_client).to receive(:call_api).and_return(nil)
+    allow(TddiumClient::InternalClient).to receive(:new).and_return(tddium_client)
   end
 
   before do

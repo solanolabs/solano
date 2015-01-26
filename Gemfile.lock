@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     solano (1.26.0)
+      addressable
       github_api
       highline
       json

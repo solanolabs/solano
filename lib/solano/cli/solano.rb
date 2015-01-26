@@ -173,6 +173,13 @@ module Solano
           say Text::Error::SCM_NO_ORIGIN
           exit_failure
         end
+
+        begin
+          Solano::SCM.valid_repo_url?(@scm.origin_url)
+        rescue SolanoError => e
+          say e.message
+          exit_failure
+        end
       end
 
       if params[:suite] then

@@ -1,6 +1,7 @@
 # Copyright (c) 2012, 2013, 2014, 2015 Solano Labs, Inc. All Rights Reserved
 
 require 'stringio'
+require 'addressable/uri'
 
 class String
   def sanitize(encoding="UTF-8")
