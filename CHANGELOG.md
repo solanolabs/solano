@@ -3,6 +3,7 @@
 
 ## Version History
 
+- v1.26.0 - Add preliminary profile support to `solano run`
 - v1.25.6 - Fix refactoring typo
 - v1.25.5 - First release with 'solano' gem fully replacing 'tddium' gem
 - v1.25.4 - Backwards compatibility for StringIO.
