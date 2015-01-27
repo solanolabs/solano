@@ -19,6 +19,7 @@ module Solano
     method_option :machine, :type => :boolean, :default => false
     method_option :session_id, :type => :numeric, :default => nil
     method_option :tool, :type => :hash, :default => {}
+    method_option :profile, :type => :string, :default => nil
     def spec(*pattern)
       machine_data = {}
 
@@ -98,6 +99,15 @@ module Solano
         :cache_save_paths_encoded => read_and_encode_cache_save_paths,
         :raw_config_file => read_and_encode_config_file
       }
+      
+      if options[:profile]
+        if  options[:session_id].nil?
+          say Text::Process::USING_PROFILE % options[:profile]
+          new_session_params[:profile_name] = options[:profile]
+        else
+          exit_fail Text::Error::CANNOT_OVERRIDE_PROFILE
+        end
+      end
 
       # Create a session
       # or use an already-created session

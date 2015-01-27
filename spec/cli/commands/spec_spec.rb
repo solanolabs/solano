@@ -98,5 +98,28 @@ describe Solano::SolanoCli do
       subject.scm.should_receive(:push_latest).with(anything, anything, use_private_uri: true).and_return(true)
       subject.spec
     end
+
+    it "should set the profile if provided" do
+      commits_encoded = Base64.encode64(MessagePackPure.pack([latest_commit]))
+      cache_paths_encoded = Base64.encode64(MessagePackPure.pack(nil))
+      cache_control_encoded = Base64.encode64(MessagePackPure.pack(
+        'Gemfile' => Digest::SHA1.file("Gemfile").to_s,
+        'Gemfile.lock' => Digest::SHA1.file("Gemfile.lock").to_s,
+      ))
+      repo_config_file_encoded = Base64.encode64(File.read('config/solano.yml'))
+      solano_api.stub(:get_suites).and_return([
+        {"account" => "handle-2"},
+      ])
+      subject.stub(:options) { {:profile => "testing"} }
+      solano_api.should_receive(:create_session).with(suite_id, 
+                                        :commits_encoded => commits_encoded,
+                                        :cache_control_encoded => cache_control_encoded,
+                                        :cache_save_paths_encoded => cache_paths_encoded,
+                                        :raw_config_file => repo_config_file_encoded,
+                                        :profile_name => "testing")
+      subject.scm.stub(:latest_commit).and_return(latest_commit)
+      subject.spec
+    end
+
   end
 end

@@ -275,6 +275,7 @@ EOF
       OPTIONS_SAVED = 'Options have been successfully saved.'
       NOT_SAVED_OPTIONS = 'There is no server information saved. Run `solano server:set`.'
       BUILD_CONTINUES = 'Session will continue running.'
+      USING_PROFILE = "Starting session with profile '%s'"
     end # Process
 
     module Status
@@ -499,6 +500,7 @@ EOF
 Aborting. You don't have any ssh key.
 Add an ssh key first, using `solano keys:add` or visit web-site http://ci.solanolabs.com/user_settings/ssh_keys
 EOF
+      CANNOT_OVERRIDE_PROFILE="Cannot override profile for existing session"
     end
   end
 
