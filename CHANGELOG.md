@@ -3,6 +3,7 @@
 
 ## Version History
 
+- v1.26.2 - Only warn when user has not set an SSH key rather than aborting
 - v1.26.1 - More stringent user configuration validation
 - v1.26.0 - Add preliminary profile support to `solano run`
 - v1.25.6 - Fix refactoring typo
