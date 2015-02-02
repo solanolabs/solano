@@ -28,7 +28,10 @@ module Solano
       suite_auto_configure unless options[:machine]
 
       exit_failure unless suite_for_current_branch?
-      exit_failure(Text::Error::NO_SSH_KEY) if @solano_api.get_keys.empty?
+
+      if !options[:machine] && @solano_api.get_keys.empty? then
+        warn(Text::Error::NO_SSH_KEY)
+      end
 
       if @scm.changes?(options) then
         exit_failure(Text::Error::SCM_CHANGES_NOT_COMMITTED) if !options[:force]
