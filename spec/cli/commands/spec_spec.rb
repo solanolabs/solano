@@ -34,39 +34,39 @@ describe Solano::SolanoCli do
     let(:scm) { double "Solano::Git" }
 
     def stub_git
-      Solano::Git.stub(:git_changes?).and_return(false)
-      Solano::Git.stub(:git_push).and_return(true)
+      allow(Solano::Git).to receive(:git_changes?).and_return(false)
+      allow(Solano::Git).to receive(:git_push).and_return(true)
     end
 
     def stub_commit_log_parser
-      commit_log_parser.stub(:commits).and_return([latest_commit])
-      GitCommitLogParser.stub(:new).with(latest_commit).and_return(commit_log_parser)
+      allow(commit_log_parser).to receive(:commits).and_return([latest_commit])
+      allow(GitCommitLogParser).to receive(:new).with(latest_commit).and_return(commit_log_parser)
     end
 
     before do
       stub_git
       stub_commit_log_parser
-      solano_api.stub(:current_suite_id).and_return(suite_id)
-      solano_api.stub(:get_suite_by_id).and_return(suite)
-      solano_api.stub(:update_suite)
-      solano_api.stub(:create_session).and_return(session)
-      solano_api.stub(:register_session)
-      solano_api.stub(:start_session).and_return(test_executions)
-      solano_api.stub(:poll_session).and_return(test_executions)
-      solano_api.stub(:get_keys).and_return([{name: 'some_key', pub: 'some content'}])
+      allow(solano_api).to receive(:current_suite_id).and_return(suite_id)
+      allow(solano_api).to receive(:get_suite_by_id).and_return(suite)
+      allow(solano_api).to receive(:update_suite)
+      allow(solano_api).to receive(:create_session).and_return(session)
+      allow(solano_api).to receive(:register_session)
+      allow(solano_api).to receive(:start_session).and_return(test_executions)
+      allow(solano_api).to receive(:poll_session).and_return(test_executions)
+      allow(solano_api).to receive(:get_keys).and_return([{name: 'some_key', pub: 'some content'}])
     end
  
     before(:each) do
-      scm.stub(:repo?).and_return(true)
-      scm.stub(:changes?).and_return(false)
-      scm.stub(:root).and_return(Dir.pwd)
-      scm.stub(:commits).and_return([latest_commit])
-      scm.stub(:push_latest).and_return(true)
-      scm.stub(:current_branch).and_return('current_branch')
-      scm.stub(:origin_url).and_return('ssh://git@github.com/solano/solano.git')
-      scm.stub(:ignore_path).and_return('.gitignore')
+      allow(scm).to receive(:repo?).and_return(true)
+      allow(scm).to receive(:changes?).and_return(false)
+      allow(scm).to receive(:root).and_return(Dir.pwd)
+      allow(scm).to receive(:commits).and_return([latest_commit])
+      allow(scm).to receive(:push_latest).and_return(true)
+      allow(scm).to receive(:current_branch).and_return('current_branch')
+      allow(scm).to receive(:origin_url).and_return('ssh://git@github.com/solano/solano.git')
+      allow(scm).to receive(:ignore_path).and_return('.gitignore')
 
-      Solano::Git.stub(:new).and_return(scm)
+      allow(Solano::Git).to receive(:new).and_return(scm)
     end
 
     it "should create a new session" do
@@ -79,7 +79,7 @@ describe Solano::SolanoCli do
         'lib/solano/version.rb' => Digest::SHA1.file("lib/solano/version.rb").to_s,
       ))
       repo_config_file_encoded = Base64.encode64(File.read('config/solano.yml'))
-      solano_api.stub(:get_suites).and_return([
+      allow(solano_api).to receive(:get_suites).and_return([
         {"account" => "handle-2"},
       ])
       expect(solano_api).to receive(:create_session).with(suite_id, 
@@ -87,35 +87,35 @@ describe Solano::SolanoCli do
                                     :cache_control_encoded => cache_control_encoded,
                                     :cache_save_paths_encoded => cache_paths_encoded,
                                     :raw_config_file => repo_config_file_encoded)
-      scm.stub(:latest_commit).and_return(latest_commit)
+      allow(scm).to receive(:latest_commit).and_return(latest_commit)
       subject.spec
     end
 
     it "should not create a new session if a session_id is specified" do
       expect(solano_api).to_not receive(:create_session)
       expect(solano_api).to receive(:update_session)
-      solano_api.stub(:get_suites).and_return([
+      allow(solano_api).to receive(:get_suites).and_return([
         {"account" => "handle-2"},
       ])
-      scm.stub(:latest_commit).and_return(latest_commit)
-      subject.stub(:options) { {:session_id=>1} }
+      allow(scm).to receive(:latest_commit).and_return(latest_commit)
+      allow(subject).to receive(:options) { {:session_id=>1} }
       subject.spec
     end
 
     it "should push to the public repo uri in CLI mode" do
-      subject.stub(:options) { {:machine => false} }
-      solano_api.stub(:get_suites).and_return([
+      allow(subject).to receive(:options).and_return({:machine => false})
+      allow(solano_api).to receive(:get_suites).and_return([
         {"account" => "handle-2"},
       ])
-      scm.stub(:latest_commit).and_return(latest_commit)
+      allow(scm).to receive(:latest_commit).and_return(latest_commit)
       expect(scm).to receive(:push_latest).with(anything, anything, {}).and_return(true)
       subject.spec
     end
 
     it "should push to the private repo uri in ci mode" do
-      scm.stub(:latest_commit).and_return(latest_commit)
+      allow(scm).to receive(:latest_commit).and_return(latest_commit)
       expect(scm).to receive(:push_latest).with(anything, anything, use_private_uri: true).and_return(true)
-      subject.stub(:options) { {:machine => true} }
+      allow(subject).to receive(:options).and_return({:machine => true})
       subject.spec
     end
 
@@ -125,21 +125,22 @@ describe Solano::SolanoCli do
       cache_control_encoded = Base64.encode64(MessagePackPure.pack(
         'Gemfile' => Digest::SHA1.file("Gemfile").to_s,
         'Gemfile.lock' => Digest::SHA1.file("Gemfile.lock").to_s,
+        'solano.gemspec' => Digest::SHA1.file("solano.gemspec").to_s,
+        'lib/solano/version.rb' => Digest::SHA1.file("lib/solano/version.rb").to_s
       ))
       repo_config_file_encoded = Base64.encode64(File.read('config/solano.yml'))
-      solano_api.stub(:get_suites).and_return([
+      allow(solano_api).to receive(:get_suites).and_return([
         {"account" => "handle-2"},
       ])
-      subject.stub(:options) { {:profile => "testing"} }
-      solano_api.should_receive(:create_session).with(suite_id, 
+      allow(subject).to receive(:options).and_return({:profile => "testing"})
+      expect(solano_api).to receive(:create_session).with(suite_id, 
                                         :commits_encoded => commits_encoded,
                                         :cache_control_encoded => cache_control_encoded,
                                         :cache_save_paths_encoded => cache_paths_encoded,
                                         :raw_config_file => repo_config_file_encoded,
                                         :profile_name => "testing")
-      subject.scm.stub(:latest_commit).and_return(latest_commit)
+      allow(subject.scm).to receive(:latest_commit).and_return(latest_commit)
       subject.spec
     end
-
   end
 end

@@ -287,7 +287,7 @@ module Solano
       cache_key_paths.reject!{|x| x =~ /(solano|tddium).yml$/}
       cache_control_data = {}
       cache_key_paths.each do |p|
-        if File.exists?(p)
+        if File.exists?(p) then
           cache_control_data[p] = Digest::SHA1.file(p).to_s
         end
       end
