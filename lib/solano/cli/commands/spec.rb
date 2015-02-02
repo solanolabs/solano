@@ -30,7 +30,7 @@ module Solano
       exit_failure unless suite_for_current_branch?
 
       if !options[:machine] && @solano_api.get_keys.empty? then
-        warn(Text::Error::NO_SSH_KEY)
+        warn(Text::Warning::NO_SSH_KEY)
       end
 
       if @scm.changes?(options) then
