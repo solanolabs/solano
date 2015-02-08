@@ -1,4 +1,4 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011, 2012, 2013, 2014, 2014 Solano Labs All Rights Reserved
 
 require "./lib/solano/version"
 
@@ -30,26 +30,26 @@ EOF
   s.files         = `git ls-files lib bin`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
 
-  s.add_runtime_dependency("thor")
-  s.add_runtime_dependency("highline")
-  s.add_runtime_dependency("json")
-  s.add_runtime_dependency("launchy")
-  s.add_runtime_dependency("addressable")
-  s.add_runtime_dependency("github_api")
-  s.add_runtime_dependency("tddium_client", "~> 0.4.2")
-  s.add_runtime_dependency("nayutaya-msgpack-pure", "~> 0.0.2")
+  s.add_runtime_dependency("thor", "~> 0.19")
+  s.add_runtime_dependency("highline", "~> 1.6")
+  s.add_runtime_dependency("json", "~> 1.8")
+  s.add_runtime_dependency("launchy", "~> 2.4")
+  s.add_runtime_dependency("addressable", "~> 2.3")
+  s.add_runtime_dependency("github_api", "~> 0.12")
+  s.add_runtime_dependency("tddium_client", "~> 0.4")
+  s.add_runtime_dependency("nayutaya-msgpack-pure", "~> 0.0", ">= 0.0.2")
 
   s.add_development_dependency("aruba", "0.4.6")
   s.add_development_dependency("rdiscount", "1.6.8")
-  s.add_development_dependency("pickle")
-  s.add_development_dependency("mimic")
-  s.add_development_dependency("daemons")
+  s.add_development_dependency("pickle", "~> 0.5")
+  s.add_development_dependency("mimic", "~> 0.4")
+  s.add_development_dependency("daemons", "~> 1.1")
   s.add_development_dependency("httparty", "0.9.0")
   s.add_development_dependency("httpclient", "2.4.0")
-  s.add_development_dependency("antilles")
-  s.add_development_dependency("rspec")
-  s.add_development_dependency("cucumber")
-  s.add_development_dependency("fakefs")
-  s.add_development_dependency("simplecov")
-  s.add_development_dependency("rake")
+  s.add_development_dependency("antilles", "~> 0.1")
+  s.add_development_dependency("rspec", "~> 3.1")
+  s.add_development_dependency("cucumber","~> 1.3")
+  s.add_development_dependency("fakefs", "~> 0.6")
+  s.add_development_dependency("simplecov", "~> 0.9")
+  s.add_development_dependency("rake", "~> 10.4")
 end
