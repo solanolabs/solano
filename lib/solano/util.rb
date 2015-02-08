@@ -33,6 +33,20 @@ module Solano
     result = io.string
     return result
   end
+
+  def self.sensitive(hash)
+    hash.each_pair do |k, v|
+      if v.is_a?(Hash) then
+        hash[k] = sensitive(v)
+      elsif v.is_a?(String) then
+        if k =~ /_(key|privkey|token)\z/ then
+          hash[k] = '[SENSITIVE]'
+        end
+      end
+    end
+
+    return hash
+  end
 end
 
 module ConfigHelper

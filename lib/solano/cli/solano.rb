@@ -42,25 +42,26 @@ module Solano
     end
 
 
-    require "solano/cli/commands/account"
-    require "solano/cli/commands/activate"
-    require "solano/cli/commands/heroku"
-    require "solano/cli/commands/login"
-    require "solano/cli/commands/logout"
-    require "solano/cli/commands/password"
-    require "solano/cli/commands/rerun"
-    require "solano/cli/commands/find_failing"
-    require "solano/cli/commands/spec"
-    require "solano/cli/commands/stop"
-    require "solano/cli/commands/suite"
-    require "solano/cli/commands/status"
-    require "solano/cli/commands/keys"
-    require "solano/cli/commands/config"
+    require 'solano/cli/commands/account'
+    require 'solano/cli/commands/activate'
+    require 'solano/cli/commands/heroku'
+    require 'solano/cli/commands/login'
+    require 'solano/cli/commands/logout'
+    require 'solano/cli/commands/password'
+    require 'solano/cli/commands/rerun'
+    require 'solano/cli/commands/find_failing'
+    require 'solano/cli/commands/spec'
+    require 'solano/cli/commands/stop'
+    require 'solano/cli/commands/suite'
+    require 'solano/cli/commands/status'
+    require 'solano/cli/commands/keys'
+    require 'solano/cli/commands/config'
     require 'solano/cli/commands/describe'
-    require "solano/cli/commands/web"
+    require 'solano/cli/commands/web'
     require 'solano/cli/commands/github'
     require 'solano/cli/commands/hg'
     require 'solano/cli/commands/server'
+    require 'solano/cli/commands/support'
 
     map "-v" => :version
     desc "version", "Print the solano gem version"

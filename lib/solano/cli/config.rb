@@ -75,6 +75,8 @@ module Solano
   class ApiConfig
     include SolanoConstant
 
+    attr_reader :config
+
     # BOTCH: should be a state object rather than entire CLI object
     def initialize(scm, tddium_client, host, cli_options)
       @scm = scm
