@@ -3,6 +3,10 @@ bundler_version: 1.3.5
 test_pattern:
   - features/*.feature
   - spec/**_spec.rb
+test_exclude_pattern:
+  - spec/agent_spec.rb
+tests:
+  - bundle exec rspec spec/agent_spec.rb
 cache:
   key_paths:
     - Gemfile
