@@ -82,12 +82,16 @@ module Solano
         table = [header, header.map { |t| "-" * t.size }] + current_sessions.map do |session|
           duration = "%ds" % session['duration']
           start_timeago = "%s ago" % Solano::TimeFormat.seconds_to_human_time(Time.now - Time.parse(session["start_time"]))
+          status = session["status"]
+          if status.nil? || status.strip == "" then
+            status = 'unknown'
+          end
 
           [
             session["id"].to_s,
             session["commit"] ? session['commit'][commit_size] : '-      ',
             (session["branch"] if include_branch),
-            session["status"],
+            status,
             duration,
             start_timeago
           ].compact
