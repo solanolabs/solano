@@ -6,6 +6,7 @@ module Solano
   class SolanoCli < Thor
     desc "status", "Display information about this suite, and any open dev sessions"
     method_option :json, :type => :boolean, :default => false
+    method_option :commit, :type => :string, :default => nil
     def status
       solano_setup({:repo => true})
 
@@ -32,6 +33,11 @@ module Solano
             :active => false,
             :limit => 10
           }
+        end
+
+        if options[:commit] then
+          repo_params[:last_commit_id] = options[:commit]
+          suite_params[:last_commit_id] = options[:commit]
         end
 
         if options[:json] 
