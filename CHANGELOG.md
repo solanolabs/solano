@@ -3,6 +3,7 @@
 
 ## Version History
 
+- v1.26.6 - Add ability to set profile in solano rerun.
 - v1.26.5 - Add ability to filter status by last commit ID
 - v1.26.3 - Update warning message for SSH.
 - v1.26.2 - Only warn when user has not set an SSH key rather than aborting

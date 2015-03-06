@@ -8,6 +8,7 @@ module Solano
     method_option :max_parallelism, :type => :numeric, :default => nil
     method_option :no_op, :type=>:boolean, :default => false, :aliases => ["-n"]
     method_option :force, :type=>:boolean, :default => false
+    method_option :profile, :type => :string, :default => nil, :aliases => %w(--profile-name)
     def rerun(session_id=nil)
       params = {:scm => true, :repo => false}
       if session_id.nil? then
@@ -27,10 +28,13 @@ module Solano
       tests = tests.select{ |t| ['failed', 'error'].include?(t['status']) }
       tests = tests.map{ |t| t['test_name'] }
 
+      profile = options[:profile]
+
       cmd = "solano run"
       cmd += " --max-parallelism=#{options[:max_parallelism]}" if options[:max_parallelism]
       cmd += " --org=#{options[:account]}" if options[:account]
       cmd += " --force" if options[:force]
+      cmd += " --profile=#{profile}" if profile
       cmd += " #{tests.join(" ")}"
 
       say cmd
