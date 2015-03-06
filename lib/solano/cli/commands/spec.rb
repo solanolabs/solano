@@ -303,7 +303,7 @@ module Solano
     end
 
     def read_and_encode_config_file
-      config, raw_config = @repo_config.read_config(true)
+      config, raw_config = @repo_config.read_config(false)
       encoded = Base64.encode64(raw_config)
       return encoded
     end

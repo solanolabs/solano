@@ -5,11 +5,11 @@ PATH
       addressable (~> 2.3)
       github_api (~> 0.12)
       highline (~> 1.6)
-      json (~> 1.8)
+      json
       launchy (~> 2.4)
       nayutaya-msgpack-pure (~> 0.0, >= 0.0.2)
       tddium_client (~> 0.4)
-      thor (~> 0.19)
+      thor
 
 GEM
   remote: http://rubygems.org/
