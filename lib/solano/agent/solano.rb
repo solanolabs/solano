@@ -1,4 +1,4 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011, 2012, 2013, 2014, 2015 Solano Labs All Rights Reserved
 
 require 'json'
 require 'fileutils'
@@ -20,17 +20,17 @@ module Solano
     # @return The current worker thread ID
     # @note Id is not unique across workers; there is no accessible GUID
     def thread_id
-      return fetch_id('SOLANO_TID')
+      return fetch_id('TID')
     end
 
     # @return Current session ID
     def session_id
-      return fetch_id('SOLANO_SESSION_ID')
+      return fetch_id('SESSION_ID')
     end
 
     # @return Per-execution unique ID of currently running test
     def test_exec_id
-      return fetch_id('SOLANO_TEST_EXEC_ID')
+      return fetch_id('TEST_EXEC_ID')
     end
 
     # @return Solano environment (batch, interactive, etc.)
@@ -114,9 +114,15 @@ module Solano
     protected
 
     def fetch_id(name)
-      return nil unless solano? && ENV.member?(name)
-      id = ENV[name]
-      return id.to_i
+      return nil unless solano?
+      %w(TDDIUM SOLANO).each do |prefix|
+        qualified_name = "#{prefix}_#{name}"
+        if ENV.member?(qualified_name) then
+          id = ENV[qualified_name]
+          return id.to_i
+        end
+      end
+      return nil
     end
   end
 end

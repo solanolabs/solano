@@ -38,8 +38,8 @@ describe "Agent" do
   end
 
   it "should fetch various identifiers" do
-    ids = [[:thread_id, 'SOLANO_TID'], [:session_id, 'SOLANO_SESSION_ID'],
-           [:test_exec_id, 'SOLANO_TEST_EXEC_ID']]
+    ids = [[:thread_id, 'TDDIUM_TID'], [:session_id, 'TDDIUM_SESSION_ID'],
+           [:test_exec_id, 'TDDIUM_TEST_EXEC_ID']]
 
     ids.each do |method, var|
       begin
