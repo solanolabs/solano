@@ -75,85 +75,10 @@ module Solano
       false
     end
 
+    # repo_config_file has authority over solano.yml now
     # Update the suite parameters from solano.yml
-    def update_suite_parameters!(current_suite, session_id=nil)
-      update_params = {}
-
-      update_params[:session_id] = session_id if session_id
-
-      pattern = configured_test_pattern
-      if pattern.is_a?(Array)
-        pattern = pattern.join(",")
-      end
-      if pattern && current_suite["test_pattern"] != pattern then
-        update_params[:test_pattern] = pattern
-      end
-
-      exclude_pattern = configured_test_exclude_pattern
-      if exclude_pattern.is_a?(Array)
-        exclude_pattern = exclude_pattern.join(",")
-      end
-      if exclude_pattern && current_suite["test_exclude_pattern"] != exclude_pattern then
-        update_params[:test_exclude_pattern] = exclude_pattern
-      end
-
-      ruby_version = sniff_ruby_version
-      if ruby_version && ruby_version != current_suite["ruby_version"] then
-        update_params[:ruby_version] = ruby_version
-      end
-
-      bundler_version = @repo_config["bundler_version"]
-      if bundler_version && bundler_version != current_suite["bundler_version"] then
-        update_params[:bundler_version] = bundler_version
-      end
-
-      test_configs = @repo_config["tests"] || []
-      if test_configs != (current_suite['test_configs'] || []) then
-        if test_configs != 'disable' && !test_configs.is_a?(Array) then
-          warn(Text::Warning::TEST_CONFIGS_MUST_BE_LIST)
-          test_configs = []
-        end
-        update_params[:test_configs] = test_configs
-      end
-
-      %w(golang java leiningen nodejs php python scala).each do |lang|
-        config_name = "#{lang}_config"
-        lang_config = @repo_config[lang] || {}
-        current_lang_config = current_suite[config_name] || {}
-        if lang_config != (current_suite[config_name] || {}) then
-          update_params[lang.to_sym] = lang_config
-        end
-      end
-
-      if !update_params.empty? then
-        @solano_api.update_suite(@solano_api.current_suite_id, update_params)
-        if update_params[:test_pattern]
-          say Text::Process::UPDATED_TEST_PATTERN % pattern
-        end
-        if update_params[:test_exclude_pattern]
-          say Text::Process::UPDATED_TEST_EXCLUDE_PATTERN % exclude_pattern
-        end
-        if update_params[:ruby_version]
-          say Text::Process::UPDATED_RUBY_VERSION % ruby_version
-        end
-        if update_params[:bundler_version]
-          say Text::Process::UPDATED_BUNDLER_VERSION % bundler_version
-        end
-        if update_params[:test_configs]
-          say Text::Process::UPDATED_TEST_CONFIGS % YAML.dump(test_configs)
-          say "(was:\n#{YAML.dump(current_suite['test_configs'])})\n"
-        end
-        if update_params[:python_config]
-          say Text::Process::UPDATED_PYTHON_CONFIG % YAML.dump(python_config)
-        end
-        if update_params[:golang_config]
-          say Text::Process::UPDATED_PYTHON_CONFIG % YAML.dump(golang_config)
-        end
-        if update_params[:java_config]
-          say Text::Process::UPDATED_PYTHON_CONFIG % YAML.dump(java_config)
-        end
-      end
-    end
+    #def update_suite_parameters!(current_suite, session_id=nil)
+    #end
 
     def suite_remembered_option(options, key, default, &block)
       remembered = false
