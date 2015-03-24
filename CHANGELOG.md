@@ -3,6 +3,7 @@
 
 ## Version History
 
+- v1.27.0 - Stop being paranoid about YAML - prep for server-side validation
 - v1.26.8 - Update Solano agent to handle both TDDIUM_* and SOLANO_* environment variables.
 - v1.26.7 - Fix deprecation warning spam for Cookie#domain
 - v1.26.6 - Add ability to set profile in solano rerun.
