@@ -35,7 +35,7 @@ EOF
   s.add_runtime_dependency("json")
   s.add_runtime_dependency("launchy", "~> 2.4")
   s.add_runtime_dependency("addressable", "~> 2.3")
-  s.add_runtime_dependency("github_api", "~> 0.12")
+  s.add_runtime_dependency("github_api", "~> 0.11.3")
   s.add_runtime_dependency("tddium_client", "~> 0.5", ">= 0.5.1")
   s.add_runtime_dependency("nayutaya-msgpack-pure", "~> 0.0", ">= 0.0.2")
 
