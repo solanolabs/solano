@@ -308,6 +308,10 @@ module Solano
       call_api(:get, "#{Api::Path::SESSIONS}/#{session_id}/#{Api::Path::TEST_EXECUTIONS}")
     end
 
+    def query_session(session_id, params={})
+      call_api(:get, "#{Api::Path::SESSIONS}/#{session_id}")
+    end
+
     def query_session_tests(session_id, params={})
       call_api(:get, "#{Api::Path::SESSIONS}/#{session_id}/#{Api::Path::QUERY_TEST_EXECUTIONS}")
     end

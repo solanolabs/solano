@@ -11,6 +11,7 @@ module Solano
     method_option :type, :type=>:string, :default=>nil
     method_option :json, :type=>:boolean, :default=>false
     method_option :names, :type=>:boolean, :default=>false
+    method_option :verbose, :type=>:boolean, :default=>false
     def describe(session_id=nil)
       solano_setup({:repo => false})
 
@@ -61,6 +62,11 @@ module Solano
 
       result = @solano_api.query_session_tests(session_id)
 
+      session_result = Hash.new
+      if options[:verbose] then
+        session_result = @solano_api.query_session(session_id)
+      end
+
       filtered = result['session']['tests']
       if !options[:all]
         filtered = filtered.select{|x| x['status'] == 'failed'}
@@ -71,7 +77,9 @@ module Solano
       end
 
       if options[:json]
-        puts JSON.pretty_generate(result['session'])
+        json = result['session']
+        json['session'] = session_result['session']
+        puts JSON.pretty_generate(json)
       elsif options[:names]
         say filtered.map{|x| x['test_name']}.join(" ")
       else
