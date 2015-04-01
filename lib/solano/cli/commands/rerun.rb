@@ -19,7 +19,7 @@ module Solano
       session_id ||= session_id_for_current_suite
 
       begin
-        result = @solano_api.query_session(session_id)
+        result = @solano_api.query_session_tests(session_id)
       rescue TddiumClient::Error::API => e
         exit_failure Text::Error::NO_SESSION_EXISTS
       end

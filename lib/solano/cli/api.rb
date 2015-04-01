@@ -1,4 +1,4 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011, 2012, 2013, 2014, 2015 Solano Labs All Rights Reserved
 
 module Solano
   class SolanoAPI
@@ -308,7 +308,7 @@ module Solano
       call_api(:get, "#{Api::Path::SESSIONS}/#{session_id}/#{Api::Path::TEST_EXECUTIONS}")
     end
 
-    def query_session(session_id, params={})
+    def query_session_tests(session_id, params={})
       call_api(:get, "#{Api::Path::SESSIONS}/#{session_id}/#{Api::Path::QUERY_TEST_EXECUTIONS}")
     end
 

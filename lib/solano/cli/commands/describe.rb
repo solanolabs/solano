@@ -59,7 +59,7 @@ module Solano
         status_message = Text::Status::SESSION_STATUS % [session_commit, commit_message, session_status, finish_timeago]
       end
 
-      result = @solano_api.query_session(session_id)
+      result = @solano_api.query_session_tests(session_id)
 
       filtered = result['session']['tests']
       if !options[:all]

@@ -1,4 +1,4 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011, 2012, 2013, 2014, 2015 Solano Labs All Rights Reserved
 
 require 'spec_helper'
 require 'solano/cli'
@@ -9,7 +9,7 @@ describe Solano::SolanoCli do
     include_context "solano_api_stubs"
 
     let(:session_id) { 123 }
-    let(:query_session_result) {
+    let(:query_session_tests_result) {
       {'session'=> {'tests' => [{'status'=>'failed', 'test_name'=>'foo.rb'}]}}
     }
     let(:suite_id) { 1 }
@@ -19,13 +19,13 @@ describe Solano::SolanoCli do
     }
 
     it "should table print the failures" do
-      solano_api.should_receive(:query_session).with(session_id).and_return(query_session_result)
+      solano_api.should_receive(:query_session_tests).with(session_id).and_return(query_session_tests_result)
       subject.should_receive(:print_table)
       subject.describe(session_id)
     end
 
     it "should print only names if indicated" do
-      solano_api.should_receive(:query_session).with(session_id).and_return(query_session_result)
+      solano_api.should_receive(:query_session_tests).with(session_id).and_return(query_session_tests_result)
       subject.stub(:options) { { :names => true } }
       subject.should_receive(:say).with("foo.rb")
       subject.describe(session_id)
@@ -57,7 +57,7 @@ describe Solano::SolanoCli do
         solano_api.stub(:current_suite_id) { suite_id }
         subject.stub(:suite_for_current_branch?) { true }
         solano_api.stub(:get_sessions).exactly(1).times.and_return(get_sessions_result)
-        solano_api.should_receive(:query_session).with(session_id).and_return(query_session_result)
+        solano_api.should_receive(:query_session_tests).with(session_id).and_return(query_session_tests_result)
         subject.should_receive(:print_table)
       end
 
