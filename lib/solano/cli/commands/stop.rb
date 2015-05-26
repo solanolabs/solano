@@ -12,7 +12,7 @@ module Solano
         rescue 
         end
       else
-        say 'Stop requires a session id -- e.g. `solano stop 7869764`'
+        exit_failure 'Stop requires a session id -- e.g. `solano stop 7869764`'
       end
     end
   end

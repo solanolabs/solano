@@ -20,5 +20,10 @@ describe Solano::SolanoCli do
 
       subject.stop(ls_id)
     end
+
+    it "returns non-zero status code in case of failure" do
+      subject.should_receive(:exit_failure)
+      subject.stop
+    end
   end
 end

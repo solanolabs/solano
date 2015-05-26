@@ -10,7 +10,7 @@ describe Solano::SolanoCli do
 
     it 'with empty suites' do
       solano_api.should_receive(:get_suites).and_return([])
-      subject.should_receive(:say).with('You do not have any suites configured with solano')
+      subject.should_receive(:exit_failure).with('You do not have any suites configured with solano')
       subject.send('github:migrate_hooks')
     end
 

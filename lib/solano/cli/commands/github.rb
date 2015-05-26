@@ -22,7 +22,7 @@ module Solano
           end
         end
       else
-        say 'You do not have any suites configured with solano'
+        exit_failure 'You do not have any suites configured with solano'
       end
     end
 
