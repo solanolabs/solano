@@ -3,6 +3,7 @@
 
 ## Version History
 
+- v1.27.2 - Ensure non-zero exit status when gem command line is incorrect
 - v1.27.1 - Add solano describe verbose json dump mode
 - v1.27.0 - Stop being paranoid about YAML - prep for server-side validation
 - v1.26.8 - Update Solano agent to handle both TDDIUM_* and SOLANO_* environment variables.
