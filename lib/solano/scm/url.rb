@@ -63,8 +63,8 @@ module Solano
       scheme_pattern = "https?|ssh|"+scheme_pattern
 
       ok =  uri.scheme =~ /^(#{scheme_pattern})$/
-      ok &&= uri.host.size > 0
-      ok &&= uri.path.size > 0
+      ok &&= uri.host && uri.host.size > 0
+      ok &&= uri.path && uri.path.size > 0
 
       if !ok then
         raise SolanoError.new("invalid repo url: '#{url}'")
