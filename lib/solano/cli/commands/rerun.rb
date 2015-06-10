@@ -25,7 +25,8 @@ module Solano
       end
 
       tests = result['session']['tests']
-      tests = tests.select{ |t| ['failed', 'error'].include?(t['status']) }
+      tests = tests.select{ |t| [
+        'failed', 'error', 'notstarted', 'started'].include?(t['status']) }
       tests = tests.map{ |t| t['test_name'] }
 
       profile = options[:profile]
