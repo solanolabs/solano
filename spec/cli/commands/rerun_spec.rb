@@ -32,7 +32,6 @@ describe Solano::SolanoCli do
       solano_api.should_receive(:get_sessions).and_return([{"id" => 1234}])
       solano_api.should_receive(:query_session_tests).with(1234).and_return(query_session_tests_result)
       Kernel.should_receive(:exec).with(/solano run --profile=first foo.rb foo2.rb foo3.rb foo4.rb/)
-
       subject.rerun
     end
   end
