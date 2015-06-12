@@ -97,7 +97,7 @@ module Solano
     end
 
     def get_user(api_key=nil)
-      result = call_api(:get, Api::Path::USERS, {}, api_key, false) rescue nil
+      result = call_api(:get, Api::Path::USERS, {}, api_key, false)
       result && result['user']
     end
 

@@ -103,4 +103,15 @@ describe Solano::SolanoAPI do
       end
     end
   end
+
+  context "#get_user" do
+    before do
+      api_config.stub(:get_api_key)
+      tddium_client.stub(:call_api) { raise SocketError }
+    end
+
+    it "not returns nil when call_api raise an error" do
+      expect { subject.get_user }.to raise_error
+    end
+  end
 end
