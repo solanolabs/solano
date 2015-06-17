@@ -266,7 +266,7 @@ EOF
       ABORTING = "Aborting."
       DESCRIBE_SESSION =<<EOF
 
-Session %d%s
+Session %s%s
 Showing %s tests
 
 EOF

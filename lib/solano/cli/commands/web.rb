@@ -14,8 +14,8 @@ module Solano
 
       solano_setup(params)
 
-      if session_id then
-        fragment = "1/reports/#{session_id.to_i}" if session_id =~ /^[0-9]+$/
+      if session_id
+        fragment = "1/reports/#{session_id}" if session_id =~ /^(\d+)(\.\d)?$/
       end
       fragment ||= 'latest'
 
