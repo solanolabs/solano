@@ -114,4 +114,46 @@ describe Solano::SolanoAPI do
       expect { subject.get_user }.to raise_error
     end
   end
+
+  EXAMPLE_HTTP_METHOD = :post
+  EXAMPLE_TDDIUM_RESOURCE = "suites"
+
+  context "handle call_api upgrade exceptions" do
+    before do
+      api_config.stub(:get_api_key)
+      http_response = Net::HTTPResponse.new(1.0, '426', "failed")
+      http_response.stub_chain(:body).and_return({:explanation => "upgrade require error"}.to_json)
+      tddium_client.stub(:call_api).and_raise(TddiumClient::Error::UpgradeRequired.new(http_response))
+    end
+
+    it "should handle TddiumClient::Error::UpgradeRequired exception and recieve error message" do
+      expect { subject.call_api(EXAMPLE_HTTP_METHOD, EXAMPLE_TDDIUM_RESOURCE) }.to raise_error("API Error: upgrade require error")
+    end
+  end
+
+  context "handle call_api cert exceptions" do
+    before do
+      api_config.stub(:get_api_key)
+      tddium_client.stub(:call_api).and_raise(TddiumClient::Error::APICert.new("error message"))
+    end
+
+    it "should handle TddiumClient::Error::APICert exception and recieve error message" do
+      expect { subject.call_api(EXAMPLE_HTTP_METHOD, EXAMPLE_TDDIUM_RESOURCE) }.to raise_error("API Cert Error: error message")
+    end
+  end
+
+  context "handle call_api base exceptions" do
+    before do
+      api_config.stub(:get_api_key)
+      http_response = Net::HTTPResponse.new(1.0, '503', "failed")
+      http_response.stub_chain(:header, :reason_phrase).and_return("server error")
+      tddium_client.stub(:call_api).and_raise(TddiumClient::Error::Server.new(http_response))
+      subject.stub(:say)
+    end
+
+    it "should handle TddiumClient::Error::Base exception and recieve error message" do
+      expect { subject.call_api(EXAMPLE_HTTP_METHOD, EXAMPLE_TDDIUM_RESOURCE) }.to raise_error {|error| error.should be_a(TddiumClient::Error::Base)}
+    end
+  end
+
 end

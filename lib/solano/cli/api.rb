@@ -19,6 +19,8 @@ module Solano
         result = @tddium_client.call_api(method, api_path, params, api_key)
       rescue TddiumClient::Error::UpgradeRequired => e
         abort e.message
+      rescue TddiumClient::Error::APICert => e
+        abort e.message
       rescue TddiumClient::Error::Base => e
         say e.message.dup if show_error
         raise e
@@ -228,16 +230,16 @@ module Solano
     end
 
     # suites/user_suites returns:
-    # [                                                                               
+    # [
     #   'account',
     #   'account_id',
-    #   'branch',                                                                          
-    #   'ci_ssh_pubkey', 
-    #   'git_repo_uri', 
-    #   'id', 
-    #   'org_name', 
-    #   'repo_name', 
-    #   'repo_url'                                  
+    #   'branch',
+    #   'ci_ssh_pubkey',
+    #   'git_repo_uri',
+    #   'id',
+    #   'org_name',
+    #   'repo_name',
+    #   'repo_url'
     # ]
     def get_suites(params={})
       current_suites = call_api(:get, "#{Api::Path::SUITES}/user_suites", params)
