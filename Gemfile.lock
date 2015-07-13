@@ -1,14 +1,14 @@
 PATH
   remote: .
   specs:
-    solano (1.27.5)
+    solano (1.27.6)
       addressable (~> 2.3)
       github_api (~> 0.12)
       highline (~> 1.6)
       json (~> 1.8)
       launchy (~> 2.4)
       nayutaya-msgpack-pure (~> 0.0, >= 0.0.2)
-      tddium_client (~> 0.5, >= 0.5.1)
+      tddium_client (~> 0.5, >= 0.5.2)
       thor (~> 0.19)
 
 GEM
@@ -64,7 +64,7 @@ GEM
       multi_xml
     httpclient (2.4.0)
     json (1.8.2)
-    jwt (1.5.0)
+    jwt (1.5.1)
     launchy (2.4.3)
       addressable (~> 2.3)
     mimic (0.4.3)
@@ -117,7 +117,7 @@ GEM
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (~> 1.3, >= 1.3.4)
-    tddium_client (0.5.1)
+    tddium_client (0.5.2)
       httpclient (>= 2.2.5)
       json
     thor (0.19.1)

@@ -3,6 +3,7 @@
 
 ## Version History
 
+- v1.27.6 - Better report SSL certificate verification failures.
 - v1.27.5 - Handle composite profile step session IDs.
 - v1.27.4 - Better handle network connection interruptions.
 - v1.27.3 - CLI rerun command will now re-run unstarted tests, too.
