@@ -44,6 +44,7 @@ module Solano
 
     require 'solano/cli/commands/account'
     require 'solano/cli/commands/activate'
+    require 'solano/cli/commands/api'
     require 'solano/cli/commands/heroku'
     require 'solano/cli/commands/login'
     require 'solano/cli/commands/logout'

@@ -417,6 +417,7 @@ EOF
       REMOVE_CONFIG_ERROR = "Error removing configuration variable"
       KEY_ALREADY_EXISTS = "Aborting. SSH key already exists: %s"
       KEYGEN_FAILED = "Failed to generate new SSH key for '%s'"
+      LIST_API_KEY_ERROR = "Unable to retrieve API key"
       LIST_KEYS_ERROR = "Error listing SSH keys"
       REMOVE_KEYS_ERROR = "Failed to remove key '%s'"
       ADD_KEYS_DUPLICATE = "You already have a key named '%s'"
