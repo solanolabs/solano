@@ -1,4 +1,8 @@
-ruby_version: 'ruby-1.9.3-p545'
+ruby_version:
+ SPLIT:
+   - 'ruby-1.9.3-p545'
+   - 'ruby-2.1.5'
+   - 'ruby-2.2.2'
 bundler_version: 1.3.5
 test_pattern:
   - features/*.feature
