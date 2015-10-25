@@ -3,6 +3,9 @@ ruby_version:
    - 'ruby-1.9.3-p545'
    - 'ruby-2.1.5'
    - 'ruby-2.2.2'
+coverage:
+  version: 2
+  enabled: true
 bundler_version: 1.10.6
 test_pattern:
   - features/*.feature
