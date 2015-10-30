@@ -29,7 +29,7 @@ module Solano
         'failed', 'error', 'notstarted', 'started'].include?(t['status']) }
       tests = tests.map{ |t| t['test_name'] }
 
-      profile = options[:profile]
+      profile = options[:profile] || result['non_passed_profile_name']
 
       cmd = "solano run"
       cmd += " --max-parallelism=#{options[:max_parallelism]}" if options[:max_parallelism]
