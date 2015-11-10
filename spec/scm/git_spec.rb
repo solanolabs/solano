@@ -16,10 +16,11 @@ describe Solano::Git do
     end
 
     it "should return the latest commit" do
-      subject.should_receive(:`).with("git log --pretty='%H%n%s%n%aN%n%aE%n%at%n%cN%n%cE%n%ct%n' HEAD^..HEAD")
+      subject.should_receive(:`).with("git log --pretty='%H%n%s%n%aN%n%aE%n%at%n%cN%n%cE%n%ct%n' -1")
       subject.send(:latest_commit).should == "latest_commit"
     end
   end
+
 
   describe ".push_latest" do
     let(:url) { "abc" }

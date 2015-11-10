@@ -122,7 +122,7 @@ module Solano
     protected
 
     def latest_commit
-      `git log --pretty='%H%n%s%n%aN%n%aE%n%at%n%cN%n%cE%n%ct%n' HEAD^..HEAD`
+      `git log --pretty='%H%n%s%n%aN%n%aE%n%at%n%cN%n%cE%n%ct%n' -1`
     end
 
     class << self
