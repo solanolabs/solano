@@ -27,5 +27,5 @@ For contributed code, see the extras directory.
 
 == Copyright
 
-Copyright (c) 2011-2014 Solano Labs, Inc. All Rights Reserved. See
+Copyright (c) 2011-2015 Solano Labs, Inc. All Rights Reserved. See
 LICENSE.txt for further details.
