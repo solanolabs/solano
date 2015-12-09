@@ -277,6 +277,14 @@ module Solano
       commits_encoded
     end
 
+    def docker_enabled
+      if @repo_config['system'] then
+         @repo_config['system']['docker'].presence || false
+      else
+        false
+      end
+    end
+
     def cache_control_config
       @repo_config['cache'] || {}
     end
@@ -285,6 +293,11 @@ module Solano
       cache_key_paths = cache_control_config['key_paths'] || cache_control_config[:key_paths] 
       cache_key_paths ||= ["Gemfile", "Gemfile.lock", "requirements.txt", "packages.json", "package.json"]
       cache_key_paths.reject!{|x| x =~ /(solano|tddium).yml$/}
+
+      if docker_enabled then
+        cache_key_paths << "Dockerfile"
+      end
+
       cache_control_data = {}
       cache_key_paths.each do |p|
         if File.exists?(p) then
@@ -298,6 +311,11 @@ module Solano
 
     def read_and_encode_cache_save_paths
       cache_save_paths = cache_control_config['save_paths'] || cache_control_config[:save_paths]
+
+      if docker_enabled then
+        (cache_save_paths ||= []) << "HOME/docker-graph"
+      end
+
       msgpack = Solano.message_pack(cache_save_paths)
       cache_save_paths_encoded = Base64.encode64(msgpack)
     end
