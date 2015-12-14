@@ -279,7 +279,11 @@ module Solano
 
     def docker_enabled
       if @repo_config['system'] then
-         @repo_config['system']['docker'].presence || false
+         if @repo_config['system']['docker'] then
+           @repo_config['system']['docker']
+         else
+           false
+         end
       else
         false
       end
