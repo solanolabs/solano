@@ -11,7 +11,7 @@ production environments.
 
 Solano CI also supports parallel test running in our cloud even before
 you push to a shared branch.
-
+:( :(
 The `solano` gem implements a command line interface for you to start
 a parallel run from your local git workspace, along with ways to edit
 configuration and retrieve your account status all from within your
