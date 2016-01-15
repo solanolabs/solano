@@ -5,7 +5,7 @@
 require 'solano/constant'
 
 def remove_server_file
-  `rm #{SolanoConstant::Default::PARAMS_PATH}`
+  `rm -f #{SolanoConstant::Default::PARAMS_PATH}`
 end
 
 remove_server_file
