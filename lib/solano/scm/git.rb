@@ -43,7 +43,17 @@ module Solano
 
       result = `(git config --get remote.origin.url || echo GIT_FAILED) 2>/dev/null`
       return nil if result =~ /GIT_FAILED/
-      result.strip
+
+      result = result.strip
+
+      # no slashes before first colon
+      # [user@]host.xz:path/to/repo.git/
+      scp_pat = /^([A-Za-z0-9_]+@)?([A-Za-z0-9._-]+):(\/?[^\/].*)/
+      if m = scp_pat.match(result) then
+        result = "ssh://#{m[1]}#{m[2]}/#{m[3]}"
+      end
+
+      return result
     end
 
     def ignore_path
