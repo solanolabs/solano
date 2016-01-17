@@ -48,7 +48,7 @@ module Solano
 
       # no slashes before first colon
       # [user@]host.xz:path/to/repo.git/
-      scp_pat = /^([A-Za-z0-9_]+@)?([A-Za-z0-9._-]+):(\/?[^\/].*)/
+      scp_pat = /^([A-Za-z0-9_]+@)?([A-Za-z0-9._-]+):\/?([^\/].*)/
       if m = scp_pat.match(result) then
         result = "ssh://#{m[1]}#{m[2]}/#{m[3]}"
       end
