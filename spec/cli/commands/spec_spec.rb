@@ -142,5 +142,27 @@ describe Solano::SolanoCli do
       allow(subject.scm).to receive(:latest_commit).and_return(latest_commit)
       subject.spec
     end
+
+    it "should set the env if provided" do
+      commits_encoded = Base64.encode64(MessagePackPure.pack([latest_commit]))
+      cache_paths_encoded = Base64.encode64(MessagePackPure.pack(nil))
+      cache_control_encoded = Base64.encode64(MessagePackPure.pack(
+                                                  'Gemfile' => Digest::SHA1.file("Gemfile").to_s,
+                                                  'Gemfile.lock' => Digest::SHA1.file("Gemfile.lock").to_s,
+                                                  'solano.gemspec' => Digest::SHA1.file("solano.gemspec").to_s,
+                                                  'lib/solano/version.rb' => Digest::SHA1.file("lib/solano/version.rb").to_s
+                                              ))
+      repo_config_file_encoded = Base64.encode64(File.read('config/solano.yml'))
+      allow(solano_api).to receive(:get_suites).and_return([{"account" => "handle-2"},])
+      allow(subject).to receive(:options).and_return({:env => {"vasya"=>"petya", "kolya"=>"nata"}})
+      expect(solano_api).to receive(:create_session).with(suite_id,
+                                                          :commits_encoded => commits_encoded,
+                                                          :cache_control_encoded => cache_control_encoded,
+                                                          :cache_save_paths_encoded => cache_paths_encoded,
+                                                          :raw_config_file => repo_config_file_encoded,
+                                                          :env => {"vasya"=>"petya", "kolya"=>"nata"})
+      allow(subject.scm).to receive(:latest_commit).and_return(latest_commit)
+      subject.spec
+    end
   end
 end

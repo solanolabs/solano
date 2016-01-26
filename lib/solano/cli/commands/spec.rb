@@ -19,6 +19,7 @@ module Solano
     method_option :machine, :type => :boolean, :default => false
     method_option :session_id, :type => :numeric, :default => nil
     method_option :tool, :type => :hash, :default => {}
+    method_option :env, :type=>:hash, :default => {}
     method_option :profile, :type => :string, :default => nil, :aliases => %w(--profile-name)
     def spec(*pattern)
       machine_data = {}
@@ -110,6 +111,11 @@ module Solano
         else
           exit_fail Text::Error::CANNOT_OVERRIDE_PROFILE
         end
+      end
+
+      if options[:env]
+        say Text::Process::USING_CUSTOM_USER_ENV_VARS % "#{options[:env]}"
+        new_session_params[:env] = options[:env]
       end
 
       # Create a session
