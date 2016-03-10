@@ -1,5 +1,5 @@
 # Copyright (c) 2011-2016 Solano Labs All Rights Reserved
 
 module Solano
-  VERSION = "1.27.9"
+  VERSION = "1.28.0"
 end

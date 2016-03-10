@@ -3,6 +3,7 @@
 
 ## Version History
 
+- v1.28.0 - Allow `env` option to `solano run` to set per-session environment variables.
 - v1.27.6 - Better report SSL certificate verification failures.
 - v1.27.5 - Handle composite profile step session IDs.
 - v1.27.4 - Better handle network connection interruptions.
