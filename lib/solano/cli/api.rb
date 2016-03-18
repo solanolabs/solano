@@ -302,6 +302,12 @@ module Solano
       call_api(:post, "#{Api::Path::SESSIONS}/#{session_id}/#{Api::Path::START_TEST_EXECUTIONS}", params)
     end
 
+    def start_console(session_id, suite_id)
+      path = "#{Api::Path::SESSIONS}/#{session_id}/#{Api::Path::TEST_EXECUTIONS}/console"
+      puts "start_console #{path}"
+      call_api(:post, path, {suite_id: suite_id})
+    end
+
     def stop_session(ls_id, params = {})
       call_api(:post, "#{Api::Path::SESSIONS}/#{ls_id}/stop", params)
     end

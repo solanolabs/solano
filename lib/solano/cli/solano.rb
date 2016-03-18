@@ -55,6 +55,7 @@ module Solano
     require 'solano/cli/commands/stop'
     require 'solano/cli/commands/suite'
     require 'solano/cli/commands/status'
+    require 'solano/cli/commands/console'
     require 'solano/cli/commands/keys'
     require 'solano/cli/commands/config'
     require 'solano/cli/commands/describe'
