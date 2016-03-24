@@ -2,13 +2,14 @@
 
 require 'stringio'
 require 'json'
+require 'time'
 
 module Solano
   class SolanoCli < Thor
     desc "console [COMMAND]", "Open an ssh Debug Console to the Solano worker, execute command if given else start shell."
     method_option :json, :type => :boolean, :default => false
     method_option :commit, :type => :string, :default => nil
-    def console(cmd=nil)
+    def console(*cmd)
       solano_setup({:repo => true})
       origin = `git config --get remote.origin.url`.strip
       session_result = @solano_api.call_api(:get, "/sessions", {:repo_url => origin})["sessions"]
@@ -39,16 +40,25 @@ module Solano
             end
             if session["stage2_ready"] && session["ssh_command"] then
               if cmd then
-                ssh_command = "#{session['ssh_command']} -o StrictHostKeyChecking=no \"#{cmd}\""
+                ssh_command = "#{session['ssh_command']} -o StrictHostKeyChecking=no \"#{cmd.join(' ')}\""
               else
                 ssh_command = "#{session['ssh_command']} -o StrictHostKeyChecking=no"
               end
             end
           end
           say "SSH Command is #{ssh_command}"
-          `#{ssh_command}`
+          # exec terminates this ruby process and lets user control the ssh i/o
+          exec ssh_command
         elsif start_result["message"] == "interactive already running"
-          say "Interactive session already running (need session id and ssh_command if available)"
+          dur = duration(Time.parse(start_result['session']['expires_at']) - Time.now)
+          say "Interactive session already running (expires in #{dur})"
+          session_id = start_result["session"]["id"]
+          session = @solano_api.query_session(session_id).tddium_response["session"]
+          if cmd then
+            exec "#{session['ssh_command']} -o StrictHostKeyChecking=no \"#{cmd.join(' ')}\""
+          else
+            exec "#{session['ssh_command']} -o StrictHostKeyChecking=no"
+          end
         else
           say start_result["message"]
         end
@@ -58,6 +68,18 @@ module Solano
     end
 
     private 
-
+    # return nice string version of hrs mins secs from time delta
+    def duration(d)
+      secs = d.to_int
+      mins = secs / 60
+      hours = mins / 60
+      if hours > 0 then
+        "#{hours} hours #{mins % 60} minutes"
+      elsif mins > 0 then
+        "#{mins} minutes #{secs % 60} seconds"
+      else
+        "#{secs} seconds"
+      end
+    end
   end
 end  
