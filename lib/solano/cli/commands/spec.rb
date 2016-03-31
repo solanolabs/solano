@@ -1,5 +1,6 @@
 # Copyright (c) 2011-2015 Solano Labs All Rights Reserved
 require 'digest'
+require 'net/http'
 
 module Solano
   class SolanoCli < Thor
@@ -88,7 +89,7 @@ module Solano
           say Text::Process::SCM_REPO_WAIT
           sleep @api_config.scm_ready_sleep
         end
-        
+
         tries += 1
       end
       exit_failure Text::Error::SCM_REPO_NOT_READY unless suite_details["repoman_current"]
@@ -96,14 +97,14 @@ module Solano
       update_suite_parameters!(suite_details, options[:session_id])
 
       start_time = Time.now
-      
+
       new_session_params = {
         :commits_encoded => read_and_encode_latest_commits,
         :cache_control_encoded => read_and_encode_cache_control,
         :cache_save_paths_encoded => read_and_encode_cache_save_paths,
         :raw_config_file => read_and_encode_config_file
       }
-      
+
       if options[:profile]
         if  options[:session_id].nil?
           say Text::Process::USING_PROFILE % options[:profile]
@@ -125,32 +126,49 @@ module Solano
       session_data = if session_id && session_id > 0
         @solano_api.update_session(session_id, new_session_params)
       else
-        @solano_api.create_session(@solano_api.current_suite_id, new_session_params)
+        sess, manager = @solano_api.create_session(@solano_api.current_suite_id, new_session_params)
+        sess
       end
 
       session_data ||= {}
       session_id ||= session_data["id"]
 
-      push_options = {}
-      if options[:machine]
-        push_options[:use_private_uri] = true
+      if manager == 'DestroFreeSessionManager'
+        #check if there is a snapshot
+        res = @solano_api.get_snapshot_commit({:session_id => session_id})
+        if res['snap_commit'] then
+          snapshot_commit = res['snap_commit']
+          say Text::Process::SNAPSHOT_COMMIT % snapshot_commit
+          @scm.create_patch(session_id, {:api => @solano_api, :commit => snapshot_commit})
+         else
+          say Text::Process::NO_SNAPSHOT
+          res = @scm.create_snapshot(session_id, {:api => @solano_api})
+        end
+        start_test_executions = @solano_api.start_destrofree_session(session_id)
+      else
+
+        push_options = {}
+        if options[:machine]
+          push_options[:use_private_uri] = true
+        end
+
+        if !@scm.push_latest(session_data, suite_details, push_options) then
+          exit_failure Text::Error::SCM_PUSH_FAILED
+        end
+
+        machine_data[:session_id] = session_id
+
+        # Register the tests
+        @solano_api.register_session(session_id, @solano_api.current_suite_id, test_pattern, test_exclude_pattern)
+
+        # Start the tests
+        start_test_executions = @solano_api.start_session(session_id, test_execution_params)
+
+
+        num_tests_started = start_test_executions["started"].to_i
+
+        say Text::Process::STARTING_TEST % num_tests_started.to_s
       end
-
-      if !@scm.push_latest(session_data, suite_details, push_options) then
-        exit_failure Text::Error::SCM_PUSH_FAILED
-      end
-
-      machine_data[:session_id] = session_id
-
-      # Register the tests
-      @solano_api.register_session(session_id, @solano_api.current_suite_id, test_pattern, test_exclude_pattern)
-
-      # Start the tests
-      start_test_executions = @solano_api.start_session(session_id, test_execution_params)
-      num_tests_started = start_test_executions["started"].to_i
-
-      say Text::Process::STARTING_TEST % num_tests_started.to_s
-
       tests_finished = false
       finished_tests = {}
       latest_message = -100000
@@ -168,8 +186,8 @@ module Solano
       end
 
       say ""
-      say Text::Process::CHECK_TEST_REPORT % report 
-      say Text::Process::TERMINATE_INSTRUCTION 
+      say Text::Process::CHECK_TEST_REPORT % report
+      say Text::Process::TERMINATE_INSTRUCTION
       say ""
 
       # Catch Ctrl-C to interrupt the test
@@ -193,7 +211,7 @@ module Solano
         current_test_executions["tests"].each do |test_name, result_params|
           if finished_tests.size == 0 && result_params["finished"] then
             say ""
-            say Text::Process::CHECK_TEST_REPORT % report 
+            say Text::Process::CHECK_TEST_REPORT % report
             say Text::Process::TERMINATE_INSTRUCTION
             say ""
           end
@@ -215,8 +233,8 @@ module Solano
         end
 
         # XXX time out if all tests are done and the session isn't done.
-        if current_test_executions['session_done'] ||
-          (finished_tests.size >= num_tests_started && (Time.now - last_finish_timestamp) > Default::TEST_FINISH_TIMEOUT)
+        if current_test_executions['session_done'] || current_test_executions['phase'] == 'done' &&
+          ((!num_tests_started.nil? && finished_tests.size >= num_tests_started) && (Time.now - last_finish_timestamp) > Default::TEST_FINISH_TIMEOUT)
           tests_finished = true
         end
 
@@ -288,7 +306,7 @@ module Solano
     end
 
     def read_and_encode_cache_control
-      cache_key_paths = cache_control_config['key_paths'] || cache_control_config[:key_paths] 
+      cache_key_paths = cache_control_config['key_paths'] || cache_control_config[:key_paths]
       cache_key_paths ||= ["Gemfile", "Gemfile.lock", "requirements.txt", "packages.json", "package.json"]
       cache_key_paths.reject!{|x| x =~ /(solano|tddium).yml$/}
       cache_control_data = {}

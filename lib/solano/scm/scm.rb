@@ -69,6 +69,37 @@ module Solano
       return false
     end
 
+    def create_snapshot(session_id, options={})
+      say Text::Error:SNAPSHOT_NOT_SUPPORTED
+      raise
+    end
+
+    def create_patch(session_id, options={})
+      say "patch creation not supported"
+      raise
+    end
+
+    def upload_file(auth_url, file_path)
+      if (`which curl >/dev/null 2>&1 ; echo $?`).to_i == 0 then
+        `curl -f --upload-file "#{file_path}" "#{auth_url}"`
+        if(`echo $?`).to_i == 22  then
+          say "Failed to upload #{file_path} URL (#{out.code})"
+          raise
+        end
+      else
+        uri = URI(auth_url)
+        body = File.read(file_path)
+        out = Net::HTTP.start(uri.host, :use_ssl => true) do |http|
+            http.send_request("PUT", uri.request_uri, body, {"content-type" => "",})
+        end
+        if out.code.to_i != 200
+          say "Failed to upload to #{file_path} (#{out.code})"
+          raise
+        end
+      end
+    end
+
+
     def current_commit
       return nil
     end

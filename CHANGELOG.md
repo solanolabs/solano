@@ -2,7 +2,7 @@
 
 
 ## Version History
-
+- v1.30.0.pre - Added destrofree support
 - v1.28.0 - Allow `env` option to `solano run` to set per-session environment variables.
 - v1.27.6 - Better report SSL certificate verification failures.
 - v1.27.5 - Handle composite profile step session IDs.
