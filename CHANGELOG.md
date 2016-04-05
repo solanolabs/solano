@@ -3,6 +3,7 @@
 
 ## Version History
 
+- v1.28.1 - Add `solano console` command to start debug consoles from the CLI.
 - v1.28.0 - Allow `env` option to `solano run` to set per-session environment variables.
 - v1.27.6 - Better report SSL certificate verification failures.
 - v1.27.5 - Handle composite profile step session IDs.
