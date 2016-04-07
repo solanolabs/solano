@@ -119,6 +119,11 @@ module Solano
         new_session_params[:env] = options[:env]
       end
 
+      if options[:session_manager] then
+          say Text::Process::USING_PROFILE % options[:session_manager]
+          new_session_params[:session_manager] = options[:session_manager]
+      end
+
       # Create a session
       # or use an already-created session
       #

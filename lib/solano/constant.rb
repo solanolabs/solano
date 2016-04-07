@@ -282,6 +282,7 @@ EOF
       NOT_SAVED_OPTIONS = 'There is no server information saved. Run `solano server:set`.'
       BUILD_CONTINUES = 'Session will continue running.'
       USING_PROFILE = "Starting session with profile '%s'"
+      USING_PROFILE = "Starting session with manager '%s'"
       USING_CUSTOM_USER_ENV_VARS = "Starting session with custom environment variables: %s"
       SNAPSHOT_COMMIT = "Snapshot commit is %s"
       NO_SNAPSHOT = "No snapshot, creating one"
