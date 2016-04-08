@@ -503,6 +503,7 @@ EOF
 You have both solano.yml and tddium.yml in your repo. We don't support merging the configuration from both of these files, so you'll have to pick one. The solano.yml file will soon be deprecated, so we recommend migrating all of your configuration to solano.yml.
 EOF
       CANNOT_OVERRIDE_PROFILE="Cannot override profile for existing session"
+      CANNOT_OVERRIDE_QUEUE="Cannot override queue for existing session"
       COMMAND_DEPRECATED = "This command is deprecated and will be removed in a future version"
     end
   end

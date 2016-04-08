@@ -21,6 +21,7 @@ module Solano
     method_option :tool, :type => :hash, :default => {}
     method_option :env, :type=>:hash, :default => {}
     method_option :profile, :type => :string, :default => nil, :aliases => %w(--profile-name)
+    method_option :queue, :type => :string, :default => nil
     def spec(*pattern)
       machine_data = {}
 
@@ -110,6 +111,15 @@ module Solano
           new_session_params[:profile_name] = options[:profile]
         else
           exit_fail Text::Error::CANNOT_OVERRIDE_PROFILE
+        end
+      end
+
+     if options[:queue]
+        if  options[:session_id].nil?
+          say Text::Process::USING_PROFILE % options[:profile]
+          new_session_params[:queue] = options[:queue]
+        else
+          exit_fail Text::Error::CANNOT_OVERRIDE_QUEUE
         end
       end
 
