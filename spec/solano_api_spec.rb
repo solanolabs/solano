@@ -45,7 +45,7 @@ describe Solano::SolanoAPI do
 
     it "should post to /sessions" do
       tddium_client.should_receive(:call_api).with(:post, "sessions", {:suite_id => 1, :commits => ["foo"]}, nil)
-      subject.create_session(1, :commits => ["foo"]).should == "session_json"
+      subject.create_session(1, :commits => ["foo"]).should == ["session_json", nil]
     end
   end
 

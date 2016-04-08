@@ -2,7 +2,7 @@
 
 
 ## Version History
-
+- v1.30.0.pre - Added destrofree support
 - v1.28.3 - Allow `queue` option to `solano run` to set queue.
 - v1.28.2 - Automatically set cache paths for docker-enabled builds.
 - v1.28.1 - Add `solano console` command to start debug consoles from the CLI.
