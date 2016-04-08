@@ -6,17 +6,24 @@ module Solano
 
     attr_reader :scm	# rspec
 
-    def initialize(scm, tddium_client, api_config)
+    def initialize(scm, tddium_client, api_config, options={})
       @scm = scm
       @api_config = api_config
       @tddium_client = tddium_client
+      @tddium_clientv3 = options[:v3]
     end
 
     def call_api(method, api_path, params = {}, api_key = nil, show_error = true)
       api_key ||= @api_config.get_api_key unless api_key == false
 
+      if params[:v3]
+        api = @tddium_clientv3
+        params.delete(:v3)
+      end
+      api ||= @tddium_client
+
       begin
-        result = @tddium_client.call_api(method, api_path, params, api_key)
+        result = api.call_api(method, api_path, params, api_key)
       rescue TddiumClient::Error::UpgradeRequired => e
         abort e.message
       rescue TddiumClient::Error::APICert => e
@@ -281,7 +288,37 @@ module Solano
 
     def create_session(suite_id, params = {})
       new_session = call_api(:post, Api::Path::SESSIONS, params.merge(:suite_id=>suite_id))
-      new_session['session']
+      return new_session['session'], new_session['manager']
+    end
+
+    def get_snapshot_commit(params={})
+      params.merge!({:v3 => true})
+      call_api(:get, "#{Api::Path::REPO_SNAPSHOT}/commit_id", params)
+    end
+
+    def start_destrofree_session(session_id, params={})
+      params.merge!({:v3 => true})
+      call_api(:post, "#{Api::Path::SESSIONS}/#{session_id}/start", params)
+    end
+
+    def request_snapshot_url(params={})
+      params.merge!({:v3 => true})
+      call_api(:post, "#{Api::Path::REPO_SNAPSHOT}/request_upload_url", params)
+    end
+
+    def update_snapshot(params={})
+      params.merge!({:v3 => true})
+      call_api(:post, "#{Api::Path::REPO_SNAPSHOT}", params)
+    end
+
+    def request_patch_url(params={})
+      params.merge!({:v3 => true})
+      call_api(:post, "#{Api::Path::SESSION_PATCH}/request_url", params)
+    end
+
+    def upload_session_patch(params={})
+      params.merge!({:v3 => true})
+      call_api(:post, "#{Api::Path::SESSION_PATCH}", params)
     end
 
     def update_session(session_id, params={})

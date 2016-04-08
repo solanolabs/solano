@@ -8,7 +8,7 @@ module SolanoConstant
 
   module Default
     SLEEP_TIME_BETWEEN_POLLS = 2
-    
+
     ENVIRONMENT = "production"
     SSH_FILE = "~/.ssh/id_rsa.pub"
     SUITE_TEST_PATTERN = "features/**.feature, spec/**_spec.rb, spec/features/**.feature, test/**_test.rb"
@@ -48,7 +48,9 @@ module SolanoConstant
       QUERY_TEST_EXECUTIONS = "#{TEST_EXECUTIONS}/query"
       REGISTER_TEST_EXECUTIONS = "#{TEST_EXECUTIONS}/register"
       START_TEST_EXECUTIONS = "#{TEST_EXECUTIONS}/start"
+      REPO_SNAPSHOT = "repo_snapshots"
       REPORT_TEST_EXECUTIONS = "#{TEST_EXECUTIONS}/report"
+      SESSION_PATCH = "session_patches"
       ACCOUNT_USAGE_BY_ACCOUNT = "accounts/usage_by_account"
       MEMBERSHIPS = "memberships"
       INSTANCES = "instances"
@@ -108,7 +110,7 @@ EOF
       NO_SSH_KEY =<<EOF
 You have not set an ssh key for your user.  Please add an ssh key using `solano keys:add` or visit http://ci.solanolabs.com/user_settings/ssh_keys
 EOF
-
+      SAME_SNAPSHOT_COMMIT = "Snapshot commit is the same as HEAD"
     end
 
     module Process
@@ -119,7 +121,7 @@ EOF
       ADD_KEYS_ADD_DONE =<<EOF
 Authorized key '%s'.
 
-Assuming your private key is in %s, you can just add the following 
+Assuming your private key is in %s, you can just add the following
 to ~/.ssh/config to use this new key with Solano CI:
 
 # Solano CI SSH Config
@@ -235,7 +237,7 @@ EOF
       DETECTED_BRANCH = "... Detected branch %s"
       SETUP_CI=<<EOF;
 
->>> To set up Hosted CI, enter a git URL to pull from. 
+>>> To set up Hosted CI, enter a git URL to pull from.
     You can also set a git URL to push to after tests pass.
 
 >>> Set both pull and push URLs to 'disable' to disable hosted CI completely.
@@ -280,7 +282,13 @@ EOF
       NOT_SAVED_OPTIONS = 'There is no server information saved. Run `solano server:set`.'
       BUILD_CONTINUES = 'Session will continue running.'
       USING_PROFILE = "Starting session with profile '%s'"
+      USING_SESSION_MANAGER = "Starting session with manager '%s'"
       USING_CUSTOM_USER_ENV_VARS = "Starting session with custom environment variables: %s"
+      SNAPSHOT_COMMIT = "Snapshot commit is %s"
+      NO_SNAPSHOT = "No snapshot, creating one"
+      SNAPSHOT_URL = "Snapshot url is %s"
+      REQUST_PATCH_URL = "Requesting patch url"
+      UPLOAD_PATCH = "Uploading patch to %s"
     end # Process
 
     module Status
@@ -505,6 +513,10 @@ EOF
       CANNOT_OVERRIDE_PROFILE="Cannot override profile for existing session"
       CANNOT_OVERRIDE_QUEUE="Cannot override queue for existing session"
       COMMAND_DEPRECATED = "This command is deprecated and will be removed in a future version"
+      NO_PATCH_URL = "Failed to get Patch URL"
+      SNAPSHOT_NOT_SUPPORTED =  "Snapshot creation not supported"
+      PATCH_CREATION_ERROR = "Solano's current snapshot is based on commit: %s. We could not create a patch for your current state to that patch"
+      DEFAULT_BRANCH = "Could not find the default branch, looked for origin/head. We Need the default branch to create a snapshot. Please try again using --default_branch=master"
     end
   end
 

@@ -1,5 +1,6 @@
 # Copyright (c) 2011-2016 Solano Labs All Rights Reserved
 require 'digest'
+require 'net/http'
 
 module Solano
   class SolanoCli < Thor
@@ -22,6 +23,8 @@ module Solano
     method_option :env, :type=>:hash, :default => {}
     method_option :profile, :type => :string, :default => nil, :aliases => %w(--profile-name)
     method_option :queue, :type => :string, :default => nil
+    method_option :session_manager, :type => :string, :default => nil
+    method_option :default_branch, :type => :string, :default => nil
     def spec(*pattern)
       machine_data = {}
 
@@ -128,6 +131,11 @@ module Solano
         new_session_params[:env] = options[:env]
       end
 
+      if options[:session_manager] then
+          say Text::Process::USING_SESSION_MANAGER % options[:session_manager]
+          new_session_params[:session_manager] = options[:session_manager]
+      end
+
       # Create a session
       # or use an already-created session
       #
@@ -135,32 +143,50 @@ module Solano
       session_data = if session_id && session_id > 0
         @solano_api.update_session(session_id, new_session_params)
       else
-        @solano_api.create_session(@solano_api.current_suite_id, new_session_params)
+        sess, manager = @solano_api.create_session(@solano_api.current_suite_id, new_session_params)
+        sess
       end
 
       session_data ||= {}
       session_id ||= session_data["id"]
 
-      push_options = {}
-      if options[:machine]
-        push_options[:use_private_uri] = true
+      if manager == 'DestroFreeSessionManager'
+        #check if there is a snapshot
+        res = @solano_api.get_snapshot_commit({:session_id => session_id})
+        if res['snap_commit'] then
+          snapshot_commit = res['snap_commit']
+         else
+          say Text::Process::NO_SNAPSHOT
+          res = @scm.create_snapshot(session_id, {:api => @solano_api, :default_branch => options[:default_branch]})
+          snapshot_commit = @scm.get_snap_id
+        end
+        say Text::Process::SNAPSHOT_COMMIT % snapshot_commit
+        @scm.create_patch(session_id, {:api => @solano_api, :commit => snapshot_commit})
+        start_test_executions = @solano_api.start_destrofree_session(session_id)
+      else
+
+        push_options = {}
+        if options[:machine]
+          push_options[:use_private_uri] = true
+        end
+
+        if !@scm.push_latest(session_data, suite_details, push_options) then
+          exit_failure Text::Error::SCM_PUSH_FAILED
+        end
+
+        machine_data[:session_id] = session_id
+
+        # Register the tests
+        @solano_api.register_session(session_id, @solano_api.current_suite_id, test_pattern, test_exclude_pattern)
+
+        # Start the tests
+        start_test_executions = @solano_api.start_session(session_id, test_execution_params)
+
+
+        num_tests_started = start_test_executions["started"].to_i
+
+        say Text::Process::STARTING_TEST % num_tests_started.to_s
       end
-
-      if !@scm.push_latest(session_data, suite_details, push_options) then
-        exit_failure Text::Error::SCM_PUSH_FAILED
-      end
-
-      machine_data[:session_id] = session_id
-
-      # Register the tests
-      @solano_api.register_session(session_id, @solano_api.current_suite_id, test_pattern, test_exclude_pattern)
-
-      # Start the tests
-      start_test_executions = @solano_api.start_session(session_id, test_execution_params)
-      num_tests_started = start_test_executions["started"].to_i
-
-      say Text::Process::STARTING_TEST % num_tests_started.to_s
-
       tests_finished = false
       finished_tests = {}
       latest_message = -100000
@@ -225,8 +251,8 @@ module Solano
         end
 
         # XXX time out if all tests are done and the session isn't done.
-        if current_test_executions['session_done'] ||
-          (finished_tests.size >= num_tests_started && (Time.now - last_finish_timestamp) > Default::TEST_FINISH_TIMEOUT)
+        if current_test_executions['session_done'] || current_test_executions['phase'] == 'done' &&
+          ((!num_tests_started.nil? && finished_tests.size >= num_tests_started) && (Time.now - last_finish_timestamp) > Default::TEST_FINISH_TIMEOUT)
           tests_finished = true
         end
 
@@ -295,11 +321,11 @@ module Solano
 
     def docker_enabled
       if @repo_config['system'] then
-        if @repo_config['system']['docker'] then
-          @repo_config['system']['docker']
-        else
-          false
-        end
+         if @repo_config['system']['docker'] then
+           @repo_config['system']['docker']
+         else
+           false
+         end
       else
         false
       end

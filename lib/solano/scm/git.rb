@@ -129,6 +129,81 @@ module Solano
       result.split("\n").length
     end
 
+    def create_snapshot(session_id, options={})
+      api = options[:api]
+      res = api.request_snapshot_url({:session_id => session_id})
+      auth_url = res['auth_url']
+
+      say Text::Process::SNAPSHOT_URL % auth_url
+
+      unique = SecureRandom.hex(10)
+      snaphot_path = File.join(Dir.tmpdir,".solano-#{unique}-snapshot")
+      file = File.join(Dir.tmpdir, "solano-#{unique}-snapshot.tar")
+
+      #git default branch
+      branch = options[:default_branch]
+      branch ||= /\-\>.*\/(.*)$/.match( (`git branch -r | grep origin/HEAD`).strip)[1]
+
+      if branch.nil? then
+        raise Text::Error::DEFAULT_BRANCH
+      end
+
+      out = `git clone --mirror -b #{branch} ./ #{snaphot_path}`
+      out = `tar -C #{snaphot_path} -czpf #{file} .`
+      upload_file(auth_url, file)
+      Dir.chdir(snaphot_path){
+        @snap_id = (`git rev-parse HEAD`).strip
+      }
+
+      desc = {"url" => auth_url.gsub(/\?.*/,''),
+        "size" => File.stat(file).size,
+        "sha1"=> Digest::SHA1.file(file).hexdigest.upcase,
+        "commit_id"=> @snap_id,
+        "session_id" => session_id,
+      }
+      api.update_snapshot({:repo_snapshot => desc})
+    ensure
+      FileUtils.rm_rf(snaphot_path) if snaphot_path && File.exists?(snaphot_path)
+      FileUtils.rm_f(file) if file && File.exists?(file)
+    end
+
+    def create_patch(session_id, options={})
+      api = options[:api]
+      snapshot_commit = options[:commit]
+      if "#{snapshot_commit}" == `git rev-parse HEAD`.to_s.strip then
+        say Text::Warning::SAME_SNAPSHOT_COMMIT
+        return
+      end
+      #check if commit is known locally
+      if (`git branch -q --contains #{snapshot_commit} 2>&1 >/dev/null | grep -o 'error:' | wc -l`).to_i > 0 then
+        raise Text::Error::PATCH_CREATION_ERROR % snapshot_commit
+      end
+
+      file_name = "solano-#{SecureRandom.hex(10)}.patch"
+      file_path = File.join(Dir.tmpdir, file_name)
+      out = `git format-patch #{snapshot_commit} --stdout > #{file_path}`
+      file_size = File.size(file_path)
+      file_sha1 = Digest::SHA1.file(file_path).hexdigest.upcase
+
+      #upload patch
+      say Text::Process::REQUST_PATCH_URL
+      res = api.request_patch_url({:session_id => session_id})
+      if (auth_url = res['auth_url']) then
+        say Text::Process::UPLOAD_PATCH % auth_url
+        upload_file(auth_url, file_path)
+      else
+        raise Text::Error::NO_PATCH_URL
+      end
+
+      args = {  :session_id => session_id,
+                :sha1 => file_sha1,
+                :size => file_size,}
+      api.upload_session_patch(args)
+
+    ensure
+      FileUtils.rm_rf(file_path) if file_path && File.exists?(file_path)
+    end
+
     protected
 
     def latest_commit

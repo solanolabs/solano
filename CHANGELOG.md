@@ -3,8 +3,12 @@
 
 ## Version History
 
+<<<<<<< 3b286b61b8847f7f52a349a6e892c91e3d0f0f88
 - v1.28.6 - Update gemspec dependency specifications.
 - v1.28.5 - Update gemspec dependency specifications.
+=======
+- v1.30.0.pre - Added destrofree support
+>>>>>>> CISRV-1758 added destro free to cli
 - v1.28.4 - Add newer tddium_client with debug
 - v1.28.3 - Allow `queue` option to `solano run` to set queue.
 - v1.28.2 - Automatically set cache paths for docker-enabled builds.

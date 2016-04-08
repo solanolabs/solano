@@ -4,13 +4,13 @@ module Solano
   class SolanoCli < Thor
     include SolanoConstant
     extend ParamsHelper
-    
+
     attr_reader :scm
     attr_reader :user_details
 
     params = self.load_params
 
-    class_option :host, :type => :string, 
+    class_option :host, :type => :string,
                         :default => self.default_host(params),
                         :desc => "Solano CI app server hostname"
 
@@ -22,7 +22,7 @@ module Solano
                          :default => self.default_proto(params),
                          :desc => "API Protocol"
 
-    class_option :insecure, :type => :boolean, 
+    class_option :insecure, :type => :boolean,
                             :default => self.default_insecure(params),
                             :desc => "Don't verify Solano CI app SSL server certificate"
 
@@ -32,11 +32,18 @@ module Solano
       # TODO: read host from .solano file
       # TODO: allow selecting which .solano "profile" to use
       cli_opts = options[:insecure] ? { :insecure => true } : {}
-      @tddium_client = TddiumClient::InternalClient.new(options[:host], 
-                                                        options[:port], 
-                                                        options[:proto], 
-                                                        1, 
-                                                        caller_version, 
+      cli_opts[:debug] = true
+      @tddium_client = TddiumClient::InternalClient.new(options[:host],
+                                                        options[:port],
+                                                        options[:proto],
+                                                        1,
+                                                        caller_version,
+                                                        cli_opts)
+      @tddium_clientv3 = TddiumClient::InternalClient.new(options[:host],
+                                                        options[:port],
+                                                        options[:proto],
+                                                        "api/v3",
+                                                        caller_version,
                                                         cli_opts)
       @cli_options = options
     end
@@ -150,7 +157,7 @@ module Solano
 
       host = @cli_options[:host]
       @api_config = ApiConfig.new(@scm, @tddium_client, host, @cli_options)
-      @solano_api = SolanoAPI.new(@scm, @tddium_client, @api_config)
+      @solano_api = SolanoAPI.new(@scm, @tddium_client, @api_config, {v3: @tddium_clientv3})
 
       @api_config.set_api(@solano_api)
 
