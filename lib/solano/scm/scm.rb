@@ -74,13 +74,11 @@ module Solano
     end
 
     def create_snapshot(session_id, options={})
-      say Text::Error:SNAPSHOT_NOT_SUPPORTED
-      raise
+      raise Text::Error:SNAPSHOT_NOT_SUPPORTED
     end
 
     def create_patch(session_id, options={})
-      say "patch creation not supported"
-      raise
+      raise Text::Error:PATCH_NOT_SUPPORTED
     end
 
     def upload_file(auth_url, file_path)
