@@ -108,7 +108,103 @@ module Solano
       result.split("\n").length
     end
 
+    def create_snapshot(session_id, options={})
+      api = options[:api]
+      res = api.request_snapshot_url({:session_id => session_id})
+      auth_url = res['auth_url']
+
+      say Text::Process::SNAPSHOT_URL % auth_url
+
+      unique = SecureRandom.hex(10)
+      snaphot_path = File.join(Dir.tmpdir,".solano-#{unique}-snapshot")
+      file = File.join(Dir.tmpdir, "solano-#{unique}-snapshot.tar")
+
+      # #git default branch
+      # branch = options[:default_branch]
+      # branch ||= /\-\>.*\/(.*)$/.match( (`git branch -r | grep origin/HEAD`).strip)[1]
+
+      # if branch.nil? then
+      #   raise Text::Error::DEFAULT_BRANCH
+      # end
+
+      out = `hg clone ./ #{snaphot_path}`
+      out = `tar -C #{snaphot_path} -czpf #{file} .`
+      upload_file(auth_url, file)
+      Dir.chdir(snaphot_path){
+        @snap_id = (`hg --debug id -i`).strip
+      }
+
+      desc = {"url" => auth_url.gsub(/\?.*/,''),
+        "size" => File.stat(file).size,
+        "sha1"=> Digest::SHA1.file(file).hexdigest.upcase,
+        "commit_id"=> @snap_id,
+        "session_id" => session_id,
+      }
+      api.update_snapshot({:repo_snapshot => desc})
+    ensure
+      FileUtils.rm_rf(snaphot_path) if snaphot_path && File.exists?(snaphot_path)
+      FileUtils.rm_f(file) if file && File.exists?(file)
+    end
+
+    def create_patch(session_id, options={})
+      api = options[:api]
+      snapshot_commit = options[:commit]
+      if "#{snapshot_commit}" == `hg --debug id -i`.to_s.strip then
+        say Text::Warning::SAME_SNAPSHOT_COMMIT
+        return
+      end
+      #check if commit is known locally
+      if (`hg log --rev "ancestors(.) and #{snapshot_commit}" 2>&1 >/dev/null | grep -o 'error:' | wc -l`).to_i > 0 then
+        raise Text::Error::PATCH_CREATION_ERROR % snapshot_commit
+      end
+
+      file_name = "solano-#{SecureRandom.hex(10)}.patch"
+      tmp_dir = Dir.mktmpdir("patches")
+      file_path = File.join(tmp_dir, file_name)
+      Dir
+      out = `hg export -o #{tmp_dir}/patch-%n -r #{snapshot_commit}:tip`
+      say out
+      build_patch(tmp_dir, file_path)
+
+      file_size = File.size(file_path)
+      file_sha1 = Digest::SHA1.file(file_path).hexdigest.upcase
+
+      #upload patch
+      say Text::Process::REQUST_PATCH_URL
+      res = api.request_patch_url({:session_id => session_id})
+      if (auth_url = res['auth_url']) then
+        say Text::Process::UPLOAD_PATCH % auth_url
+        upload_file(auth_url, file_path)
+      else
+        raise Text::Error::NO_PATCH_URL
+      end
+
+      args = {  :session_id => session_id,
+                :sha1 => file_sha1,
+                :size => file_size,}
+      api.upload_session_patch(args)
+
+    ensure
+      FileUtils.rm_rf(file_path) if file_path && File.exists?(file_path)
+      FileUtils.rm_rf(tmp_dir) if tmp_dir && File.exists?(tmp_dir)
+    end
+
     protected
+
+    def build_patch(tmp_dir, file_path)
+      #patch currently includes one two many commits
+      files = Dir.glob(File.join(tmp_dir,"patch-*"))
+      files.sort!
+      files.shift
+
+      File.open( file_path, "w" ){|f_out|
+        files.each {|f_name|
+          File.open(f_name){|f_in|
+            f_in.each {|f_str| f_out.puts(f_str) }
+          }
+        }
+      }
+    end
 
     def latest_commit
       `hg log -f -l 1 --template='{node}\\n{desc|firstline}\\n{author|user}\\n{author|email}\\n{date}\\n{author|user}\\n{author|email}\\n{date}\\n\\n'`

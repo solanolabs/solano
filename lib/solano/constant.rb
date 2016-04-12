@@ -515,6 +515,7 @@ EOF
       COMMAND_DEPRECATED = "This command is deprecated and will be removed in a future version"
       NO_PATCH_URL = "Failed to get Patch URL"
       SNAPSHOT_NOT_SUPPORTED =  "Snapshot creation not supported"
+      PATCH_NOT_SUPPORTED =  "Patch creation not supported"
       PATCH_CREATION_ERROR = "Solano's current snapshot is based on commit: %s. We could not create a patch for your current state to that patch"
       DEFAULT_BRANCH = "Could not find the default branch, looked for origin/head. We Need the default branch to create a snapshot. Please try again using --default_branch=master"
     end
