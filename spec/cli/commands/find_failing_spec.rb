@@ -20,8 +20,8 @@ describe Solano::SolanoCli do
     around do |test|
       Dir.mktmpdir do |dir|
         Dir.chdir(dir) do
-          Kernel.system("git init . 2>&1 > /dev/null")
-          Kernel.system("git remote add origin git@github.com:solanolabs/solano" )
+          IO.popen("git init . 2>&1 > /dev/null") {} # Discard output on *nix & windows
+          IO.popen("git remote add origin git@github.com:solanolabs/solano" ) {} # Discard output on *nix & windows
           test.call()
         end
       end

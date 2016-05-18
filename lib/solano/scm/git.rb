@@ -41,8 +41,8 @@ module Solano
     def origin_url
       return @default_origin_url if @default_origin_url
 
-      result = `(git config --get remote.origin.url || echo GIT_FAILED) 2>/dev/null`
-      return nil if result =~ /GIT_FAILED/
+      result = `git config --get remote.origin.url`
+      return nil unless $?.success?
 
       result = result.strip
 
@@ -141,14 +141,10 @@ module Solano
       def git_changes?(options={})
         options[:exclude] ||= []
         options[:exclude] = [options[:exclude]] unless options[:exclude].is_a?(Array)
-        cmd = "(git status --porcelain -uno || echo GIT_FAILED) < /dev/null 2>&1"
+        cmd = "git status --porcelain -uno"
         p = IO.popen(cmd)
         changes = false
         while line = p.gets do
-          if line =~ /GIT_FAILED/
-            warn(Text::Warning::SCM_UNABLE_TO_DETECT)
-            return false
-          end
           line = line.strip
           status, name = line.split(/\s+/)
           next if options[:exclude].include?(name)
@@ -157,6 +153,10 @@ module Solano
             break
           end
         end
+        unless $?.success? then
+          warn(Text::Warning::SCM_UNABLE_TO_DETECT)
+          return false
+        end
         return changes
       end
 
@@ -164,7 +164,7 @@ module Solano
         remote_name ||= Config::REMOTE_NAME
 
         unless `git remote show -n #{remote_name}` =~ /#{git_repo_uri}/
-          `git remote rm #{remote_name} > /dev/null 2>&1`
+          IO.popen("git remote rm #{remote_name}") {} # Discard output on *nix & windows
           `git remote add #{remote_name} #{git_repo_uri.shellescape}`
         end
       end
