@@ -136,6 +136,8 @@ module Solano
           new_session_params[:session_manager] = options[:session_manager]
       end
 
+      new_session_params[:cli_current_commit] = @scm.current_commit
+
       # Create a session
       # or use an already-created session
       #

@@ -183,22 +183,28 @@ module Solano
       file_path = File.join(Dir.tmpdir, file_name)
       out = `git format-patch #{snapshot_commit} --stdout > #{file_path}`
       file_size = File.size(file_path)
-      file_sha1 = Digest::SHA1.file(file_path).hexdigest.upcase
+      if file_size != 0 then
 
-      #upload patch
-      say Text::Process::REQUST_PATCH_URL
-      res = api.request_patch_url({:session_id => session_id})
-      if (auth_url = res['auth_url']) then
-        say Text::Process::UPLOAD_PATCH % auth_url
-        upload_file(auth_url, file_path)
+        file_sha1 = Digest::SHA1.file(file_path).hexdigest.upcase
+
+        #upload patch
+        say Text::Process::REQUST_PATCH_URL
+        res = api.request_patch_url({:session_id => session_id})
+        if (auth_url = res['auth_url']) then
+          say Text::Process::UPLOAD_PATCH % auth_url
+          upload_file(auth_url, file_path)
+        else
+          raise Text::Error::NO_PATCH_URL
+        end
+
+        args = {  :session_id => session_id,
+                  :sha1 => file_sha1,
+                  :size => file_size,}
+        api.upload_session_patch(args)
       else
-        raise Text::Error::NO_PATCH_URL
+        say Text::Warning::EMPTY_PATCH
+        return
       end
-
-      args = {  :session_id => session_id,
-                :sha1 => file_sha1,
-                :size => file_size,}
-      api.upload_session_patch(args)
 
     ensure
       FileUtils.rm_rf(file_path) if file_path && File.exists?(file_path)

@@ -111,6 +111,7 @@ EOF
 You have not set an ssh key for your user.  Please add an ssh key using `solano keys:add` or visit http://ci.solanolabs.com/user_settings/ssh_keys
 EOF
       SAME_SNAPSHOT_COMMIT = "Snapshot commit is the same as HEAD"
+      EMPTY_PATCH = "Patch not created because it would have been empty. Most likely the commit exists in the snapshot already"
     end
 
     module Process
