@@ -164,7 +164,7 @@ module Solano
         end
         say Text::Process::SNAPSHOT_COMMIT % snapshot_commit
         @scm.create_patch(session_id, {:api => @solano_api, :commit => snapshot_commit})
-        start_test_executions = @solano_api.start_destrofree_session(session_id)
+        start_test_executions = @solano_api.start_destrofree_session(session_id, {:test_pattern => test_pattern, :test_exclude_pattern=>test_exclude_pattern})
       else
 
         push_options = {}

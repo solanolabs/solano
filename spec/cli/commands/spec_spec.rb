@@ -55,7 +55,7 @@ describe Solano::SolanoCli do
       allow(solano_api).to receive(:poll_session).and_return(test_executions)
       allow(solano_api).to receive(:get_keys).and_return([{name: 'some_key', pub: 'some content'}])
     end
- 
+
     before(:each) do
       allow(scm).to receive(:repo?).and_return(true)
       allow(scm).to receive(:changes?).and_return(false)
@@ -67,6 +67,7 @@ describe Solano::SolanoCli do
       allow(scm).to receive(:ignore_path).and_return('.gitignore')
 
       allow(Solano::Git).to receive(:new).and_return(scm)
+      allow(scm).to receive(:current_commit).and_return('abcdef')
     end
 
     it "should create a new session" do
@@ -82,11 +83,12 @@ describe Solano::SolanoCli do
       allow(solano_api).to receive(:get_suites).and_return([
         {"account" => "handle-2"},
       ])
-      expect(solano_api).to receive(:create_session).with(suite_id, 
+      expect(solano_api).to receive(:create_session).with(suite_id,
                                     :commits_encoded => commits_encoded,
                                     :cache_control_encoded => cache_control_encoded,
                                     :cache_save_paths_encoded => cache_paths_encoded,
-                                    :raw_config_file => repo_config_file_encoded)
+                                    :raw_config_file => repo_config_file_encoded,
+                                    :cli_current_commit=>"abcdef")
       allow(scm).to receive(:latest_commit).and_return(latest_commit)
       subject.spec
     end
@@ -133,12 +135,13 @@ describe Solano::SolanoCli do
         {"account" => "handle-2"},
       ])
       allow(subject).to receive(:options).and_return({:profile => "testing"})
-      expect(solano_api).to receive(:create_session).with(suite_id, 
+      expect(solano_api).to receive(:create_session).with(suite_id,
                                         :commits_encoded => commits_encoded,
                                         :cache_control_encoded => cache_control_encoded,
                                         :cache_save_paths_encoded => cache_paths_encoded,
                                         :raw_config_file => repo_config_file_encoded,
-                                        :profile_name => "testing")
+                                        :profile_name => "testing",
+                                        :cli_current_commit=>"abcdef")
       allow(subject.scm).to receive(:latest_commit).and_return(latest_commit)
       subject.spec
     end
@@ -160,7 +163,8 @@ describe Solano::SolanoCli do
                                                           :cache_control_encoded => cache_control_encoded,
                                                           :cache_save_paths_encoded => cache_paths_encoded,
                                                           :raw_config_file => repo_config_file_encoded,
-                                                          :env => {"vasya"=>"petya", "kolya"=>"nata"})
+                                                          :env => {"vasya"=>"petya", "kolya"=>"nata"},
+                                                          :cli_current_commit=>"abcdef")
       allow(subject.scm).to receive(:latest_commit).and_return(latest_commit)
       subject.spec
     end
