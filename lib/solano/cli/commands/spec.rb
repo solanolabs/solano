@@ -25,6 +25,7 @@ module Solano
     method_option :queue, :type => :string, :default => nil
     method_option :session_manager, :type => :string, :default => nil
     method_option :default_branch, :type => :string, :default => nil
+    method_option :force_snapshot, :type => :boolean, :default => false
     def spec(*pattern)
       machine_data = {}
 
@@ -154,12 +155,18 @@ module Solano
 
       if manager == 'DestroFreeSessionManager'
         #check if there is a snapshot
-        res = @solano_api.get_snapshot_commit({:session_id => session_id})
-        if res['snap_commit'] then
-          snapshot_commit = res['snap_commit']
-         else
-          say Text::Process::NO_SNAPSHOT
-          res = @scm.create_snapshot(session_id, {:api => @solano_api, :default_branch => options[:default_branch]})
+        if !options[:force_snapshot] then
+          res = @solano_api.get_snapshot_commit({:session_id => session_id})
+          if res['snap_commit'] then
+            snapshot_commit = res['snap_commit']
+           else
+            say Text::Process::NO_SNAPSHOT
+            res = @scm.create_snapshot(session_id, {:api => @solano_api, :default_branch => options[:default_branch]})
+            snapshot_commit = @scm.get_snap_id
+          end
+        else
+          say Text::Process::FORCED_SNAPSHOT
+          res = @scm.create_snapshot(session_id, {:api => @solano_api, :force => true})
           snapshot_commit = @scm.get_snap_id
         end
         say Text::Process::SNAPSHOT_COMMIT % snapshot_commit

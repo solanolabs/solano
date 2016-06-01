@@ -287,6 +287,7 @@ EOF
       USING_CUSTOM_USER_ENV_VARS = "Starting session with custom environment variables: %s"
       SNAPSHOT_COMMIT = "Snapshot commit is %s"
       NO_SNAPSHOT = "No snapshot, creating one"
+      FORCED_SNAPSHOT = "Forcing snapshot creation"
       SNAPSHOT_URL = "Snapshot url is %s"
       REQUST_PATCH_URL = "Requesting patch url"
       UPLOAD_PATCH = "Uploading patch to %s"
@@ -519,6 +520,9 @@ EOF
       PATCH_NOT_SUPPORTED =  "Patch creation not supported"
       PATCH_CREATION_ERROR = "Solano's current snapshot is based on commit: %s. We could not create a patch for your current state to that patch"
       DEFAULT_BRANCH = "Could not find the default branch, looked for origin/head. We Need the default branch to create a snapshot. Please try again using --default_branch=master"
+      NEED_TO_FORCE =<<EOF
+There is currently not a Solano snapshot for this repo. We tried to create a snapshot based on your local copy of '%s', but it appears that there are unpushed commits on this branch. To Ensure the snapshot is usable by other builds please run 'solano run' either after pushing current commits or use 'solano run --force_snapshot' to create a snapshot from the current state.
+EOF
     end
   end
 

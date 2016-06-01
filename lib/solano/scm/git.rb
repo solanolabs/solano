@@ -140,15 +140,21 @@ module Solano
       snaphot_path = File.join(Dir.tmpdir,".solano-#{unique}-snapshot")
       file = File.join(Dir.tmpdir, "solano-#{unique}-snapshot.tar")
 
-      #git default branch
-      branch = options[:default_branch]
-      branch ||= /\-\>.*\/(.*)$/.match( (`git branch -r | grep origin/HEAD`).strip)[1]
-
-      if branch.nil? then
-        raise Text::Error::DEFAULT_BRANCH
+      if !options[:force] then
+        #git default branch
+        branch = options[:default_branch]
+        branch ||= /\-\>.*\/(.*)$/.match( (`git branch -r | grep origin/HEAD`).strip)[1]
+        if branch.nil? then
+          raise Text::Error::DEFAULT_BRANCH
+        end
+        if branch == (`git rev-parse --abbrev-ref HEAD`).strip && /Your branch is up-to-date with/.match(`git status`).nil? then
+          raise Text::Error::NEED_TO_FORCE % branch
+        end
+        out = `git clone --mirror -b #{branch} ./ #{snaphot_path}`
+      else
+        out = `git clone --mirror ./ #{snaphot_path}`
       end
 
-      out = `git clone --mirror -b #{branch} ./ #{snaphot_path}`
       out = `tar -C #{snaphot_path} -czpf #{file} .`
       upload_file(auth_url, file)
       Dir.chdir(snaphot_path){
