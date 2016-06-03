@@ -154,24 +154,30 @@ module Solano
       session_id ||= session_data["id"]
 
       if manager == 'DestroFreeSessionManager'
-        #check if there is a snapshot
-        if !options[:force_snapshot] then
-          res = @solano_api.get_snapshot_commit({:session_id => session_id})
-          if res['snap_commit'] then
-            snapshot_commit = res['snap_commit']
-           else
-            say Text::Process::NO_SNAPSHOT
-            res = @scm.create_snapshot(session_id, {:api => @solano_api, :default_branch => options[:default_branch]})
+        begin
+          #check if there is a snapshot
+          if !options[:force_snapshot] then
+            res = @solano_api.get_snapshot_commit({:session_id => session_id})
+            if res['snap_commit'] then
+              snapshot_commit = res['snap_commit']
+             else
+              say Text::Process::NO_SNAPSHOT
+              res = @scm.create_snapshot(session_id, {:api => @solano_api, :default_branch => options[:default_branch]})
+              snapshot_commit = @scm.get_snap_id
+            end
+          else
+            say Text::Process::FORCED_SNAPSHOT
+            res = @scm.create_snapshot(session_id, {:api => @solano_api, :force => true})
             snapshot_commit = @scm.get_snap_id
           end
-        else
-          say Text::Process::FORCED_SNAPSHOT
-          res = @scm.create_snapshot(session_id, {:api => @solano_api, :force => true})
-          snapshot_commit = @scm.get_snap_id
+          say Text::Process::SNAPSHOT_COMMIT % snapshot_commit
+          @scm.create_patch(session_id, {:api => @solano_api, :commit => snapshot_commit})
+          start_test_executions = @solano_api.start_destrofree_session(session_id, {:test_pattern => test_pattern, :test_exclude_pattern=>test_exclude_pattern})
+        rescue Exception, RuntimeError => e
+           @solano_api.stop_session(session_id)
+           say "ERROR: #{e.message}"
+           return
         end
-        say Text::Process::SNAPSHOT_COMMIT % snapshot_commit
-        @scm.create_patch(session_id, {:api => @solano_api, :commit => snapshot_commit})
-        start_test_executions = @solano_api.start_destrofree_session(session_id, {:test_pattern => test_pattern, :test_exclude_pattern=>test_exclude_pattern})
       else
 
         push_options = {}
