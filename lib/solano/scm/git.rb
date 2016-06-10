@@ -147,7 +147,7 @@ module Solano
         if branch.nil? then
           raise Text::Error::DEFAULT_BRANCH
         end
-        if branch == (`git rev-parse --abbrev-ref HEAD`).strip && /Your branch is up-to-date with/.match(`git status`).nil? then
+        if branch == (`git rev-parse --abbrev-ref HEAD`).strip && !/Your branch is up-to-date with/.match(`git status`).nil? then
           raise Text::Error::NEED_TO_FORCE % branch
         end
         out = `git clone --mirror -b #{branch} ./ #{snaphot_path}`

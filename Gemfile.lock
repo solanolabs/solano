@@ -1,11 +1,7 @@
 PATH
   remote: .
   specs:
-<<<<<<< 3b286b61b8847f7f52a349a6e892c91e3d0f0f88
-    solano (1.28.7)
-=======
     solano (1.30.0.pre)
->>>>>>> CISRV-1758 added destro free to cli
       addressable (~> 2.3)
       github_api (~> 0.12.1)
       highline (~> 1.7.3)
@@ -94,12 +90,8 @@ GEM
     pickle (0.5.1)
       cucumber (>= 0.8)
       rake
-<<<<<<< 3b286b61b8847f7f52a349a6e892c91e3d0f0f88
     pkg-config (1.1.7)
-    plist (3.1.0)
-=======
     plist (3.2.0)
->>>>>>> CISRV-1758 added destro free to cli
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -154,4 +146,4 @@ DEPENDENCIES
   solano!
 
 BUNDLED WITH
-   1.10.6
+   1.12.5
