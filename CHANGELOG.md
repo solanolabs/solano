@@ -3,6 +3,7 @@
 
 ## Version History
 
+- v1.28.5 - Update gemspec dependency specifications.
 - v1.28.4 - Add newer tddium_client with debug
 - v1.28.3 - Allow `queue` option to `solano run` to set queue.
 - v1.28.2 - Automatically set cache paths for docker-enabled builds.

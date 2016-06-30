@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    solano (1.28.4)
+    solano (1.28.5)
       addressable (~> 2.3)
-      github_api (~> 0.12)
+      github_api (~> 0.12.1)
       highline (~> 1.6)
       json (~> 1.8)
       launchy (~> 2.4)
@@ -49,12 +49,13 @@ GEM
     ffi (1.9.10)
     gherkin (2.12.2)
       multi_json (~> 1.3)
-    github_api (0.13.1)
-      addressable (~> 2.4.0)
+    github_api (0.12.4)
+      addressable (~> 2.3)
       descendants_tracker (~> 0.0.4)
       faraday (~> 0.8, < 0.10)
       hashie (>= 3.4)
       multi_json (>= 1.7.5, < 2.0)
+      nokogiri (~> 1.6.6)
       oauth2
     hashie (3.4.3)
     highline (1.7.8)
@@ -71,11 +72,14 @@ GEM
       plist
       rack
       sinatra
+    mini_portile2 (2.0.0)
     multi_json (1.11.2)
     multi_test (0.1.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     nayutaya-msgpack-pure (0.0.2)
+    nokogiri (1.6.7.2)
+      mini_portile2 (~> 2.0.0.rc2)
     oauth2 (1.1.0)
       faraday (>= 0.8, < 0.10)
       jwt (~> 1.0, < 1.5.2)
