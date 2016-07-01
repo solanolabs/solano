@@ -1,7 +1,7 @@
 # Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
 
-#require 'simplecov'
-#SimpleCov.start
+require 'simplecov'
+SimpleCov.start
 
 require 'solano'
 
