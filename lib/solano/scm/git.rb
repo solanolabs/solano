@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2015 Solano Labs All Rights Reserved
+# Copyright (c) 2011-2016 Solano Labs All Rights Reserved
 
 module Solano
   class Git < SCM

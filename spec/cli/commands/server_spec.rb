@@ -1,4 +1,4 @@
-# Copyright (c) 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2014-2016 Solano Labs All Rights Reserved
 
 # delete solano-server file before require solano/cli/solano.rb
 # it will use stored options, not default (if server-file already exist)
