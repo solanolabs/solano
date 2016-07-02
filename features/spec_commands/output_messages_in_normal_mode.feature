@@ -5,8 +5,8 @@ Feature: spec command
   In order to run tests
   I want to start a test session
 
-  Background:
-    Given the command is "solano spec"
+Background:
+  Given the command is "solano spec"
 
 Scenario: Output messages in normal mode
   Given the destination repo exists

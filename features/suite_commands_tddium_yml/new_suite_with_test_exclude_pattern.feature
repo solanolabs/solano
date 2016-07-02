@@ -6,8 +6,8 @@ Feature: suite command
   In order to interact with Solano
   I want to configure a test suite
 
-  Background:
-    Given the command is "solano suite"
+Background:
+  Given the command is "solano suite"
 
 Scenario Outline: Configure new suite with test exclude pattern from repo config file
   Given the user is logged in, and can successfully create a new suite in a git repo

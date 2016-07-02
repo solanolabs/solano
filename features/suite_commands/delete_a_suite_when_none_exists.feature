@@ -6,8 +6,8 @@ Feature: suite command
   In order to interact with Solano
   I want to configure a test suite
 
-  Background:
-    Given the command is "solano suite"
+Background:
+  Given the command is "solano suite"
 
 Scenario: Delete a suite when none exists
   Given a git repo is initialized on branch "test/foobar"

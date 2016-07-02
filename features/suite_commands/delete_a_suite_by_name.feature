@@ -6,8 +6,8 @@ Feature: suite command
   In order to interact with Solano
   I want to configure a test suite
 
-  Background:
-    Given the command is "solano suite"
+Background:
+  Given the command is "solano suite"
 
 Scenario: Delete a suite by name
   Given the command is "solano suite --delete bar"

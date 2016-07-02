@@ -5,8 +5,8 @@ Feature: spec command
   In order to run tests
   I want to start a test session
 
-  Background:
-    Given the command is "solano spec"
+Background:
+  Given the command is "solano spec"
 
 Scenario: Use suite on API server but not in local configuration
   Given the destination repo exists

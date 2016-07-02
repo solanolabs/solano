@@ -6,8 +6,8 @@ Feature: suite command
   In order to interact with Solano
   I want to configure a test suite
 
-  Background:
-    Given the command is "solano suite"
+Background:
+  Given the command is "solano suite"
 
 Scenario: Create a suite under a different account interactively
   Given the destination repo exists
