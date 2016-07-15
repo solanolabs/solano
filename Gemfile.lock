@@ -1,11 +1,11 @@
 PATH
   remote: .
   specs:
-    solano (1.28.5)
+    solano (1.28.7)
       addressable (~> 2.3)
       github_api (~> 0.12.1)
       highline (~> 1.7.3)
-      json
+      json (~> 1.8.3)
       launchy (~> 2.4)
       nayutaya-msgpack-pure (~> 0.0, >= 0.0.2)
       tddium_client (~> 0.6, >= 0.6.0)
@@ -53,12 +53,12 @@ GEM
       addressable (~> 2.3)
       descendants_tracker (~> 0.0.4)
       faraday (~> 0.8, < 0.10)
-      hashie (>= 1.2)
+      hashie (>= 3.4)
       multi_json (>= 1.7.5, < 2.0)
       nokogiri (~> 1.6.6)
       oauth2
-    hashie (3.4.3)
-    highline (1.7.3)
+    hashie (3.4.4)
+    highline (1.7.8)
     httparty (0.9.0)
       multi_json (~> 1.0)
       multi_xml
@@ -144,3 +144,6 @@ DEPENDENCIES
   rspec (~> 3.1)
   simplecov (~> 0.9)
   solano!
+
+BUNDLED WITH
+   1.10.6
