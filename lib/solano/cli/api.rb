@@ -55,25 +55,41 @@ module Solano
       acct["account_id"]
     end
 
-    def env_path(scope, key=nil)
+    def env_path(scope, key=nil, options={})
       path = ['']
 
       case scope
       when "suite"
         path << 'suites'
-        path << current_suite_id
+        # TODO: Raise error if suite is not found
+        path << current_suite_id(options)
       when "repo"
         path << 'repos'
-        path << current_repo_id
+        # TODO: Raise error if repo is not found
+        path << current_repo_id(options)
       when "account", "org"
         path << 'accounts'
-        path << get_single_account_id
+        if !options['account'].nil?
+          path << get_account_id(options['account'])
+        else
+          path << get_single_account_id
+        end
       when /\Aaccount:/
         path << 'accounts'
-        path << get_account_id(scope.sub(/\Aaccount:/, ''))
+        if !options['account'].nil?
+          path << get_account_id(options['account'])
+        else
+          # TODO: Add deprecation warning
+          path << get_account_id(scope.sub(/\Aaccount:/, ''))
+        end
       when /\Aorg:/
         path << 'accounts'
-        path << get_account_id(scope.sub(/\Aorg:/, ''))
+        if !options['account'].nil?
+          path << get_account_id(options['account'])
+        else
+          # TODO: Add deprecation warning
+          path << get_account_id(scope.sub(/\Aorg:/, ''))
+        end
       else
         raise "Unrecognized scope. Use 'suite', 'repo', 'org', or 'org:an_organization_name'."
       end
@@ -83,18 +99,18 @@ module Solano
       path.join('/')
     end
 
-    def get_config_key(scope, key=nil)
-      path = env_path(scope, key)
+    def get_config_key(scope, key=nil, options={})
+      path = env_path(scope, key, options)
       call_api(:get, path)
     end
 
-    def set_config_key(scope, key, value)
-      path = env_path(scope)
+    def set_config_key(scope, key, value, options={})
+      path = env_path(scope, nil, options)
       call_api(:post, path, :env=>{key=>value})
     end
 
-    def delete_config_key(scope, key)
-      path = env_path(scope, key)
+    def delete_config_key(scope, key, options={})
+      path = env_path(scope, key, options)
       call_api(:delete, path)
     end
 
