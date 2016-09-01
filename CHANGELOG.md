@@ -3,7 +3,7 @@
 
 ## Version History
 
-- v1.30.0.pre - Added destrofree support
+- v1.30.0 - Support SCM-agnostic repo caching architecture
 - v1.28.6 - Update gemspec dependency specifications.
 - v1.28.5 - Update gemspec dependency specifications.
 - v1.28.4 - Add newer tddium_client with debug
