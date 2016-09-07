@@ -14,7 +14,7 @@ module Solano
 
     # @return Boolean indicating whether or not we are running inside Solano
     def solano?
-      return ENV.member?('SOLANO')
+      return ENV.member?('SOLANO') || ENV.member?('TDDIUM')
     end
 
     # @return The current worker thread ID
