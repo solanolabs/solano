@@ -28,9 +28,11 @@ describe "Agent" do
       env = env_save
 
       ENV['SOLANO'] = '1'
+      ENV['TDDIUM'] = '1'
       expect(@agent.solano?).to be true
 
       ENV.delete('SOLANO')
+      ENV.delete('TDDIUM')
       expect(@agent.solano?).to be false
     ensure
       env_restore(env)
