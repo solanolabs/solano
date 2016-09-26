@@ -127,7 +127,7 @@ module Solano
       #   raise Text::Error::DEFAULT_BRANCH
       # end
 
-      out = `hg clone ./ #{snaphot_path}`
+      out = `hg clone #{root} #{snaphot_path}`
       out = `tar -C #{snaphot_path} -czpf #{file} .`
       upload_file(auth_url, file)
       Dir.chdir(snaphot_path){

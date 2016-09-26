@@ -150,9 +150,9 @@ module Solano
         if branch == (`git rev-parse --abbrev-ref HEAD`).strip && !/Your branch is up-to-date with/.match(`git status`).nil? then
           raise Text::Error::NEED_TO_FORCE % branch
         end
-        out = `git clone --mirror -b #{branch} ./ #{snaphot_path}`
+        out = `git clone --mirror -b #{branch} #{root} #{snaphot_path}`
       else
-        out = `git clone --mirror ./ #{snaphot_path}`
+        out = `git clone --mirror #{root} #{snaphot_path}`
       end
 
       out = `tar -C #{snaphot_path} -czpf #{file} .`
