@@ -40,8 +40,9 @@ module Solano
     def origin_url
       return @default_origin_url if @default_origin_url
 
-      result = `(hg paths default || echo HG_FAILED) 2>/dev/null`
-      return nil if result =~ /HG_FAILED/
+      result = `hg paths default`
+      return nil unless $?.success?
+      return nil if result.empty?
       result.strip!
       u = URI.parse(result) rescue nil
       if u && u.host.nil? then
@@ -216,14 +217,10 @@ module Solano
       def hg_changes?(options={})
         options[:exclude] ||= []
         options[:exclude] = [options[:exclude]] unless options[:exclude].is_a?(Array)
-        cmd = "(hg status -mardu || echo HG_FAILED) < /dev/null 2>&1"
+        cmd = "hg status -mardu"
         p = IO.popen(cmd)
         changes = false
         while line = p.gets do
-          if line =~ /HG_FAILED/
-            warn(Text::Warning::SCM_UNABLE_TO_DETECT)
-            return false
-          end
           line = line.strip
           status, name = line.split(/\s+/)
           next if options[:exclude].include?(name)
@@ -231,6 +228,10 @@ module Solano
             changes = true
             break
           end
+        end
+        unless $?.success? then
+          warn(Text::Warning::SCM_UNABLE_TO_DETECT)
+          return false
         end
         return changes
       end
