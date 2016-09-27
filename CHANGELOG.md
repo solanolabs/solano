@@ -3,6 +3,7 @@
 
 ## Version History
 
+- v1.30.1 - Use absolute paths for git, hg; only create patch if no snapshot.
 - v1.30.0 - Support SCM-agnostic repo caching architecture
 - v1.28.6 - Update gemspec dependency specifications.
 - v1.28.5 - Update gemspec dependency specifications.
