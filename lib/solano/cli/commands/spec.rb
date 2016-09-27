@@ -165,13 +165,13 @@ module Solano
               res = @scm.create_snapshot(session_id, {:api => @solano_api, :default_branch => options[:default_branch]})
               snapshot_commit = @scm.get_snap_id
             end
+            say Text::Process::SNAPSHOT_COMMIT % snapshot_commit
+            @scm.create_patch(session_id, {:api => @solano_api, :commit => snapshot_commit})
           else
             say Text::Process::FORCED_SNAPSHOT
             res = @scm.create_snapshot(session_id, {:api => @solano_api, :force => true})
             snapshot_commit = @scm.get_snap_id
           end
-          say Text::Process::SNAPSHOT_COMMIT % snapshot_commit
-          @scm.create_patch(session_id, {:api => @solano_api, :commit => snapshot_commit})
           start_test_executions = @solano_api.start_destrofree_session(session_id, {:test_pattern => test_pattern, :test_exclude_pattern=>test_exclude_pattern})
         rescue Exception, RuntimeError => e
            @solano_api.stop_session(session_id)
