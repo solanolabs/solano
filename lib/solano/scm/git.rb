@@ -143,18 +143,31 @@ module Solano
       if !options[:force] then
         #git default branch
         branch = options[:default_branch]
-        branch ||= /\-\>.*\/(.*)$/.match( (`git branch -r | grep origin/HEAD`).strip)[1]
+        branches = /\-\>.*\/(.*)$/.match( (`git branch -r | grep origin/HEAD`).strip)
+        branch ||= branches[1] unless branches.nil?
+        branches = /master/.match( (`git branch --list master`).strip)
+        if branch.nil? && !branches.nil? then
+          say Text::Process::USING_MASTER
+          branch ||= branches[0]
+        end
         if branch.nil? then
           raise Text::Error::DEFAULT_BRANCH
         end
         if branch == (`git rev-parse --abbrev-ref HEAD`).strip && !/Your branch is up-to-date with/.match(`git status`).nil? then
           raise Text::Error::NEED_TO_FORCE % branch
         end
+        say Text::Process::CREATING_REPO_SNAPSHOT_BRANCH % [root, branch]
         out = `git clone --mirror -b #{branch} #{root} #{snaphot_path}`
+        if !$?.success? then
+          raise Text::Error::FAILED_TO_CREATE_SNAPSHOT % out
+        end
       else
+        say Text::Process::CREATING_REPO_SNAPSHOT % root
         out = `git clone --mirror #{root} #{snaphot_path}`
+        if !$?.success? then
+          raise Text::Error::FAILED_TO_CREATE_SNAPSHOT % out
+        end
       end
-
       out = `tar -C #{snaphot_path} -czpf #{file} .`
       upload_file(auth_url, file)
       Dir.chdir(snaphot_path){
@@ -188,6 +201,9 @@ module Solano
       file_name = "solano-#{SecureRandom.hex(10)}.patch"
       file_path = File.join(Dir.tmpdir, file_name)
       out = `git format-patch #{snapshot_commit} --stdout > #{file_path}`
+      if !$?.success? then
+        raise Text::Error::FAILED_TO_CREATE_PATCH % [snapshot_commit, out]
+      end
       file_size = File.size(file_path)
       if file_size != 0 then
 

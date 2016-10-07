@@ -190,6 +190,8 @@ EOF
       USING_EXISTING_SUITE = "Using suite '%s/%s'."
       CREATING_SUITE = "Creating suite '%s/%s'.  This will take a few seconds."
       CREATING_SUITE_CI_DISABLED = "Disabling automatic CI for this new branch."
+      CREATING_REPO_SNAPSHOT = "Creating a snapshot from %s"
+      CREATING_REPO_SNAPSHOT_BRANCH = "Creating a snapshot from %s, based on branch %s"
       CREATED_SUITE = "\nCreated suite.\n"
       PASSWORD_CONFIRMATION_INCORRECT = "Password confirmation incorrect"
       PASSWORD_CHANGED = "Your password has been changed."
@@ -291,6 +293,13 @@ EOF
       SNAPSHOT_URL = "Snapshot url is %s"
       REQUST_PATCH_URL = "Requesting patch url"
       UPLOAD_PATCH = "Uploading patch to %s"
+      USING_MASTER = "Found a branch named master, if this is not the correct default branch please run again with --force_snapshot --default_branch=master"
+      ATTEMPT_UPSTREAM_PATCH = "Attempting to create a patch from %s"
+      ASK_FOR_SNAPSHOT =<<EOF
+Since we could not create a patch, we can try creating a snapshot instead. This may take longer to upload, then a patch.
+(Please see http://docs.solanolabs.com/RunningBuild/snapshots-and-patches/ for more info)
+Would you like to attempt snapshot creation?[Y/n]
+EOF
     end # Process
 
     module Status
@@ -516,12 +525,38 @@ EOF
       CANNOT_OVERRIDE_QUEUE="Cannot override queue for existing session"
       COMMAND_DEPRECATED = "This command is deprecated and will be removed in a future version"
       NO_PATCH_URL = "Failed to get Patch URL"
-      SNAPSHOT_NOT_SUPPORTED =  "Snapshot creation not supported"
-      PATCH_NOT_SUPPORTED =  "Patch creation not supported"
+      SNAPSHOT_NOT_SUPPORTED =<<EOF
+================================================================================================
+Snapshot creation not supported
+Please see http://docs.solanolabs.com/RunningBuild/snapshots-and-patches/ for more info
+================================================================================================
+EOF
+      PATCH_NOT_SUPPORTED =<<EOF
+================================================================================================
+Patch creation not supported
+Please see http://docs.solanolabs.com/RunningBuild/snapshots-and-patches/ for more info
+================================================================================================
+EOF
       PATCH_CREATION_ERROR = "Solano's current snapshot is based on commit: %s. We could not create a patch for your current state to that patch"
-      DEFAULT_BRANCH = "Could not find the default branch, looked for origin/head. We Need the default branch to create a snapshot. Please try again using --default_branch=master"
+      DEFAULT_BRANCH =<<EOF
+Could not find the default branch, looked for origin/head. We Need the default branch to create a snapshot. Please try again using --default_branch=master
+Please see http://docs.solanolabs.com/RunningBuild/snapshots-and-patches/ for more info
+EOF
+      FAILED_TO_CREATE_SNAPSHOT =<<EOF
+Could not create a repo snapshot, output from command was: %s
+Please see http://docs.solanolabs.com/RunningBuild/snapshots-and-patches/ for more info
+EOF
+      FAILED_TO_CREATE_PATCH = "Could not create a repo patch. Tried to patch based on %s. output from command was: %s"
+      ANSERER_NOT_Y =<<EOF
+================================================================================================
+Since you did not create a snapshot, and we could not create a patch a build can not be started.
+Please see http://docs.solanolabs.com/RunningBuild/snapshots-and-patches/ for more info
+================================================================================================
+EOF
       NEED_TO_FORCE =<<EOF
-There is currently not a Solano snapshot for this repo. We tried to create a snapshot based on your local copy of '%s', but it appears that there are unpushed commits on this branch. To Ensure the snapshot is usable by other builds please run 'solano run' either after pushing current commits or use 'solano run --force_snapshot' to create a snapshot from the current state.
+There is currently not a Solano snapshot for this repo. We tried to create a snapshot based on your local copy of '%s', but it appears that there are unpushed commits on this branch.
+To Ensure the snapshot is usable by other builds please run 'solano run' either after pushing the current commits or use 'solano run --force_snapshot' to create a snapshot from the current state.
+Please see http://docs.solanolabs.com/RunningBuild/snapshots-and-patches/ for more info
 EOF
     end
   end
