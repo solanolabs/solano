@@ -26,6 +26,7 @@ module Solano
     method_option :session_manager, :type => :string, :default => nil
     method_option :default_branch, :type => :string, :default => nil
     method_option :force_snapshot, :type => :boolean, :default => false
+    method_option :volume, :type => :string, :default => nil
     def spec(*pattern)
       machine_data = {}
 
@@ -131,6 +132,12 @@ module Solano
         say Text::Process::USING_CUSTOM_USER_ENV_VARS % "#{options[:env]}"
         new_session_params[:env] = options[:env]
       end
+
+      if options["volume"]
+        say Text::Process::VOLUME_OVERRIDE % options["volume"]
+        new_session_params[:volume] = options["volume"]
+      end
+      say "OPTIONS ARE #{options.inspect}"
 
       if options[:session_manager] then
           say Text::Process::USING_SESSION_MANAGER % options[:session_manager]
