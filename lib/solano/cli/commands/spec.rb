@@ -133,11 +133,10 @@ module Solano
         new_session_params[:env] = options[:env]
       end
 
-      if options["volume"]
-        say Text::Process::VOLUME_OVERRIDE % options["volume"]
-        new_session_params[:volume] = options["volume"]
+      if options[:volume]
+        say Text::Process::VOLUME_OVERRIDE % options[:volume]
+        new_session_params[:volume] = options[:volume]
       end
-      say "OPTIONS ARE #{options.inspect}"
 
       if options[:session_manager] then
           say Text::Process::USING_SESSION_MANAGER % options[:session_manager]
