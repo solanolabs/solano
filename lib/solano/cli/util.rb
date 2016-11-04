@@ -55,7 +55,7 @@ module Solano
 
     def sniff_ruby_version
       ruby_version = @repo_config["ruby_version"]
-      return ruby_version unless ruby_version.nil? || ruby_version.empty?
+      return ruby_version unless ruby_version.nil? || ruby_version.to_s.empty?
 
       if !options[:machine] then
         scm_root = @scm.root

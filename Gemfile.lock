@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    solano (1.30.2)
+    solano (1.30.3)
       addressable (~> 2.3)
       github_api (~> 0.12.1)
       highline (~> 1.7.3)
