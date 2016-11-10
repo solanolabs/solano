@@ -175,7 +175,7 @@ module Solano
             say Text::Process::SNAPSHOT_COMMIT % snapshot_commit
             #if we already had a snapshot or we created a master snapshot
             #create a patch
-            @scm.create_patch(session_id, {:api => @solano_api, :commit => snapshot_commit})
+            @scm.create_patch(session_id, snapshot_commit, {:api => @solano_api, :commit => snapshot_commit})
           #forced snapshot creation
           else
             say Text::Process::FORCED_SNAPSHOT

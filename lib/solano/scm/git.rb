@@ -190,7 +190,7 @@ module Solano
       FileUtils.rm_f(file) if file && File.exists?(file)
     end
 
-    def create_patch(session_id, options={})
+    def create_patch(session_id, snapshot_commit, options={})
       api = options[:api]
       patch_base = options[:commit]
       base_commit = patch_base
@@ -244,7 +244,8 @@ module Solano
         args = {  :session_id => session_id,
                   :sha1 => file_sha1,
                   :size => file_size,
-                  :base_commit => base_commit}
+                  :base_commit => base_commit,
+                  :snapshot_commit => snapshot_commit}
         api.upload_session_patch(args)
       else
         say Text::Warning::EMPTY_PATCH
