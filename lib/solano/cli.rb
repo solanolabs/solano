@@ -10,7 +10,6 @@ require 'shellwords'
 require 'base64'
 require 'msgpack_pure'
 require 'erb'
-require 'github_api'
 
 require 'solano/script'
 require 'solano/cli/params_helper'
