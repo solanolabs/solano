@@ -2,6 +2,7 @@
 
 
 ## Version History
+- v1.30.4 - Add base commit to patch upload
 - v1.30.3 - Handle non-string values in solano.yml.
 - v1.30.2 - Add better messaging around patching and snapshots
 - v1.30.1 - Use absolute paths for git, hg; only create patch if no snapshot.

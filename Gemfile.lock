@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    solano (1.30.3)
+    solano (1.30.4)
       addressable (~> 2.3)
       highline (~> 1.7.3)
       json (~> 1.8.3)
@@ -44,7 +44,7 @@ GEM
     ffi (1.9.10)
     gherkin (2.12.2)
       multi_json (~> 1.3)
-    highline (1.7.3)
+    highline (1.7.8)
     httparty (0.9.0)
       multi_json (~> 1.0)
       multi_xml
@@ -92,7 +92,7 @@ GEM
       rack (~> 1.5)
       rack-protection (~> 1.4)
       tilt (>= 1.3, < 3)
-    tddium_client (0.6.0)
+    tddium_client (0.6.1)
       httpclient (>= 2.2.5)
       json
     thor (0.19.1)

@@ -221,7 +221,9 @@ module Solano
 
         args = {  :session_id => session_id,
                   :sha1 => file_sha1,
-                  :size => file_size,}
+                  :size => file_size,
+                  :base_commit => snapshot_commit,
+                }
         api.upload_session_patch(args)
       else
         say Text::Warning::EMPTY_PATCH
