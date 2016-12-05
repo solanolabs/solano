@@ -1,5 +1,4 @@
 = Solano
-
 {<img src="https://ci.solanolabs.com:443/solanolabs/solano/badges/branches/master"/>}[https://ci.solanolabs.com:443/solanolabs/solano/suites/120685]
 {<img src="https://badge.fury.io/rb/solano.svg" alt="Gem Version" />}[http://badge.fury.io/rb/solano]
 
@@ -11,7 +10,7 @@ production environments.
 
 Solano CI also supports parallel test running in our cloud even before
 you push to a shared branch.
-
+:( :(
 The `solano` gem implements a command line interface for you to start
 a parallel run from your local git workspace, along with ways to edit
 configuration and retrieve your account status all from within your
