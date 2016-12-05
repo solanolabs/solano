@@ -119,9 +119,14 @@ module Solano
       `git rev-parse --verify HEAD`.strip
     end
 
-    def commits
-      commits = GitCommitLogParser.new(self.latest_commit).commits
-      return commits
+    def commits(prev_commit=nil)
+      if prev_commit.nil? || prev_commit == current_commit
+        rev_range = '-1'
+      else
+        rev_range = "#{prev_commit}..HEAD"
+      end
+      commit_log = `git log --pretty='%H%n%s%n%aN%n%aE%n%at%n%cN%n%cE%n%ct%n' #{rev_range}`
+      GitCommitLogParser.new(commit_log).commits
     end
 
     def number_of_commits(id_from, id_to)

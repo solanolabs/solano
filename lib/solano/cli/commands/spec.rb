@@ -103,8 +103,9 @@ module Solano
 
       start_time = Time.now
 
+      from_commit = suite_details['last_commit']
       new_session_params = {
-        :commits_encoded => read_and_encode_latest_commits,
+        :commits_encoded => read_and_encode_latest_commits(from_commit),
         :cache_control_encoded => read_and_encode_cache_control,
         :cache_save_paths_encoded => read_and_encode_cache_save_paths,
         :raw_config_file => read_and_encode_config_file
@@ -338,8 +339,8 @@ module Solano
       [messages, latest_message]
     end
 
-    def read_and_encode_latest_commits
-      commits = @scm.commits
+    def read_and_encode_latest_commits(from_commit)
+      commits = @scm.commits(from_commit)
       commits_packed = Solano.message_pack(commits)
       commits_encoded = Base64.encode64(commits_packed)
       commits_encoded
