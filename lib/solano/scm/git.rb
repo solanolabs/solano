@@ -129,16 +129,6 @@ module Solano
       result.split("\n").length
     end
 
-    def offer_snapshot_creation(session_id)
-      say Test::Process::ASK_FOR_SNAPSHOT
-      answer = gets.chomp
-      if /Y/.match(answer) then
-        create_snapshot(session_id, { :force=>true })
-      else
-        raise Text::Error::ANSWER_NOT_Y
-      end
-    end
-
     def create_snapshot(session_id, options={})
       api = options[:api]
       res = api.request_snapshot_url({:session_id => session_id})
@@ -153,7 +143,13 @@ module Solano
       if !options[:force] then
         #git default branch
         branch = options[:default_branch]
-        branch ||= default_branch
+        branches = /\-\>.*\/(.*)$/.match( (`git branch -r | grep origin/HEAD`).strip)
+        branch ||= branches[1] unless branches.nil?
+        branches = /master/.match( (`git branch --list master`).strip)
+        if branch.nil? && !branches.nil? then
+          say Text::Process::USING_MASTER
+          branch ||= branches[0]
+        end
         if branch.nil? then
           raise Text::Error::DEFAULT_BRANCH
         end
@@ -192,40 +188,22 @@ module Solano
 
     def create_patch(session_id, options={})
       api = options[:api]
-      patch_base = options[:commit]
-      base_commit = patch_base
-      if "#{patch_base}" == self.current_commit then
+      snapshot_commit = options[:commit]
+      if "#{snapshot_commit}" == `git rev-parse HEAD`.to_s.strip then
         say Text::Warning::SAME_SNAPSHOT_COMMIT
         return
       end
-      #check if snapshot commit is known locally
-      `git branch -q --contains #{patch_base}`
-      if !$?.success? then
-        #try and create a patch from upstream instread of repo snapshot
-        upstream = origin_url
-        reg = Regexp.new('([^\s]*)\s*' + upstream.to_s + '\s*\(fetch\)')
-        if !upstream.nil? && (reg_match = reg.match(`git remote`)) then
-          say TEXT::Process::ATTEMPT_UPSTREAM_PATCH % upstream
-          #should be the remote name
-          patch_base = reg_match[1]
-          base_commit = `git rev-parse #{patch_base}`.to_s.strip
-        else
-          say Text::Error::PATCH_CREATION_ERROR % patch_base
-          offer_snapshot_creation(session_id)
-          return
-        end
+      #check if commit is known locally
+      if (`git branch -q --contains #{snapshot_commit} 2>&1 >/dev/null | grep -o 'error:' | wc -l`).to_i > 0 then
+        raise Text::Error::PATCH_CREATION_ERROR % snapshot_commit
       end
 
       file_name = "solano-#{SecureRandom.hex(10)}.patch"
       file_path = File.join(Dir.tmpdir, file_name)
-      say Text::Process::CREATING_PATCH % [patch_base, self.current_commit]
-      out = `git diff --minimal -p --ignore-space-at-eol --no-prefix #{patch_base}..#{self.current_commit} > #{file_path}`
+      out = `git format-patch #{snapshot_commit} --stdout > #{file_path}`
       if !$?.success? then
-        say Text::Error::FAILED_TO_CREATE_PATCH % [patch_base, out]
-        offer_snapshot_creation(session_id)
-        return
+        raise Text::Error::FAILED_TO_CREATE_PATCH % [snapshot_commit, out]
       end
-
       file_size = File.size(file_path)
       if file_size != 0 then
 
@@ -243,8 +221,7 @@ module Solano
 
         args = {  :session_id => session_id,
                   :sha1 => file_sha1,
-                  :size => file_size,
-                  :base_commit => base_commit}
+                  :size => file_size,}
         api.upload_session_patch(args)
       else
         say Text::Warning::EMPTY_PATCH

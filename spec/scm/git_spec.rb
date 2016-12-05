@@ -45,42 +45,4 @@ describe Solano::Git do
       subject.push_latest({}, {"git_repo_uri" => url, "git_repo_private_uri" => private_url}, {use_private_uri: true})
     end
   end
-
-  module Solano
-    class Git
-      def say(message)
-        puts message
-      end
-    end
-  end
-
-  describe ".offer_snapshot_creation" do
-    before do
-      stub_const("Solano::Git::Test::Process::ASK_FOR_SNAPSHOT", "")
-      stub_const("Solano::Git::Text::Error::ANSWER_NOT_Y", "NOT Y")
-    end
-
-    it "should create a snapshot if given Y" do
-      expect(subject).to receive(:gets).and_return('Y')
-      expect(subject).to receive(:create_snapshot).and_return(true)
-      subject.offer_snapshot_creation(123)
-    end
-
-    it "should raise an error if given n" do
-      expect(subject).to receive(:gets).and_return('n')
-      expect(subject).to_not receive(:create_snapshot)
-      expect{
-        subject.offer_snapshot_creation(123)
-      }.to raise_error(RuntimeError)
-    end
-
-    it "should raise an error if given anything besides Y" do
-      expect(subject).to receive(:gets).and_return('asdas')
-      expect(subject).to_not receive(:create_snapshot)
-      expect{
-        subject.offer_snapshot_creation(123)
-      }.to raise_error(RuntimeError)
-
-    end
-  end
 end
