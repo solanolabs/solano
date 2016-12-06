@@ -161,23 +161,28 @@ module Solano
 
       if manager == 'DestroFreeSessionManager'
         begin
-          #check if there is a snapshot
           if !options[:force_snapshot] then
+            #check if there is a snapshot
             res = @solano_api.get_snapshot_commit({:session_id => session_id})
             if res['snap_commit'] then
               snapshot_commit = res['snap_commit']
-             else
+            #No snapshot
+            else
               say Text::Process::NO_SNAPSHOT
               res = @scm.create_snapshot(session_id, {:api => @solano_api, :default_branch => options[:default_branch]})
               snapshot_commit = @scm.get_snap_id
             end
             say Text::Process::SNAPSHOT_COMMIT % snapshot_commit
+            #if we already had a snapshot or we created a master snapshot
+            #create a patch
             @scm.create_patch(session_id, {:api => @solano_api, :commit => snapshot_commit})
+          #forced snapshot creation
           else
             say Text::Process::FORCED_SNAPSHOT
             res = @scm.create_snapshot(session_id, {:api => @solano_api, :force => true})
             snapshot_commit = @scm.get_snap_id
           end
+          #start tests
           start_test_executions = @solano_api.start_destrofree_session(session_id, {:test_pattern => test_pattern, :test_exclude_pattern=>test_exclude_pattern})
         rescue Exception, RuntimeError => e
            @solano_api.stop_session(session_id)

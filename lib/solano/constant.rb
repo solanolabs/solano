@@ -102,6 +102,10 @@ Please run `solano hg:mirror` to create the mirror for the first time.
  depending on how large your repo is. Rest assured, you'll only need to run hg:mirror once.)
 
 EOF
+      GIT_VERSION_FOR_PATCH =<<EOF
+Patching requires a newer version of git. Please update to git 1.8+ or contact support at support@solanolabs.com
+See http://docs.solanolabs.com/RunningBuild/snapshots-and-patches/ for more info on patching
+EOF
       GIT_VERSION = "Unsupported git version: %s"
       SCM_CHANGES_NOT_COMMITTED = "There are uncommitted changes in the local repository"
       SCM_UNABLE_TO_DETECT = "Unable to detect uncommitted changes"
@@ -296,8 +300,14 @@ EOF
       UPLOAD_PATCH = "Uploading patch to %s"
       USING_MASTER = "Found a branch named master, if this is not the correct default branch please run again with --force_snapshot --default_branch=master"
       ATTEMPT_UPSTREAM_PATCH = "Attempting to create a patch from %s"
+      CREATING_PATCH =<<EOF
+Creating a Patch by running
+git diff --minimal -p --ignore-space-at-eol --no-prefix %s..%s
+Please see http://docs.solanolabs.com/RunningBuild/snapshots-and-patches/ for more info on patching
+EOF
       ASK_FOR_SNAPSHOT =<<EOF
 Since we could not create a patch, we can try creating a snapshot instead. This may take longer to upload, then a patch.
+WARNING this will replace the current snapshot for the Repo.
 (Please see http://docs.solanolabs.com/RunningBuild/snapshots-and-patches/ for more info)
 Would you like to attempt snapshot creation?[Y/n]
 EOF
@@ -548,7 +558,7 @@ Could not create a repo snapshot, output from command was: %s
 Please see http://docs.solanolabs.com/RunningBuild/snapshots-and-patches/ for more info
 EOF
       FAILED_TO_CREATE_PATCH = "Could not create a repo patch. Tried to patch based on %s. output from command was: %s"
-      ANSERER_NOT_Y =<<EOF
+      ANSWER_NOT_Y =<<EOF
 ================================================================================================
 Since you did not create a snapshot, and we could not create a patch a build can not be started.
 Please see http://docs.solanolabs.com/RunningBuild/snapshots-and-patches/ for more info

@@ -2,6 +2,7 @@
 
 
 ## Version History
+- v1.31.0 - Improve the logic around patch and snapshot creations.
 - v1.30.5 - Standardize specification of organization name to CLI commands.
 - v1.30.4 - Add base commit to patch upload.
 - v1.30.3 - Handle non-string values in solano.yml.

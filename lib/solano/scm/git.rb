@@ -129,6 +129,16 @@ module Solano
       result.split("\n").length
     end
 
+    def offer_snapshot_creation(session_id, options={})
+      say Text::Process::ASK_FOR_SNAPSHOT
+      answer = STDIN.gets.chomp
+      if /Y/.match(answer) then
+        create_snapshot(session_id, options.merge({ :force=>true }))
+      else
+        raise Text::Error::ANSWER_NOT_Y
+      end
+    end
+
     def create_snapshot(session_id, options={})
       api = options[:api]
       res = api.request_snapshot_url({:session_id => session_id})
@@ -143,13 +153,7 @@ module Solano
       if !options[:force] then
         #git default branch
         branch = options[:default_branch]
-        branches = /\-\>.*\/(.*)$/.match( (`git branch -r | grep origin/HEAD`).strip)
-        branch ||= branches[1] unless branches.nil?
-        branches = /master/.match( (`git branch --list master`).strip)
-        if branch.nil? && !branches.nil? then
-          say Text::Process::USING_MASTER
-          branch ||= branches[0]
-        end
+        branch ||= self.default_branch
         if branch.nil? then
           raise Text::Error::DEFAULT_BRANCH
         end
@@ -187,23 +191,48 @@ module Solano
     end
 
     def create_patch(session_id, options={})
+      #oldest version of git that has been tested with diff patching
+      if !check_version('1.7.12.4') then
+          say Text::Warning::SAME_SNAPSHOT_COMMIT
+          warn(Text::Warning::GIT_VERSION_FOR_PATCH)
+          raise
+      end
       api = options[:api]
-      snapshot_commit = options[:commit]
-      if "#{snapshot_commit}" == `git rev-parse HEAD`.to_s.strip then
+      patch_base_sha = options[:commit]
+      if "#{patch_base_sha}" == self.current_commit then
         say Text::Warning::SAME_SNAPSHOT_COMMIT
         return
       end
-      #check if commit is known locally
-      if (`git branch -q --contains #{snapshot_commit} 2>&1 >/dev/null | grep -o 'error:' | wc -l`).to_i > 0 then
-        raise Text::Error::PATCH_CREATION_ERROR % snapshot_commit
+      #check if snapshot commit is known locally
+      `git branch -q --contains #{patch_base_sha}`
+      if !$?.success? then
+        #try and create a patch from upstream instread of repo snapshot
+        upstream = self.origin_url
+        reg = Regexp.new('([^\s]*)\s*' + upstream.to_s + '\s*\(fetch\)')
+        if !upstream.nil? && (reg_match = reg.match(`git remote -v`)) then
+          origin_name = reg_match[1]
+        end
+        origin_name ||= "origin"
+        say Text::Process::ATTEMPT_UPSTREAM_PATCH % upstream
+        #should be the remote name
+        patch_base_sha = `git rev-parse #{origin_name}`.to_s.strip
+        if !$?.success? then
+          say Text::Error::PATCH_CREATION_ERROR % patch_base_sha
+          offer_snapshot_creation(session_id, :api=>api)
+          return
+        end
       end
 
       file_name = "solano-#{SecureRandom.hex(10)}.patch"
       file_path = File.join(Dir.tmpdir, file_name)
-      out = `git format-patch #{snapshot_commit} --stdout > #{file_path}`
+      say Text::Process::CREATING_PATCH % [patch_base_sha, self.current_commit]
+      out = ` git diff-index -p --minimal #{patch_base_sha} > #{file_path}`
       if !$?.success? then
-        raise Text::Error::FAILED_TO_CREATE_PATCH % [snapshot_commit, out]
+        say Text::Error::FAILED_TO_CREATE_PATCH % [patch_base_sha, out]
+        offer_snapshot_creation(session_id, :api=>api)
+        return
       end
+
       file_size = File.size(file_path)
       if file_size != 0 then
 
@@ -222,8 +251,11 @@ module Solano
         args = {  :session_id => session_id,
                   :sha1 => file_sha1,
                   :size => file_size,
-                  :base_commit => snapshot_commit,
+                  :base_commit => patch_base_sha,
+                  :git_version_used => current_version,
+                  :cli_version_used => Solano::VERSION,
                 }
+
         api.upload_session_patch(args)
       else
         say Text::Warning::EMPTY_PATCH
@@ -232,6 +264,14 @@ module Solano
 
     ensure
       FileUtils.rm_rf(file_path) if file_path && File.exists?(file_path)
+    end
+
+    def current_version
+      `git --version`.strip.match(Dependency::VERSION_REGEXP)[0] rescue nil
+    end
+
+    def check_version(allowed_version)
+      Gem::Version.new(allowed_version) <= Gem::Version.new(current_version)
     end
 
     protected
