@@ -75,7 +75,7 @@ module Solano
   class ApiConfig
     include SolanoConstant
 
-    attr_reader :config
+    attr_reader :config, :cli_options
 
     # BOTCH: should be a state object rather than entire CLI object
     def initialize(scm, tddium_client, host, cli_options)
@@ -185,7 +185,7 @@ module Solano
         write_scm_ignore		# BOTCH: no need to write every time
       end
     end
-    
+
     def write_scm_ignore
       path = @scm.ignore_path
       content = File.exists?(path) ? File.read(path) : ''

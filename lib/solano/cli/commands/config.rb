@@ -2,14 +2,17 @@
 
 module Solano
   class SolanoCli < Thor
-    desc "config [suite | repo | org[:ACCOUNT]]", "Display config variables.
-    The scope argument can be 'suite', 'repo', 'org' (if you are a member of
-    one organization), or 'org:an_organization_name' (if you are a member of
-    multiple organizations). The default is 'suite'."
+    desc "config [suite | repo | org] [--org NAME]", "Display config variables.
+    The scope argument can be 'suite', 'repo', 'org'. The default is 'suite'."
+    method_option :account, :type => :string, :default => nil,
+      :aliases => %w(--org --organization)
     def config(scope="suite")
       params = {:repo => true}
       if scope == 'suite' then
         params[:suite] = true
+      end
+      if options[:account] then
+        params[:account] = options[:account]
       end
       solano_setup(params)
 
@@ -23,14 +26,17 @@ module Solano
       end
     end
 
-    desc "config:add [SCOPE] [KEY] [VALUE]", "Set KEY=VALUE at SCOPE.
-    The scope argument can be 'suite', 'repo', 'org' (if you are a member of
-    one organization), or 'org:an_organization_name' (if you are a member of
-    multiple organizations)."
+    desc "config:add [SCOPE] [KEY] [VALUE] [--org NAME]", "Set KEY=VALUE at SCOPE.
+    The scope argument can be 'suite', 'repo', 'org'."
+    method_option :account, :type => :string, :default => nil,
+      :aliases => %w(--org --organization)
     define_method "config:add" do |scope, key, value|
       params = {:repo => true}
       if scope == 'suite' then
         params[:suite] = true
+      end
+      if options[:account] then
+        params[:account] = options[:account]
       end
       solano_setup(params)
 
@@ -45,11 +51,16 @@ module Solano
       end
     end
 
-    desc "config:remove [SCOPE] [KEY]", "Remove config variable NAME from SCOPE."
+    desc "config:remove [SCOPE] [KEY] [--org NAME]", "Remove config variable NAME from SCOPE."
+    method_option :account, :type => :string, :default => nil,
+      :aliases => %w(--org --organization)
     define_method "config:remove" do |scope, key|
       params = {:repo => true}
       if scope == 'suite' then
         params[:suite] = true
+      end
+      if options[:account] then
+        params[:account] = options[:account]
       end
       solano_setup(params)
 

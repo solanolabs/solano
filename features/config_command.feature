@@ -1,4 +1,4 @@
-# Copyright (c) 2011, 2012 Solano Labs All Rights Reserved
+# Copyright (c) 2011-2016 Solano Labs All Rights Reserved
 
 @mimic
 Feature: Config command
@@ -42,7 +42,7 @@ Scenario: Display account config without disambiguating account
 Scenario: Display account config without disambiguating account
   Given the user belongs to two accounts
   And the user is logged in with a configured suite on branch "test/foobar"
-  When I run `solano config org:not_my_account`
+  When I run `solano config org --org not_my_account`
   Then the output should contain "You aren't a member of organization"
   And the exit status should be 1
 
@@ -53,7 +53,7 @@ Scenario: Display account config for the first account
     | scope     | name      | value     |
     | account   | foo       | bar       |
     | suite     | quz       | blehher   |
-  When I run `solano config org:some_account`
+  When I run `solano config org --org some_account`
   Then the output should contain "foo=bar"
   And the exit status should be 0
 
@@ -64,7 +64,7 @@ Scenario: Display account config for the second account
     | scope     | name      | value     |
     | account   | foo       | bar       |
     | suite     | quz       | blehher   |
-  When I run `solano config org:another_account`
+  When I run `solano config org --org another_account`
   Then the output should not contain "foo=bar"
   And the exit status should be 0
 
@@ -103,6 +103,15 @@ Scenario: Add repo config
   Then the exit status should be 0
   And the output should contain "repo"
   And the output should contain "third=fourth"
+
+Scenario: Add org config for the first account
+  Given the user belongs to two accounts
+  And the user is logged in with a configured suite on branch "test/foobar"
+  And setting "key" on the account will succeed
+  When I run `solano config:add org key value --org some_account`
+  Then the exit status should be 0
+  And the output should contain "org"
+  And the output should contain "key=value"
 
 Scenario: Fail to add key if the user isn't logged in
   When I run `solano config:add suite third fourth`

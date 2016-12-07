@@ -42,7 +42,7 @@ module Solano
       unless accounts.length == 1
         msg = "You are a member of more than one organization.\n"
         msg << "Please specify the organization you want to operate on with "
-        msg << "'org:an_organization_name'.\n"
+        msg << "'--org NAME'.\n"
         accounts.each do |acct|
           msg << "  #{acct["account"]}\n"
         end
@@ -63,6 +63,13 @@ module Solano
     end
 
     def env_path(scope, key=nil)
+      account_id = nil
+      if @api_config.cli_options[:account] then
+        account_id = get_account_id(@api_config.cli_options[:account])
+      end
+      if account_id.nil? then
+        account_id = get_single_account_id
+      end
       path = ['']
 
       case scope
@@ -72,17 +79,11 @@ module Solano
       when "repo"
         path << 'repos'
         path << current_repo_id
-      when "account", "org"
+      when "org"
         path << 'accounts'
-        path << get_single_account_id
-      when /\Aaccount:/
-        path << 'accounts'
-        path << get_account_id(scope.sub(/\Aaccount:/, ''))
-      when /\Aorg:/
-        path << 'accounts'
-        path << get_account_id(scope.sub(/\Aorg:/, ''))
+        path << account_id
       else
-        raise "Unrecognized scope. Use 'suite', 'repo', 'org', or 'org:an_organization_name'."
+        raise "Unrecognized scope. Use 'suite', 'repo', 'org'."
       end
 
       path << 'env'
