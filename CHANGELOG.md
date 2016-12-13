@@ -2,6 +2,7 @@
 
 
 ## Version History
+- v1.32.2 - Fix new patching for binary files
 - v1.31.1 - Fix patching command output
 - v1.31.0 - Improve the logic around patch and snapshot creations.
 - v1.30.5 - Standardize specification of organization name to CLI commands.

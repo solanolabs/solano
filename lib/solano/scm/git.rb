@@ -225,7 +225,7 @@ module Solano
 
       file_name = "solano-#{SecureRandom.hex(10)}.patch"
       file_path = File.join(Dir.tmpdir, file_name)
-      cmd = "git diff-index -p --minimal #{patch_base_sha}"
+      cmd = "git diff-index -p --minimal --full-index --binary #{patch_base_sha}"
       say Text::Process::CREATING_PATCH % cmd
       out = `#{cmd} > #{file_path}`
       if !$?.success? then
