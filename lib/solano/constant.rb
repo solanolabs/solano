@@ -302,7 +302,7 @@ EOF
       ATTEMPT_UPSTREAM_PATCH = "Attempting to create a patch from %s"
       CREATING_PATCH =<<EOF
 Creating a Patch by running
-git diff --minimal -p --ignore-space-at-eol --no-prefix %s..%s
+%s
 Please see http://docs.solanolabs.com/RunningBuild/snapshots-and-patches/ for more info on patching
 EOF
       ASK_FOR_SNAPSHOT =<<EOF
