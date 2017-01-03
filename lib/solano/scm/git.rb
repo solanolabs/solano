@@ -203,16 +203,23 @@ module Solano
         say Text::Warning::SAME_SNAPSHOT_COMMIT
         return
       end
+      upstream = self.origin_url
+      reg = Regexp.new('([^\s]*)\s*' + upstream.to_s + '\s*\(fetch\)')
+      if !upstream.nil? && (reg_match = reg.match(`git remote -v`)) then
+        origin_name = reg_match[1]
+      end
+      origin_name ||= "origin"
+
+      reg = Regexp.new("^\s*"+ origin_name.to_s + "/#{self.current_branch}")
+      if reg.match(`git branch -r --contains HEAD`) then
+        return
+      end
+
       #check if snapshot commit is known locally
       `git branch -q --contains #{patch_base_sha}`
       if !$?.success? then
         #try and create a patch from upstream instread of repo snapshot
-        upstream = self.origin_url
-        reg = Regexp.new('([^\s]*)\s*' + upstream.to_s + '\s*\(fetch\)')
-        if !upstream.nil? && (reg_match = reg.match(`git remote -v`)) then
-          origin_name = reg_match[1]
-        end
-        origin_name ||= "origin"
+
         say Text::Process::ATTEMPT_UPSTREAM_PATCH % upstream
         #should be the remote name
         patch_base_sha = `git rev-parse #{origin_name}`.to_s.strip
