@@ -4,10 +4,14 @@ ruby_version:
    - 'ruby-2.1.5'
    - 'ruby-2.2.2'
    - 'ruby-2.3.0'
+   - 'ruby-2.4.0'
 coverage:
   version: 2
   enabled: true
-bundler_version: 1.10.6
+bundler_version: 1.13.7
+tool_config:
+  gcc:
+    version: '4.8'
 test_pattern:
   - features/*.feature
   - spec/**_spec.rb
