@@ -7,7 +7,7 @@ module Solano
       solano_setup({:scm => false})
       if ls_id then
         begin
-          say "Stoping session #{ls_id} ..."
+          say "Stopping session #{ls_id} ..."
           say @solano_api.stop_session(ls_id)['notice']
         rescue 
         end
