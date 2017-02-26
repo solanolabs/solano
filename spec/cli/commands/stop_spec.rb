@@ -15,7 +15,7 @@ describe Solano::SolanoCli do
 
     it "should produce a command line from an old session's results" do
       solano_api.should_receive(:stop_session).with(ls_id).and_return(stop_session_result)
-      subject.should_receive(:say).with("Stoping session #{ls_id} ...")
+      subject.should_receive(:say).with("Stopping session #{ls_id} ...")
       subject.should_receive(:say).with(stop_session_result['notice'])
 
       subject.stop(ls_id)
