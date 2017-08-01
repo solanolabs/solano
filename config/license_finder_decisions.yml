@@ -1,0 +1,49 @@
+---
+- - :whitelist
+  - MIT
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2017-08-01 01:28:32.934269330 Z
+- - :whitelist
+  - ISC
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2017-08-01 01:28:35.543518884 Z
+- - :whitelist
+  - ruby
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2017-08-01 01:28:49.288974310 Z
+- - :whitelist
+  - BSD
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2017-08-01 01:28:53.685046961 Z
+- - :whitelist
+  - Apache 2.0
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2017-08-01 01:29:00.151461101 Z
+- - :approve
+  - tddium_client
+  - :who: wkj
+    :why: Solano internal dependency
+    :versions: []
+    :when: 2017-08-01 01:29:33.417300227 Z
+- - :approve
+  - nayutaya-msgpack-pure
+  - :who: wkj
+    :why: MIT licensed
+    :versions: []
+    :when: 2017-07-31 23:56:54.693282483 Z
+- - :approve
+  - rdiscount
+  - :who: wkj
+    :why: 3 Clause BSD
+    :versions: []
+    :when: 2017-08-01 01:31:31.544631304 Z
