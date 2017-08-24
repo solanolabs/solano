@@ -74,11 +74,42 @@ module Solano
       say Text::Error::NO_SUITE_EXISTS % @scm.default_branch
       false
     end
-
     # repo_config_file has authority over solano.yml now
+    # but some test info is expected to be added by destro when it creates a suite
     # Update the suite parameters from solano.yml
-    #def update_suite_parameters!(current_suite, session_id=nil)
-    #end
+    def update_suite_parameters!(current_suite, session_id=nil)
+      update_params = {}
+
+      update_params[:session_id] = session_id if session_id
+
+      pattern = configured_test_pattern
+      if pattern.is_a?(Array)
+        pattern = pattern.join(",")
+      end
+      if pattern && current_suite["test_pattern"] != pattern then
+        update_params[:test_pattern] = pattern
+      end
+
+      exclude_pattern = configured_test_exclude_pattern
+      if exclude_pattern.is_a?(Array)
+        exclude_pattern = exclude_pattern.join(",")
+      end
+      if exclude_pattern && current_suite["test_exclude_pattern"] != exclude_pattern then
+        update_params[:test_exclude_pattern] = exclude_pattern
+      end
+
+      test_configs = @repo_config["tests"] || []
+      if test_configs != (current_suite['test_configs'] || []) then
+        if test_configs != 'disable' && !test_configs.is_a?(Array) then
+          warn(Text::Warning::TEST_CONFIGS_MUST_BE_LIST)
+          test_configs = []
+        end
+        update_params[:test_configs] = test_configs
+      end
+      if !update_params.empty? then
+        @solano_api.update_suite(@solano_api.current_suite_id, update_params)
+      end
+    end
 
     def suite_remembered_option(options, key, default, &block)
       remembered = false
