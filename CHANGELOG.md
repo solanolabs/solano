@@ -2,6 +2,7 @@
 
 
 ## Version History
+- v1.32.3 - Fix suite creation bug
 - v1.32.3 - Dont create patches when commit exists upstream
 - v1.32.2 - Fix new patching for binary files
 - v1.31.1 - Fix patching command output
