@@ -1,6 +1,7 @@
 # Copyright (c) 2011-2015 Solano Labs All Rights Reserved
 
 module Solano
+  require "tmpdir"
   class SCM
     attr_accessor :default_origin_url
 
