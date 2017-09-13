@@ -67,7 +67,6 @@ module Solano
     require 'solano/cli/commands/config'
     require 'solano/cli/commands/describe'
     require 'solano/cli/commands/web'
-    require 'solano/cli/commands/hg'
     require 'solano/cli/commands/server'
     require 'solano/cli/commands/support'
 
