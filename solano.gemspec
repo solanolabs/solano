@@ -44,7 +44,7 @@ EOF
   s.add_development_dependency("pickle", "~> 0.5")
   s.add_development_dependency("mimic", "~> 0.4")
   s.add_development_dependency("daemons", "~> 1.1")
-  s.add_development_dependency("httparty", "0.9.0")
+  s.add_development_dependency("httparty", "~> 0.10.0")
   s.add_development_dependency("httpclient", "2.4.0")
   s.add_development_dependency("antilles", "~> 0.1")
   s.add_development_dependency("rspec", "~> 3.1")
