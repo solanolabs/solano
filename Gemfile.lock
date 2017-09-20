@@ -12,7 +12,7 @@ PATH
       thor
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     addressable (2.4.0)
     antilles (0.1.4)
