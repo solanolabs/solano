@@ -11,9 +11,19 @@ module Solano
     method_option :commit, :type => :string, :default => nil
     def console(*cmd)
       solano_setup({:repo => true})
-      origin = `git config --get remote.origin.url`.strip
-      session_result = @solano_api.call_api(:get, "/sessions", {:repo_url => origin})["sessions"]
-      if session_result.length > 0 then
+      origin_url = @scm.origin_url
+      current_suite_id = @solano_api.current_suite_id
+      if current_suite_id then
+        say "Checking for sessions on this branch"
+        session_result = @solano_api.call_api(:get, "/sessions", {:suite_id => current_suite_id})["sessions"]
+      elsif suite_for_default_branch? then
+        say "Checking for sessions on default branch"
+        session_result = @solano_api.call_api(:get, "/sessions", {:repo_url => origin_url})["sessions"]
+      else
+        say "Checking for sessions on this repository"
+        session_result = @solano_api.call_api(:get, "/sessions", {:repo_url => origin_url})["sessions"]
+      end
+      if defined?(session_result) && session_result.any? then
         session = session_result[0]
         session_id = session["id"]
         q_result = @solano_api.query_session(session_id).tddium_response["session"]
@@ -63,11 +73,11 @@ module Solano
           say start_result["message"]
         end
       else
-        say "Unable to find any previous sessions. Execute solano run first"
+        say "Unable to find any previous sessions. Execute solano run first or switch to a branch with a recent session."
       end
     end
 
-    private 
+    private
     # return nice string version of hrs mins secs from time delta
     def duration(d)
       secs = d.to_int
