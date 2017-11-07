@@ -2,6 +2,7 @@
 
 
 ## Version History
+- v1.31.7 - Improve solano console command's search for recent sessions.
 - v1.31.4 - Fixed assorted ruby version compatibility issuess
 - v1.31.3 - Dont create patches when commit exists upstream
 - v1.31.2 - Fix new patching for binary files
