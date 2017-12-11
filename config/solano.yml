@@ -8,7 +8,7 @@ ruby_version:
 coverage:
   version: 2
   enabled: true
-bundler_version: 1.13.7
+bundler_version: 1.15.4
 tool_config:
   gcc:
     version: '4.8'
