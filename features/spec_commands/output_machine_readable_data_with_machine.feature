@@ -19,7 +19,6 @@ Scenario: Output machine readable data with --machine
   And the user successfully registers tests for the suite
   And the tests start successfully
   And the test all pass
-  And the user can indicate repoman demand
   And the session completes
   When I run `solano spec --machine`
   Then the exit status should be 0

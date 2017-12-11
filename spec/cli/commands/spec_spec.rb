@@ -27,7 +27,7 @@ describe Solano::SolanoCli do
   describe "#spec" do
     let(:commit_log_parser) { double(GitCommitLogParser) }
     let(:suite_id) { 1 }
-    let(:suite) {{ "repoman_current" => true }}
+    let(:suite) {{}}
     let(:session) { { "id" => 1 } }
     let(:latest_commit) { "latest_commit" }
     let(:test_executions) { { "started" => 1, "tests" => [], "session_done" => true, "session_status" => "passed"}}
