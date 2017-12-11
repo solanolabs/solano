@@ -1,4 +1,4 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011, 2012, 2013, 2014, 2017 Solano Labs All Rights Reserved
 
 require 'spec_helper'
 require 'solano/cli'
@@ -11,7 +11,7 @@ describe Solano::SolanoCli do
     let(:suite_id) { 1 }
 
     it "should display current status with no suites or sessions" do
-      solano_api.should_not_receive(:get_suites)
+      solano_api.should_receive(:get_suites).once.and_return([])
       subject.should_receive(:suite_for_current_branch?).and_return(false)
       subject.should_receive(:suite_for_default_branch?).and_return(false)
       solano_api.should_receive(:get_sessions).once.and_return([])
@@ -23,23 +23,21 @@ describe Solano::SolanoCli do
         subject.stub(:suite_for_current_branch?) { true }
         solano_api.stub(:current_suite_id) { suite_id }
         solano_api.stub(:current_branch) { "branch" }
+        solano_api.stub(:get_suites) { [{ 'account' => 'org1', 'id' => 99999 }] }
       end
 
       it "should display current status with no sessions" do
-        solano_api.should_not_receive(:get_suites)
         solano_api.should_receive(:get_sessions).exactly(2).times.and_return([])
         subject.status
       end
 
       it "should display current status as JSON with no sessions" do
-        solano_api.should_not_receive(:get_suites)
         solano_api.should_receive(:get_sessions).exactly(2).times.and_return([])
         subject.stub(:options) { {:json => true } }
         subject.status
       end
 
       it "should display current status as valid JSON" do
-        solano_api.should_not_receive(:get_suites)
         solano_api.should_receive(:get_sessions).exactly(2).times.and_return([])
         subject.should_receive(:puts).with(/running|history/i)
         subject.should_not_receive(:puts).with(/Re-run failures from a session with/i)
@@ -54,23 +52,21 @@ describe Solano::SolanoCli do
         subject.stub(:suite_for_default_branch?) { true }
         solano_api.stub(:default_suite_id) { suite_id }
         solano_api.stub(:default_branch) { "branch" }
+        solano_api.stub(:get_suites) { [{ 'account' => 'org1', 'id' => 99999 }] }
       end
 
       it "should display current status with no sessions" do
-        solano_api.should_not_receive(:get_suites)
         solano_api.should_receive(:get_sessions).exactly(2).times.and_return([])
         subject.status
       end
 
       it "should display current status as JSON with no sessions" do
-        solano_api.should_not_receive(:get_suites)
         solano_api.should_receive(:get_sessions).exactly(2).times.and_return([])
         subject.stub(:options) { {:json => true } }
         subject.status
       end
 
       it "should display current status as valid JSON" do
-        solano_api.should_not_receive(:get_suites)
         solano_api.should_receive(:get_sessions).exactly(2).times.and_return([])
         subject.should_receive(:puts).with(/running|history/i)
         subject.should_not_receive(:puts).with(/Re-run failures from a session with/i)

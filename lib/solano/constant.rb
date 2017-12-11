@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2016 Solano Labs All Rights Reserved
+# Copyright (c) 2011-2017 Solano Labs All Rights Reserved
 
 module SolanoConstant
 
@@ -438,6 +438,8 @@ Session Details:
  Finished: %s
 
 EOF
+      SUITE_IN_MULTIPLE_ACCOUNTS = "The suite %s/%s exists in multiple organization:"
+      SUITE_IN_MULTIPLE_ACCOUNTS_PROMPT = "Which organization do you want to use to get the status:"
     end
 
     module Error

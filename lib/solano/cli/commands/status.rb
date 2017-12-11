@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2015 Solano Labs All Rights Reserved
+# Copyright (c) 2011-2017 Solano Labs All Rights Reserved
 
 require 'stringio'
 
@@ -7,6 +7,8 @@ module Solano
     desc "status", "Display information about this suite, and any open dev sessions"
     method_option :json, :type => :boolean, :default => false
     method_option :commit, :type => :string, :default => nil
+    method_option :account, :type => :string, :default => nil,
+                  :aliases => %w(--org --organization)
     def status
       solano_setup({:repo => true})
 
@@ -14,14 +16,13 @@ module Solano
         # solano_setup asserts that we're in a supported SCM repo
         origin_url = @scm.origin_url
         repo_params = {
-          :active => true, 
+          :active => true,
           :repo_url => origin_url
         }
 
         if suite_for_current_branch? then
           status_branch = @solano_api.current_branch
           suite_params = {
-            :suite_id => @solano_api.current_suite_id,
             :active => false,
             :limit => 10
           }
@@ -29,7 +30,6 @@ module Solano
           status_branch = @solano_api.default_branch
           say Text::Error::TRY_DEFAULT_BRANCH % status_branch
           suite_params = {
-            :suite_id => @solano_api.default_suite_id,
             :active => false,
             :limit => 10
           }
@@ -39,6 +39,26 @@ module Solano
           repo_params[:last_commit_id] = options[:commit]
           suite_params[:last_commit_id] = options[:commit]
         end
+
+        suites = @solano_api.get_suites(:repo_url => origin_url, :branch => status_branch)
+        if suites.count == 0
+          exit_failure Text::Error::CANT_FIND_SUITE % [origin_url, status_branch]
+        elsif suites.count > 1
+          if options[:account] then
+            suites = suites.select { |s| s['account'] == options[:account] }
+          else
+            say Text::Status::SUITE_IN_MULTIPLE_ACCOUNTS % [origin_url, status_branch]
+            suites.each { |s| say '  ' + s['account'] }
+            account = ask Text::Status::SUITE_IN_MULTIPLE_ACCOUNTS_PROMPT
+            suites = suites.select { |s| s['account'] == account }
+          end
+        end
+
+        if suites.count == 0
+          exit_failure Text::Error::INVALID_ACCOUNT_NAME
+        end
+
+        suite_params[:suite_id] = suites.first['id']
 
         if options[:json] 
           res = {}
