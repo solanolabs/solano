@@ -23,6 +23,7 @@ Scenario: Wait until repo preparation is done
   And the user successfully registers tests for the suite
   And the tests start successfully
   And the test all pass
+  And the user can indicate repoman demand
   When I run `solano spec`
   Then the exit status should be 1
   And the output should contain "Creating suite"

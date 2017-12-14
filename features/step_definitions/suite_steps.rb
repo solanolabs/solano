@@ -11,6 +11,7 @@ def make_suite_response(name, branch, options = {})
   suite["repo_name"] = name
   suite["branch"] = branch
   suite["git_repo_uri"] = "file:///#{Dir.tmpdir}/solano-aruba/repo"
+  suite["repoman_current"] = true
   suite["ci_ssh_pubkey"] = "ssh-rsa ABCDEFGG"
   suite
 end
@@ -48,7 +49,12 @@ end
 
 Given /^the user creates a pending suite for "([^"]*)" on branch "([^"]*)"$/ do |name, branch|
   resp = make_suite_response(name, branch)
+  resp["repoman_current"] = false
   Antilles.install(:get, "/1/suites/1", {:status=>0, :suite=>resp})
+end
+
+Given /^the user can indicate repoman demand$/ do
+  Antilles.install(:post, '/1/accounts/1/demand_repoman', {:status=>0})
 end
 
 Given /^there is a problem retrieving suite information$/ do
