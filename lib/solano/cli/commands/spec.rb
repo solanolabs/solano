@@ -80,26 +80,9 @@ module Solano
         say Text::Process::USING_SPEC_OPTION[:test_exclude_pattern] % test_exclude_pattern
       end
 
-      tries = 0
-      while tries < Default::SCM_READY_TRIES do
-        # Call the API to get the suite and its tests
-        suite_details = @solano_api.get_suite_by_id(@solano_api.current_suite_id,
+       # Call the API to get the suite and its tests
+      suite_details = @solano_api.get_suite_by_id(@solano_api.current_suite_id,
                                                     :session_id => options[:session_id])
-
-        if suite_details["repoman_current"] == true
-          break
-        else
-          @solano_api.demand_repoman_account(suite_details["account_id"])
-
-          say Text::Process::SCM_REPO_WAIT
-          sleep @api_config.scm_ready_sleep
-        end
-
-        tries += 1
-      end
-      exit_failure Text::Error::SCM_REPO_NOT_READY unless suite_details["repoman_current"]
-
-      #update_suite_parameters!(suite_details, options[:session_id])
 
       start_time = Time.now
 
