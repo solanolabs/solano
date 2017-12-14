@@ -1,4 +1,6 @@
-# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+# Copyright (c) 2011-2017 Solano Labs All Rights Reserved
+
+require 'tempfile'
 
 module Solano
   class SolanoCli < Thor
