@@ -16,8 +16,6 @@ module SolanoConstant
 
     GIT_SERVER = "git.solanolabs.com"
     READY_TRIES = 3
-    SCM_READY_TRIES = 18
-    SCM_READY_SLEEP = 10
     TEST_FINISH_TIMEOUT = 15 * 60 # 15 minutes
 
     PARAMS_PATH = "#{ENV['HOME']}/.solano-server"
@@ -182,7 +180,6 @@ EOF
       TERMINATE_INSTRUCTION = ">>> Press Ctrl-C to stop waiting.  Tests will continue running.\n"
       INTERRUPT = "Interrupted"
       SCM_PUSH = ">>> Pushing changes to Solano CI..."
-      SCM_REPO_WAIT = ">>> Waiting for your repository to be prepared. Sleeping for 10 seconds..."
       STARTING_TEST = ">>> Starting Session with %s tests..."
       CHECK_TEST_STATUS = ">>> Use 'solano status' to check on pending jobs"
       FINISHED_TEST = "Finished in %s seconds"
@@ -473,7 +470,6 @@ You entered:
 EOF
       SCM_NOT_A_REPOSITORY = "Current working directory is not a suitable repository"
       SCM_NO_ORIGIN = "Origin URI not set; Solano CI requires origin URI to identify repository"
-      SCM_REPO_NOT_READY = "Your repository is being prepped.  Try again in a minute."
       SCM_PUSH_FAILED = <<EOF;
 
 Attempt to push source to Solano CI failed.

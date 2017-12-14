@@ -8,7 +8,7 @@ Feature: spec command
 Background:
   Given the command is "solano spec"
 
-Scenario: Wait until repo preparation is done
+Scenario: Creates a new suite
   Given the destination repo exists
   And the SCM ready timeout is 0
   And a git repo is initialized on branch "foobar"
@@ -24,6 +24,5 @@ Scenario: Wait until repo preparation is done
   And the tests start successfully
   And the test all pass
   When I run `solano spec`
-  Then the exit status should be 1
+  Then the exit status should be 0
   And the output should contain "Creating suite"
-  And the output should contain "prepped"
