@@ -142,60 +142,36 @@ module Solano
       session_data ||= {}
       session_id ||= session_data["id"]
 
-      if manager == 'DestroFreeSessionManager'
-        begin
-          if !options[:force_snapshot] then
-            #check if there is a snapshot
-            res = @solano_api.get_snapshot_commit({:session_id => session_id})
-            if res['snap_commit'] then
-              snapshot_commit = res['snap_commit']
-            #No snapshot
-            else
-              say Text::Process::NO_SNAPSHOT
-              res = @scm.create_snapshot(session_id, {:api => @solano_api, :default_branch => options[:default_branch]})
-              snapshot_commit = @scm.get_snap_id
-            end
-            say Text::Process::SNAPSHOT_COMMIT % snapshot_commit
-            #if we already had a snapshot or we created a master snapshot
-            #create a patch
-            @scm.create_patch(session_id, {:api => @solano_api, :commit => snapshot_commit})
-          #forced snapshot creation
+      begin
+        if !options[:force_snapshot] then
+          #check if there is a snapshot
+          res = @solano_api.get_snapshot_commit({:session_id => session_id})
+          if res['snap_commit'] then
+            snapshot_commit = res['snap_commit']
+          #No snapshot
           else
-            say Text::Process::FORCED_SNAPSHOT
-            res = @scm.create_snapshot(session_id, {:api => @solano_api, :force => true})
+            say Text::Process::NO_SNAPSHOT
+            res = @scm.create_snapshot(session_id, {:api => @solano_api, :default_branch => options[:default_branch]})
             snapshot_commit = @scm.get_snap_id
           end
-          #start tests
-          start_test_executions = @solano_api.start_destrofree_session(session_id, {:test_pattern => test_pattern, :test_exclude_pattern=>test_exclude_pattern})
-        rescue Exception, RuntimeError => e
-           @solano_api.stop_session(session_id)
-           say "ERROR: #{e.message}"
-           return
+          say Text::Process::SNAPSHOT_COMMIT % snapshot_commit
+          #if we already had a snapshot or we created a master snapshot
+          #create a patch
+          @scm.create_patch(session_id, {:api => @solano_api, :commit => snapshot_commit})
+        #forced snapshot creation
+        else
+          say Text::Process::FORCED_SNAPSHOT
+          res = @scm.create_snapshot(session_id, {:api => @solano_api, :force => true})
+          snapshot_commit = @scm.get_snap_id
         end
-      else
-
-        push_options = {}
-        if options[:machine]
-          push_options[:use_private_uri] = true
-        end
-
-        if !@scm.push_latest(session_data, suite_details, push_options) then
-          exit_failure Text::Error::SCM_PUSH_FAILED
-        end
-
-        machine_data[:session_id] = session_id
-
-        # Register the tests
-        @solano_api.register_session(session_id, @solano_api.current_suite_id, test_pattern, test_exclude_pattern)
-
-        # Start the tests
-        start_test_executions = @solano_api.start_session(session_id, test_execution_params)
-
-
-        num_tests_started = start_test_executions["started"].to_i
-
-        say Text::Process::STARTING_TEST % num_tests_started.to_s
+        #start tests
+        start_test_executions = @solano_api.start_destrofree_session(session_id, {:test_pattern => test_pattern, :test_exclude_pattern=>test_exclude_pattern})
+      rescue Exception, RuntimeError => e
+         @solano_api.stop_session(session_id)
+         say "ERROR: #{e.message}"
+         return
       end
+
       tests_finished = false
       finished_tests = {}
       latest_message = -100000

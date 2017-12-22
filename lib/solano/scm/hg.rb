@@ -72,27 +72,6 @@ module Solano
       return Solano::Hg.hg_changes?(:exclude=>".hgignore")
     end
 
-    def hg_push(uri)
-      cmd = "hg push -f -b #{self.current_branch} "
-      cmd += " #{uri}"
-
-      # git outputs something to stderr when it runs git push.
-      # hg doesn't always ... so show the command that's being run and its
-      # output to indicate progress.
-      puts cmd
-      puts `#{cmd}`
-      return [0,1].include?( $?.exitstatus )
-    end
-
-    def push_latest(session_data, suite_details, options={})
-      uri = if options[:use_private_uri] then
-              suite_details["git_repo_private_uri"] || suite_details["git_repo_uri"]
-            else
-              suite_details["git_repo_uri"]
-            end
-      self.hg_push(uri)
-    end
-
     def current_commit
       commit = `hg id -i`
       commit.chomp!
@@ -234,10 +213,6 @@ module Solano
           return false
         end
         return changes
-      end
-
-      def hg_push(this_branch, additional_refs=[])
-        raise "not implemented"
       end
 
       def version_ok
