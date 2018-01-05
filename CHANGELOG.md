@@ -2,6 +2,7 @@
 
 
 ## Version History
+- v1.31.9 - Remove classic session manager specific code
 - v1.31.8 - Remove repoman
 - v1.31.7 - Improve solano console command's search for recent sessions.
 - v1.31.4 - Fixed assorted ruby version compatibility issuess

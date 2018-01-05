@@ -20,7 +20,7 @@ Scenario: Auto-create a new suite for an hg repo
   And the user creates a suite for "work/foobar" on branch "foobar"
   And the user can create a session with commit data
   And the user successfully registers tests for the suite
-  And the tests start successfully
+  And the session starts successfully
   And the test all pass
   When I run `solano spec`
   Then the exit status should be 0

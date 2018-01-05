@@ -323,19 +323,6 @@ module Solano
       result['session']
     end
 
-    def register_session(session_id, suite_id, test_pattern, test_exclude_pattern=nil)
-      args = {:suite_id => suite_id, :test_pattern => test_pattern}
-      if test_exclude_pattern
-        args[:test_exclude_pattern] = test_exclude_pattern
-      end
-
-      call_api(:post, "#{Api::Path::SESSIONS}/#{session_id}/#{Api::Path::REGISTER_TEST_EXECUTIONS}", args)
-    end
-
-    def start_session(session_id, params)
-      call_api(:post, "#{Api::Path::SESSIONS}/#{session_id}/#{Api::Path::START_TEST_EXECUTIONS}", params)
-    end
-
     def start_console(session_id, suite_id)
       path = "#{Api::Path::SESSIONS}/#{session_id}/#{Api::Path::TEST_EXECUTIONS}/console"
       call_api(:post, path, {suite_id: suite_id})

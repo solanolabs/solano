@@ -70,10 +70,6 @@ module Solano
       return @snap_id
     end
 
-    def push_latest(session_data, suite_details, options={})
-      return false
-    end
-
     def create_snapshot(session_id, options={})
       raise Text::Error:SNAPSHOT_NOT_SUPPORTED
     end

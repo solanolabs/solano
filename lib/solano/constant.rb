@@ -470,18 +470,6 @@ You entered:
 EOF
       SCM_NOT_A_REPOSITORY = "Current working directory is not a suitable repository"
       SCM_NO_ORIGIN = "Origin URI not set; Solano CI requires origin URI to identify repository"
-      SCM_PUSH_FAILED = <<EOF;
-
-Attempt to push source to Solano CI failed.
-
-If you get a "Permission denied (publickey)" message, ensure that SSH is
-configured to send a key you have authorized with Solano CI (Run `solano keys` to
-see a list.)
-
-For any other error, contact us at: support@solanolabs.com
-
-
-EOF
       SCM_CHANGES_NOT_COMMITTED =<<EOF
 There are uncommitted changes in the local repository.
 

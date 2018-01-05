@@ -21,31 +21,6 @@ describe Solano::Git do
     end
   end
 
-
-  describe ".push_latest" do
-    let(:url) { "abc" }
-    let(:private_url) { "def" }
-
-    before do
-      Solano::Git.stub(:git_push).and_return(true)
-    end
-
-    it "should set a public remote by default" do
-      expect(Solano::Git).to receive(:git_set_remotes).with(url)
-      subject.push_latest({}, {"git_repo_uri" => url})
-    end
-
-    it "should set a public remote if requested" do
-      expect(Solano::Git).to receive(:git_set_remotes).with(url)
-      subject.push_latest({}, {"git_repo_uri" => url}, {use_private_uri: false})
-    end
-
-    it "should set a private remote if requested" do
-      expect(Solano::Git).to receive(:git_set_remotes).with(private_url)
-      subject.push_latest({}, {"git_repo_uri" => url, "git_repo_private_uri" => private_url}, {use_private_uri: true})
-    end
-  end
-
   module Solano
     class Git
       def say(message)

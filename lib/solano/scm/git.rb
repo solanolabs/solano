@@ -94,27 +94,6 @@ module Solano
       return Solano::Git.git_changes?(:exclude=>".gitignore")
     end
 
-    def push_latest(session_data, suite_details, options={})
-      branch = options[:branch] || self.current_branch
-      remote_branch = options[:remote_branch] || branch
-      git_repo_uri = if options[:git_repo_uri] then
-                       options[:git_repo_uri]
-                     elsif options[:use_private_uri] then
-                       suite_details["git_repo_private_uri"] || suite_details["git_repo_uri"]
-                     else
-                       suite_details["git_repo_uri"]
-                     end
-      this_ref = (session_data['commit_data'] || {})['git_ref']
-      refs = this_ref ? ["HEAD:#{this_ref}"] : []
-
-      if options[:git_repo_origin_uri] then
-        Solano::Git.git_set_remotes(options[:git_repo_origin_uri], 'origin')
-      end
-
-      Solano::Git.git_set_remotes(git_repo_uri)
-      return Solano::Git.git_push(branch, refs, remote_branch)
-    end
-
     def current_commit
       `git rev-parse --verify HEAD`.strip
     end
@@ -320,17 +299,6 @@ module Solano
           IO.popen("git remote rm #{remote_name}") {} # Discard output on *nix & windows
           `git remote add #{remote_name} #{git_repo_uri.shellescape}`
         end
-      end
-
-      def git_push(this_branch, additional_refs=[], remote_branch=nil)
-        say Text::Process::SCM_PUSH
-        remote_branch ||= this_branch
-        refs = ["#{this_branch}:#{remote_branch}"]
-        refs += additional_refs
-        refspec = refs.map(&:shellescape).join(" ")
-        cmd = "git push -f #{Config::REMOTE_NAME} #{refspec}"
-        say "Running '#{cmd}'"
-        system(cmd)
       end
 
       def version_ok

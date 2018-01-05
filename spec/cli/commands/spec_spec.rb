@@ -35,7 +35,6 @@ describe Solano::SolanoCli do
 
     def stub_git
       allow(Solano::Git).to receive(:git_changes?).and_return(false)
-      allow(Solano::Git).to receive(:git_push).and_return(true)
     end
 
     def stub_commit_log_parser
@@ -61,7 +60,6 @@ describe Solano::SolanoCli do
       allow(scm).to receive(:changes?).and_return(false)
       allow(scm).to receive(:root).and_return(Dir.pwd)
       allow(scm).to receive(:commits).and_return([latest_commit])
-      allow(scm).to receive(:push_latest).and_return(true)
       allow(scm).to receive(:current_branch).and_return('current_branch')
       allow(scm).to receive(:origin_url).and_return('ssh://git@github.com/solano/solano.git')
       allow(scm).to receive(:ignore_path).and_return('.gitignore')
@@ -101,23 +99,6 @@ describe Solano::SolanoCli do
       ])
       allow(scm).to receive(:latest_commit).and_return(latest_commit)
       allow(subject).to receive(:options) { {:session_id=>1} }
-      subject.spec
-    end
-
-    it "should push to the public repo uri in CLI mode" do
-      allow(subject).to receive(:options).and_return({:machine => false})
-      allow(solano_api).to receive(:get_suites).and_return([
-        {"account" => "handle-2"},
-      ])
-      allow(scm).to receive(:latest_commit).and_return(latest_commit)
-      expect(scm).to receive(:push_latest).with(anything, anything, {}).and_return(true)
-      subject.spec
-    end
-
-    it "should push to the private repo uri in ci mode" do
-      allow(scm).to receive(:latest_commit).and_return(latest_commit)
-      expect(scm).to receive(:push_latest).with(anything, anything, use_private_uri: true).and_return(true)
-      allow(subject).to receive(:options).and_return({:machine => true})
       subject.spec
     end
 

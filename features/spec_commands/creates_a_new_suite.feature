@@ -21,7 +21,7 @@ Scenario: Creates a new suite
   And the user creates a pending suite for "work/foobar" on branch "foobar"
   And the user can create a session
   And the user successfully registers tests for the suite
-  And the tests start successfully
+  And the session starts successfully
   And the test all pass
   When I run `solano spec`
   Then the exit status should be 0
