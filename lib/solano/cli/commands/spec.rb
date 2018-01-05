@@ -167,9 +167,9 @@ module Solano
         #start tests
         start_test_executions = @solano_api.start_destrofree_session(session_id, {:test_pattern => test_pattern, :test_exclude_pattern=>test_exclude_pattern})
       rescue Exception, RuntimeError => e
-         @solano_api.stop_session(session_id)
-         say "ERROR: #{e.message}"
-         return
+        @solano_api.stop_session(session_id)
+        say "ERROR: #{e.message}"
+        return
       end
 
       tests_finished = false

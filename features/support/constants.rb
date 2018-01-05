@@ -113,7 +113,7 @@ SAMPLE_ACCOUNT_USAGE = {"status"=>0, "usage"=>"Usage: something"}
 SAMPLE_CHECK_DONE_RESPONSE = {"status"=>0, "done"=>true, "session_status"=>"passed"}
 SAMPLE_MESSAGE_ENTRY = {"level"=>"notice", "text"=>"abcdef    ", "seqno"=>1}
 SAMPLE_WARNING_MESSAGE_ENTRY = {"level"=>"warn", "text"=>"abcdef    ", "seqno"=>1}
-SAMPLE_START_TEST_EXECUTIONS_RESPONSE = {"status"=>0, "started"=>4, "report"=>SAMPLE_REPORT_URL}
+SAMPLE_START_SESSION_RESPONSE = {"status"=>0, "report"=>SAMPLE_REPORT_URL}
 SAMPLE_TEST_EXECUTIONS_PASSED_RESPONSE = {
   "status"=>0,
   "report"=>SAMPLE_REPORT_URL,

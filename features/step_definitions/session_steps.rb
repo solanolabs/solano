@@ -23,8 +23,8 @@ Given /^the user successfully registers tests for the suite(?: with test_pattern
   puts res.parsed_response
 end
 
-Given /^the tests start successfully$/ do
-  Antilles.install(:post, "/1/sessions/#{SAMPLE_SESSION_ID}/test_executions/start", SAMPLE_START_TEST_EXECUTIONS_RESPONSE)
+Given /^the session starts successfully$/ do
+  Antilles.install(:post, "/api/v3/sessions/#{SAMPLE_SESSION_ID}/start", SAMPLE_START_SESSION_RESPONSE)
 end
 
 Given /^the tests? all pass$/ do

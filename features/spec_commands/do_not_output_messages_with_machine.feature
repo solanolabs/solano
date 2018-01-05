@@ -17,7 +17,7 @@ Scenario: Don't output messages with --machine
     | default   |
   And the user can create a session
   And the user successfully registers tests for the suite
-  And the tests start successfully
+  And the session starts successfully
   And the test all pass with messages
   And the session completes
   When I run `solano spec --machine`

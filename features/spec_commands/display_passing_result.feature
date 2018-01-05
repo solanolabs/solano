@@ -17,7 +17,7 @@ Scenario: Display passing result
     | default   |
   And the user can create a session
   And the user successfully registers tests for the suite with test_pattern: "spec/foo"
-  And the tests start successfully
+  And the session starts successfully
   And the test all pass
   When I run `solano spec --max-parallelism=1 --test-pattern=spec/foo`
   Then the exit status should be 0
