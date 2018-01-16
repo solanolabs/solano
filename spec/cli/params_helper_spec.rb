@@ -1,8 +1,8 @@
 # Copyright (c) 2014 Solano Labs All Rights Reserved
 
+require 'spec_helper'
 require 'solano/constant'
 require 'solano/cli/params_helper'
-require 'spec_helper'
 
 describe ParamsHelper do
   extend ParamsHelper

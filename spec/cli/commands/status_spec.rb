@@ -10,7 +10,10 @@ describe Solano::SolanoCli do
   describe "#status" do
     let(:suite_id) { 1 }
 
-    it "should display current status with no suites or sessions" do
+    # TODO: this test stops execution of others
+    # When it runs in a batch - all tests in a batch marked as skipped!
+    # Story https://jira.slno.net/jira/browse/CICLI-103
+    xit "should display current status with no suites or sessions" do
       solano_api.should_receive(:get_suites).once.and_return([])
       subject.should_receive(:suite_for_current_branch?).and_return(false)
       subject.should_receive(:suite_for_default_branch?).and_return(false)

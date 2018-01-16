@@ -1,7 +1,9 @@
 # Copyright (c) 2011-2016 Solano Labs All Rights Reserved
 
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_filter "spec/"
+end
 
 require 'solano'
 
