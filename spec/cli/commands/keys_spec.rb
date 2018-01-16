@@ -1,7 +1,7 @@
 # Copyright (c) 2014 Solano Labs All Rights Reserved
 
-require 'solano/constant'
 require 'spec_helper'
+require 'solano/constant'
 require 'solano/cli'
 require 'solano/cli/commands/keys'
 

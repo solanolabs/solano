@@ -2,6 +2,7 @@
 
 # delete solano-server file before require solano/cli/solano.rb
 # it will use stored options, not default (if server-file already exist)
+require 'spec_helper'
 require 'solano/constant'
 
 def remove_server_file
@@ -10,7 +11,6 @@ end
 
 remove_server_file
 
-require 'spec_helper'
 require 'solano/cli'
 require 'solano/cli/commands/server'
 
