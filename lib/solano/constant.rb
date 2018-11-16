@@ -22,15 +22,16 @@ module SolanoConstant
   end
 
   module Config
-    REMOTE_NAME = "solano"
+    REMOTE_NAME = "predix-ci"
     HG_IGNORE = ".hgignore"
     GIT_IGNORE = ".gitignore"
-    CONFIG_PATHS = ["solano.yml",
-                    "config/solano.yml"
+    CONFIG_PATHS = ["predix-ci.yml",
+                    "config/predix-ci.yml"
                    ]
     CONFIG_PATHS_DEPRECATED = ["tddium.yml",
                                "config/tddium.yml",
-                               "config/tddium.cfg"
+                               "solano.yml",
+                               "config/solano.yml"
                               ]
     EMBEDDED_SCRIPT_PATH = File.expand_path(File.join("..", "script"), __FILE__)
   end
@@ -94,7 +95,7 @@ module SolanoConstant
 
 * The hg <-> git mirror is missing.
 
-Please run `solano hg:mirror` to create the mirror for the first time.
+Please run `predix-ci hg:mirror` to create the mirror for the first time.
 
 (Note: it may take several minutes, or even an hour, for hg:mirror to complete,
  depending on how large your repo is. Rest assured, you'll only need to run hg:mirror once.)
@@ -110,7 +111,7 @@ EOF
       YAML_PARSE_FAILED = "Unable to parse %s as YAML"
       TEST_CONFIGS_MUST_BE_LIST = "The test_configs section of solano.yml must be a list of configurations"
       NO_SSH_KEY =<<EOF
-You have not set an ssh key for your user.  Please add an ssh key using `solano keys:add` or visit http://ci.solanolabs.com/user_settings/ssh_keys
+You have not set an ssh key for your user.  Please add an ssh key using `solano keys:add` or visit https://ci.predix.io/user_settings/ssh_keys
 EOF
       SAME_SNAPSHOT_COMMIT = "Snapshot commit is the same as HEAD"
       EMPTY_PATCH = "Patch not created because it would have been empty. Most likely the commit exists in the snapshot already"
@@ -153,14 +154,14 @@ EOF
       REMOVE_CONFIG_DONE = "Removed config '%s' from %s"
       CONFIG_EDIT_COMMANDS =<<EOF
 
-Use `solano config:add <scope> <key> <value>` to set a config key.
-Use `solano config:remove <scope> <key>` to remove a key.
+Use `predix-ci config:add <scope> <key> <value>` to set a config key.
+Use `predix-ci config:remove <scope> <key>` to remove a key.
 
 EOF
       KEYS_EDIT_COMMANDS =<<EOF
 
-Use `solano keys:add` to generate and authorize a new SSH keypair.
-Use `solano keys:remove` to remove an authorized key from Solano CI.
+Use `predix-ci keys:add` to generate and authorize a new SSH keypair.
+Use `predix-ci keys:remove` to remove an authorized key from Solano CI.
 
 Use `ssh-keygen -lf <filename>` to print fingerprint of an existing public key.
 
@@ -172,18 +173,18 @@ EOF
 
     You can instead specify a list of test patterns in config/solano.yml.
 
-    Read more here: https://docs.solanolabs.com/
+    Read more here: https://ci.predix.io/docs
 
 EOF
-      NO_CONFIGURED_SUITE = "Looks like you haven't configured Solano CI on this computer for %s/%s...\n"
-      FOUND_EXISTING_SUITE = "Found a suite in Solano CI for\n\n%s\n\n(on branch %s)."
+      NO_CONFIGURED_SUITE = "Looks like you haven't configured Predix CI on this computer for %s/%s...\n"
+      FOUND_EXISTING_SUITE = "Found a suite in Predix CI for\n\n%s\n\n(on branch %s)."
       TERMINATE_INSTRUCTION = ">>> Press Ctrl-C to stop waiting.  Tests will continue running.\n"
       INTERRUPT = "Interrupted"
-      SCM_PUSH = ">>> Pushing changes to Solano CI..."
+      SCM_PUSH = ">>> Pushing changes to Predix CI..."
       STARTING_TEST = ">>> Starting Session with %s tests..."
-      CHECK_TEST_STATUS = ">>> Use 'solano status' to check on pending jobs"
+      CHECK_TEST_STATUS = ">>> Use 'predix-ci status' to check on pending jobs"
       FINISHED_TEST = "Finished in %s seconds"
-      RUN_SOLANO_WEB = "\n>>> Run `solano web` to open the latest test results in your browser.\n"
+      RUN_SOLANO_WEB = "\n>>> Run `predix-ci web` to open the latest test results in your browser.\n"
       CHECK_TEST_REPORT = ">>> To view results, visit: %s"
       FAILED_TESTS = "Failed tests:"
       SUMMARY_STATUS = "Final result: %s."
@@ -200,7 +201,7 @@ EOF
 
 Next, you should register your test suite and start tests by running:
 
-$ solano run
+$ predix-ci run
 
 "
       ALREADY_LOGGED_IN = "You're already logged in"
@@ -227,7 +228,7 @@ $ solano run
 
 >>> To change the pattern:
     1. Edit %s
-    2. Run `solano suite --edit` again.
+    2. Run `predix-ci suite --edit` again.
 EOF
       CONFIGURED_EXCLUDE_PATTERN =<<EOF;
 ... Configured test exclude pattern from %s:
@@ -236,7 +237,7 @@ EOF
 
 >>> To change the pattern:
     1. Edit %s
-    2. Run `solano suite --edit` again.
+    2. Run `predix-ci suite --edit` again.
 EOF
       DETECTED_BRANCH = "... Detected branch %s"
       SETUP_CI=<<EOF;
@@ -278,12 +279,12 @@ Showing %s tests
 EOF
       RERUN_SESSION =<<EOF
 
-Re-run failures from a session with `solano rerun <session_id>`.
-Extract details of a session with `solano describe <session_id>`.
+Re-run failures from a session with `predix-ci rerun <session_id>`.
+Extract details of a session with `predix-ci describe <session_id>`.
 
 EOF
       OPTIONS_SAVED = 'Options have been successfully saved.'
-      NOT_SAVED_OPTIONS = 'There is no server information saved. Run `solano server:set`.'
+      NOT_SAVED_OPTIONS = 'There is no server information saved. Run `predix-ci server:set`.'
       BUILD_CONTINUES = 'Session will continue running.'
       USING_PROFILE = "Starting session with profile '%s'"
       VOLUME_OVERRIDE = "Worker volume set to %s"
@@ -300,7 +301,7 @@ EOF
       CREATING_PATCH =<<EOF
 Creating a Patch by running
 %s
-Please see http://docs.solanolabs.com/RunningBuild/snapshots-and-patches/ for more info on patching
+Please see https://ci.predix.io/docs/RunningBuild/snapshots-and-patches/ for more info on patching
 EOF
       ASK_FOR_SNAPSHOT =<<EOF
 Since we could not create a patch, we can try creating a snapshot instead. This may take longer to upload, then a patch.
@@ -516,7 +517,7 @@ EOF
       PASSWORD_ERROR = "Error changing password: %s"
       ADD_MEMBER_ERROR = "Error adding %s: %s"
       REMOVE_MEMBER_ERROR = "Error removing %s: %s"
-      USE_ACTIVATE = "Visit 'https://ci.solanolabs.com' to activate your account for the first time."
+      USE_ACTIVATE = "Visit 'https://ci.predix.io' to activate your account for the first time."
       INVALID_CREDENTIALS = "Your .solano file has an invalid API key.\nRun `solano logout` and `solano login`, and then try again."
       MISSING_ACCOUNT_OPTION = "You must specify an organization by passing the --org option."
       MISSING_ACCOUNT = "You must specify an organization."
@@ -528,7 +529,7 @@ ERROR: could not invoke solano command
 Usage: "solano COMMAND [ARGS] [OPTIONS]". For available commands, run "solano help".
 EOF
       CONFIG_PATHS_COLLISION =<<EOF
-You have both solano.yml and tddium.yml in your repo. We don't support merging the configuration from both of these files, so you'll have to pick one. The solano.yml file will soon be deprecated, so we recommend migrating all of your configuration to solano.yml.
+You have multiple configs in your repo. We don't support merging the configuration from both of these files, so you'll have to pick one. The solano.yml file will soon be deprecated, so we recommend migrating all of your configuration to solano.yml.
 EOF
       CANNOT_OVERRIDE_PROFILE="Cannot override profile for existing session"
       CANNOT_OVERRIDE_QUEUE="Cannot override queue for existing session"

@@ -25,4 +25,3 @@ Scenario Outline: Configure new suite with repo config file without matching key
   Examples:
     | file name  | root section |
     | tddium.yml | :foo:        |
-    | tddium.cfg | :foo:        |

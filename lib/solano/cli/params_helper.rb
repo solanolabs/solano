@@ -4,7 +4,7 @@ module ParamsHelper
   include SolanoConstant
 
   def default_host params
-    params['host'] || ENV['SOLANO_CLIENT_HOST'] || ENV['TDDIUM_CLIENT_HOST'] || 'ci.solanolabs.com'
+    params['host'] || ENV['SOLANO_CLIENT_HOST'] || ENV['TDDIUM_CLIENT_HOST'] || 'ci.predix.io'
   end
 
   def default_port params

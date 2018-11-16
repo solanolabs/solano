@@ -25,8 +25,8 @@ Scenario Outline: Exit with error if repo config file contains the wrong type
   When the console session ends
   Then the exit status should not be 0
   Examples:
-    | file name  | root section |
-    | tddium.yml | :tddium:     |
-    | tddium.cfg | :tddium:     |
-    | solano.yml | :solano:     |
-    | solano.yml |              |
+    | file name     | root section |
+    | tddium.yml    | :tddium:     |
+    | solano.yml    | :solano:     |
+    | solano.yml    |              |
+    | predix-ci.yml |              |

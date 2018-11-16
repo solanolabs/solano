@@ -2,7 +2,7 @@
 
 module FileHelpers
   def solano_global_config_file_path
-    File.join(ENV["HOME"], ".solano.localhost")
+    File.join(ENV["HOME"], ".predix-ci.localhost")
   end
 
   def solano_homedir_path

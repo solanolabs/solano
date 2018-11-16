@@ -6,24 +6,24 @@ Gem::Specification.new do |s|
   s.name        = "solano"
   s.version     = Solano::VERSION
   s.platform    = (RUBY_PLATFORM == 'java' ? RUBY_PLATFORM : Gem::Platform::RUBY)
-  s.authors     = ["Solano Labs"]
-  s.email       = ["info@solanolabs.com"]
+  s.authors     = ["GE Digital LLC"]
+  s.email       = ["build-ge-solano@ge.com"]
   s.homepage    = "https://github.com/solanolabs/solano.git"
-  s.summary     = "Run tests in Solano CI Hosted Test Environment"
+  s.summary     = "Run tests in Predix CI Hosted Test Environment"
   s.license     = "MIT"
   s.description = <<-EOF
-Solano CI runs your test suite simply and quickly in our managed
+Predix CI runs your test suite simply and quickly in our managed
 cloud environment.  You can run tests by hand, or enable our hosted CI to watch
 your git repos automatically.
 
-Solano CI automatically and safely parallelizes your tests to save you time, and
+Predix CI automatically and safely parallelizes your tests to save you time, and
 takes care of setting up fresh isolated DB instances for each test thread.
 
 Tests have access to a wide variety of databases (postgres, mongo, redis,
 mysql, memcache), solr, sphinx, selenium/webdriver browsers, webkit and culerity.
 
-Solano CI supports all common Ruby test frameworks, including rspec, cucumber,
-test::unit, and spinach.  Solano CI also supports Javascript testing using
+Predix CI supports all common Ruby test frameworks, including rspec, cucumber,
+test::unit, and spinach.  Predix CI also supports Javascript testing using
 jasmine, evergreen, and many other frameworks.
 EOF
 
@@ -35,7 +35,7 @@ EOF
   s.add_runtime_dependency("json", "~> 1.8.3")
   s.add_runtime_dependency("launchy", "~> 2.4")
   s.add_runtime_dependency("addressable", "~> 2.3")
-  s.add_runtime_dependency("tddium_client", "~> 0.6", ">= 0.6.0")
+  s.add_runtime_dependency("tddium_client", "~> 0.6", ">= 0.6.5")
   s.add_runtime_dependency("nayutaya-msgpack-pure", "~> 0.0", ">= 0.0.2")
   s.add_runtime_dependency("public_suffix", "~> 1.4.6 ")
 

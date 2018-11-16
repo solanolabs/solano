@@ -2,7 +2,7 @@
 
 module Solano
   class SolanoCli < Thor
-    desc "login [[TOKEN]]", "Log in using your email address or token (see: https://ci.solanolabs.com/user_settings/token)"
+    desc "login [[TOKEN]]", "Log in using your email address or token (see: https://ci.predix.io/user_settings/token)"
     method_option :email, :type => :string, :default => nil
     method_option :password, :type => :string, :default => nil
     method_option :ssh_key_file, :type => :string, :default => nil
