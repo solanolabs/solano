@@ -7,6 +7,7 @@ tmp
 coverage
 
 .rvmrc
+.ruby-version
 .tddium*
 .solano*
 .predix-ci*
