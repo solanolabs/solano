@@ -24,8 +24,8 @@ Scenario Outline: Configure new suite with bundler from repo config file
   Then the output should contain "Created suite"
   Then the exit status should be 0
   Examples:
-    | file name  | root section |
-    | tddium.yml | :tddium:     |
-    | tddium.cfg | :tddium:     |
-    | solano.yml | :solano:     |
-    | solano.yml |              |
+    | file name     | root section |
+    | tddium.yml    | :tddium:     |
+    | solano.yml    | :solano:     |
+    | solano.yml    |              |
+    | predix-ci.yml |              |

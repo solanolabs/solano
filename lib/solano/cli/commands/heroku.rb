@@ -9,7 +9,7 @@ module Solano
     method_option :app, :type => :string, :default => nil
     def heroku
       say "To activate your heroku account, please visit"
-      say "https://ci.solanolabs.com/"
+      say "https://ci.predix.io/"
 
       solano_setup({:scm => false})
     end

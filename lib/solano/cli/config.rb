@@ -189,15 +189,15 @@ module Solano
     def write_scm_ignore
       path = @scm.ignore_path
       content = File.exists?(path) ? File.read(path) : ''
-      unless content.include?(".solano*\n")
+      unless content.include?(".predix-ci*\n")
         File.open(path, File::CREAT|File::APPEND|File::RDWR, 0644) do |file|
-          file.write(".solano*\n")
+          file.write(".predix-ci*\n")
         end
       end
     end
 
     def solano_file_name(scope=:repo, kind='', root=nil)
-      ext = (@host == 'api.tddium.com' || @host == 'ci.solanolabs.com') ? '' : ".#{@host}"
+      ext = (@host == 'ci.predix.io') ? '' : ".#{@host}"
 
       case scope
       when :repo
@@ -207,7 +207,7 @@ module Solano
         root = ENV['HOME']
       end
 
-      return File.join(root, ".solano#{kind}#{ext}")
+      return File.join(root, ".predix-ci#{kind}#{ext}")
     end
 
     def solano_deploy_key_file_name

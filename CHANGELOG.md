@@ -2,6 +2,7 @@
 
 
 ## Version History
+- v1.31.10 - Rename command to predix-ci and redirect traffic to https://ci.predix.io
 - v1.31.9 - Add `queue` option to `solano rerun` to set queue.
 - v1.31.8 - Remove repoman
 - v1.31.7 - Improve solano console command's search for recent sessions.

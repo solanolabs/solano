@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+# 
+# Copyright (c) 2011, 2012, 2013, 2014 Solano Labs All Rights Reserved
+#
+
+require 'yaml'
+
+if RUBY_VERSION < "2.1.0" && defined?(YAML::ENGINE) then
+  YAML::ENGINE.yamler = 'syck'
+end
+
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+
+if ENV['COVERAGE']
+  begin
+    require 'rubygems'
+    require 'simplecov'
+    SimpleCov.root(ENV['COVERAGE_ROOT'])
+    SimpleCov.start do
+      add_group "Commands", "lib/cli/solano/commands"
+    end
+  rescue => e
+    STDERR.puts "Can't load simplecov: #{e.inspect} #{e.backtrace}"
+  end
+end
+
+require "solano"
+require "solano/cli"
+Solano::SolanoCli.start

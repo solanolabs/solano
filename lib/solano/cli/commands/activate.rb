@@ -8,7 +8,7 @@ module Solano
     method_option :ssh_key_file, :type => :string, :default => nil
     def activate
       say "To activate your account, please visit"
-      say "https://ci.solanolabs.com/"
+      say "https://ci.predix.io/"
 
       solano_setup({:scm => false})
     end

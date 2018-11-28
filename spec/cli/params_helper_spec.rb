@@ -32,7 +32,7 @@ describe ParamsHelper do
 
     it 'returns default host if host params and env varable are not present' do
       ENV.clear
-      expect(self.class.default_host({})).to eq('ci.solanolabs.com')
+      expect(self.class.default_host({})).to eq('ci.predix.io')
     end
   end
 

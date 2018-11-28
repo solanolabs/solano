@@ -23,7 +23,7 @@ Scenario Outline: Configure new suite with empty repo config file
   Then the output should not contain "Unable to parse"
   Then the exit status should be 0
   Examples:
-    | file name  |
-    | tddium.yml |
-    | tddium.cfg |
-    | solano.yml |
+    | file name     |
+    | tddium.yml    |
+    | solano.yml    |
+    | predix-ci.yml |

@@ -20,7 +20,7 @@ describe Solano::SolanoCli do
 
   describe '#server:set' do
     let(:options){ {'host' => 'localhost', 'port' => 3000, 'proto' => 'http', 'insecure' => true} }
-    let(:default_options){ {'host' => 'ci.solanolabs.com', 'proto' => 'https', 'insecure' => false} }
+    let(:default_options){ {'host' => 'ci.predix.io', 'proto' => 'https', 'insecure' => false} }
 
     it 'PARAMS_PATH constant presence' do
       expect(self.class::Default::PARAMS_PATH).not_to be_empty
@@ -66,7 +66,7 @@ describe Solano::SolanoCli do
   end
 
   describe '#server' do
-    let(:default_options){ {'host' => 'ci.solanolabs.com', 'proto' => 'https', 'insecure' => false} }
+    let(:default_options){ {'host' => 'ci.predix.io', 'proto' => 'https', 'insecure' => false} }
 
     it 'calls display method' do
       subject.class.should_receive(:display)

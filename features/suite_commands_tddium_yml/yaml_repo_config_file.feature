@@ -31,6 +31,5 @@ Scenario Outline: Non-YAML repo config file should generate a warning and then p
   Examples:
     | file name  | root section |
     | tddium.yml | :tddium:     |
-    | tddium.cfg | :tddium:     |
     | solano.yml | :solano:     |
     | solano.yml |              |
