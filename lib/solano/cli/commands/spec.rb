@@ -27,15 +27,26 @@ module Solano
     method_option :default_branch, :type => :string, :default => nil
     method_option :force_snapshot, :type => :boolean, :default => false
     method_option :volume, :type => :string, :default => nil
+    method_option :pipeline, type: :string, default: nil
     def spec(*pattern)
       machine_data = {}
 
       solano_setup({:repo => true})
 
-      suite_auto_configure unless options[:machine]
+      unless options[:pipeline]
+        suites = @solano_api.get_suites.select { |suite| suite['repo_url'] == @scm.origin_url }
+        repo_names = suites.map { |suite| suite['repo_name'] }.uniq
+        if repo_names.count > 1
+          say "You already have pipelines with url: #{@scm.origin_url}"
+          repo_names.each { |repo_name| say " " + repo_name }
+          exit_failure "You must specify an pipeline by passing the --pipeline option."
+        end
+      end
 
+      suite_auto_configure unless options[:machine]
       exit_failure unless suite_for_current_branch?
 
+      suite_id = calc_current_suite_id
       if !options[:machine] && @solano_api.get_keys.empty? then
         warn(Text::Warning::NO_SSH_KEY)
       end
@@ -81,9 +92,9 @@ module Solano
       end
 
        # Call the API to get the suite and its tests
-      suite_details = @solano_api.get_suite_by_id(@solano_api.current_suite_id,
-                                                    :session_id => options[:session_id])
 
+      suite_details = @solano_api.get_suite_by_id(suite_id,
+                                                    :session_id => options[:session_id])
       start_time = Time.now
 
       new_session_params = {
@@ -135,7 +146,7 @@ module Solano
       session_data = if session_id && session_id > 0
         @solano_api.update_session(session_id, new_session_params)
       else
-        sess, manager = @solano_api.create_session(@solano_api.current_suite_id, new_session_params)
+        sess, manager = @solano_api.create_session(suite_id, new_session_params)
         sess
       end
 
@@ -186,7 +197,7 @@ module Solano
         machine_data[:session_id] = session_id
 
         # Register the tests
-        @solano_api.register_session(session_id, @solano_api.current_suite_id, test_pattern, test_exclude_pattern)
+        @solano_api.register_session(session_id, suite_id, test_pattern, test_exclude_pattern)
 
         # Start the tests
         start_test_executions = @solano_api.start_session(session_id, test_execution_params)
@@ -290,7 +301,7 @@ module Solano
       say Text::Process::SUMMARY_STATUS % session_status
       say ""
 
-      suite = suite_details.merge({"id" => @solano_api.current_suite_id})
+      suite = suite_details.merge({"id" => suite_id})
       @api_config.set_suite(suite)
       @api_config.write_config
 
