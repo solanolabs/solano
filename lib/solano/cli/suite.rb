@@ -23,15 +23,14 @@ module Solano
       # Did the user set a configuration option on the command line?
       # If so, auto-configure a new suite and re-configure an existing one
       user_config = options.member?(:tool)
-
-      current_suite_id = @solano_api.current_suite_id
+      current_suite_id = calc_current_suite_id
       if current_suite_id && !user_config then
         current_suite = @solano_api.get_suite_by_id(current_suite_id)
       else
         params = Hash.new
         params[:branch] = @scm.current_branch
         params[:repo_url] = @scm.origin_url
-        params[:repo_name] = @scm.repo_name
+        params[:repo_name] = options[:pipeline] || @scm.repo_name
         params[:scm] = @scm.scm_name
         if options[:account] && !params.member?(:account_id) then
           account_id = @solano_api.get_account_id(options[:account])
@@ -63,8 +62,18 @@ module Solano
       details
     end
 
+    def calc_current_suite_id
+      if options[:pipeline]
+        suites = @solano_api.get_suites.select { |s| s['repo_name'] == options[:pipeline] }
+        suite = suites.select { |s| s['branch'] == @scm.current_branch }.first
+        suite ? suite['id'] : nil
+      else
+        @solano_api.current_suite_id
+      end
+    end
+
     def suite_for_current_branch?
-      return true if @solano_api.current_suite_id
+      return true if calc_current_suite_id
       say Text::Error::NO_SUITE_EXISTS % @scm.current_branch
       false
     end
