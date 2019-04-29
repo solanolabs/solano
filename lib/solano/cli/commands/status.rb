@@ -9,6 +9,7 @@ module Solano
     method_option :commit, :type => :string, :default => nil
     method_option :account, :type => :string, :default => nil,
                   :aliases => %w(--org --organization)
+    method_option :pipeline, type: :string, default: nil
     def status
       solano_setup({:repo => true})
 
@@ -40,7 +41,12 @@ module Solano
           suite_params[:last_commit_id] = options[:commit]
         end
 
-        suites = @solano_api.get_suites(:repo_url => origin_url, :branch => status_branch)
+        if options[:pipeline]
+          suites = @solano_api.get_suites(:branch => status_branch).select { |s| s['repo_name'] == options[:pipeline] }
+        else
+          suites = @solano_api.get_suites(:repo_url => origin_url, :branch => status_branch)
+        end
+
         if suites.count == 0
           exit_failure Text::Error::CANT_FIND_SUITE % [origin_url, status_branch]
         elsif suites.count > 1

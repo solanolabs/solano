@@ -10,6 +10,7 @@ module Solano
     method_option :force, :type=>:boolean, :default => false
     method_option :profile, :type => :string, :default => nil, :aliases => %w(--profile-name)
     method_option :queue, :type => :string, :default => nil
+    method_option :pipeline, type: :string, default: nil
     def rerun(session_id=nil)
       params = {:scm => true, :repo => false}
       if session_id.nil? then
@@ -38,6 +39,7 @@ module Solano
       cmd += " --force" if options[:force]
       cmd += " --profile=#{profile}" if profile
       cmd += " --queue=#{options[:queue]}" if options[:queue]
+      cmd += " --pipeline=#{options[:pipeline]}" if options[:pipeline]
       cmd += " #{tests.join(" ")}"
 
       say cmd
@@ -49,7 +51,7 @@ module Solano
     def session_id_for_current_suite
       return unless suite_for_current_branch?
       suite_params = {
-        :suite_id => @solano_api.current_suite_id,
+        :suite_id => calc_current_suite_id,
         :active => false,
         :limit => 1,
         :origin => %w(ci cli)
