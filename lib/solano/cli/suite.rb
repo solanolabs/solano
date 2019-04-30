@@ -63,7 +63,11 @@ module Solano
     end
 
     def calc_current_suite_id
-      if options[:pipeline]
+      if options[:pipeline] && options[:account]
+        suites = @solano_api.get_suites.select { |s| s['repo_name'] == options[:pipeline] && s['account'] == options[:account] }
+        suite = suites.select { |s| s['branch'] == @scm.current_branch }.first
+        suite ? suite['id'] : nil
+      elsif options[:pipeline]
         suites = @solano_api.get_suites.select { |s| s['repo_name'] == options[:pipeline] }
         suite = suites.select { |s| s['branch'] == @scm.current_branch }.first
         suite ? suite['id'] : nil
