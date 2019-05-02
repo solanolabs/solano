@@ -17,9 +17,8 @@ module Solano
         # solano_setup asserts that we're in a supported SCM repo
         origin_url = @scm.origin_url
         repo_params = {
-          :active => true,
-          :repo_url => origin_url
-        }
+          :active => true
+       }
 
         if suite_for_current_branch? then
           status_branch = @solano_api.current_branch
@@ -65,6 +64,7 @@ module Solano
         end
 
         suite_params[:suite_id] = suites.first['id']
+        repo_params[:suite_id] = suites.first['id'] 
 
         if options[:json] 
           res = {}
