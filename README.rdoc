@@ -1,6 +1,6 @@
 = Solano
 
-{<img src="https://ci.solanolabs.com:443/solanolabs/solano/badges/branches/master"/>}[https://ci.solanolabs.com:443/solanolabs/solano/suites/120685]
+{<img src="https://ci.predix.io/predix_ci%2Fproduction/solano/badges/branches/master?badge_token=9491f540300cc8faa1dd06be22f60b3c8c24efc9"/>}[https://ci.predix.io/predix_ci%2Fproduction/solano/suites/1144]
 {<img src="https://badge.fury.io/rb/solano.svg" alt="Gem Version" />}[http://badge.fury.io/rb/solano]
 
 Solano CI is a hosted continuous deployment platform that runs your build

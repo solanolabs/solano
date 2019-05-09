@@ -42,6 +42,7 @@ shared_context "solano_api_stubs" do
 
   def stub_solano_api
     allow(solano_api).to receive(:user_logged_in?).and_return(true)
+    allow(solano_api).to receive(:get_suites).and_return({})
     allow(Solano::SolanoAPI).to receive(:new).and_return(solano_api)
   end
 
