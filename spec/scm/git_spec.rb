@@ -46,6 +46,22 @@ describe Solano::Git do
     end
   end
 
+  describe ".origin_url" do
+    it "should return remote origin url if origin url present, but predix_ci does not exist" do
+      stub_git('config --get remote.origin.url', 'https://github.com/example/origin')
+      stub_git('config --get remote.predix_ci.url', '')
+
+      expect(subject.origin_url).to eq('https://github.com/example/origin')
+    end
+
+    it "should return remote predix_ci url if predix_ci exists" do
+      stub_git('config --get remote.origin.url', 'https://github.com/example/origin')
+      stub_git('config --get remote.predix_ci.url', 'https://github.com/example/predix_ci_origin')
+
+      expect(subject.origin_url).to eq('https://github.com/example/predix_ci_origin')
+    end
+  end
+
   module Solano
     class Git
       def say(message)

@@ -41,19 +41,7 @@ module Solano
     def origin_url
       return @default_origin_url if @default_origin_url
 
-      result = `git config --get remote.origin.url`
-      return nil unless $?.success?
-
-      result = result.strip
-
-      # no slashes before first colon
-      # [user@]host.xz:path/to/repo.git/
-      scp_pat = /^([A-Za-z0-9_]+@)?([A-Za-z0-9._-]+):\/?([^\/].*)/
-      if m = scp_pat.match(result) then
-        result = "ssh://#{m[1]}#{m[2]}/#{m[3]}"
-      end
-
-      return result
+      calculate_remote_url('predix_ci') || calculate_remote_url('origin')
     end
 
     def ignore_path
@@ -286,6 +274,24 @@ module Solano
 
     def latest_commit
       `git log --pretty='%H%n%s%n%aN%n%aE%n%at%n%cN%n%cE%n%ct%n' -1`
+    end
+
+    def calculate_remote_url(remote)
+      result = `git config --get remote.#{remote}.url`
+      return nil unless $?.success?
+
+      result = result.strip
+
+      return nil if result.empty?
+
+      # no slashes before first colon
+      # [user@]host.xz:path/to/repo.git/
+      scp_pat = /^([A-Za-z0-9_]+@)?([A-Za-z0-9._-]+):\/?([^\/].*)/
+      if m = scp_pat.match(result) then
+        result = "ssh://#{m[1]}#{m[2]}/#{m[3]}"
+      end
+
+      result
     end
 
     class << self
