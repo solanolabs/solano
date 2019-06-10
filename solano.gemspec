@@ -49,7 +49,7 @@ EOF
   s.add_development_dependency("antilles", "~> 0.1")
   s.add_development_dependency("rspec", "~> 3.1")
   s.add_development_dependency("cucumber","~> 1.3")
-  s.add_development_dependency("fakefs", "~> 0.6")
+  s.add_development_dependency("fakefs", "~> 0.13.3")
   s.add_development_dependency("simplecov", "~> 0.9")
   s.add_development_dependency("rake", "~> 10.4")
 end
