@@ -1,10 +1,10 @@
 ruby_version:
  SPLIT:
    - 'ruby-1.9.3-p545'
-   - 'ruby-2.1.5'
-   - 'ruby-2.2.2'
    - 'ruby-2.3.0'
    - 'ruby-2.4.0'
+   - 'ruby-2.5.0'
+   - 'ruby-2.6.2'
 coverage:
   version: 2
   enabled: true
