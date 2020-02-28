@@ -51,5 +51,5 @@ EOF
   s.add_development_dependency("cucumber","~> 1.3")
   s.add_development_dependency("fakefs", "~> 0.13.3")
   s.add_development_dependency("simplecov", "~> 0.9")
-  s.add_development_dependency("rake", "~> 10.4")
+  s.add_development_dependency("rake", "~> 13.0")
 end
